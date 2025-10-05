@@ -1894,6 +1894,7 @@ const openPlaylistBtn = document.getElementById('openPlaylistBtn');
 const playlistModal = document.getElementById('playlistModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const trackList = document.getElementById('trackList');
+const albumArt = document.querySelector('.album-art');
 
 const visualizerCanvas = document.getElementById('audioVisualizer');
 const visualizerCtx = visualizerCanvas.getContext('2d');
@@ -1980,9 +1981,25 @@ function visualize() {
   analyser.getByteFrequencyData(dataArray);
   const W = visualizerCanvas.offsetWidth;
   const H = visualizerCanvas.offsetHeight;
+  const midY = H / 2;
+
+  // Clear and dark veil
   visualizerCtx.clearRect(0, 0, W, H);
-  visualizerCtx.fillStyle = 'rgba(0,0,0,0.22)';
+  visualizerCtx.fillStyle = 'rgba(3, 5, 12, 0.35)';
   visualizerCtx.fillRect(0, 0, W, H);
+
+  // Compute rough loudness (RMS) for album art bounce
+  let sum = 0;
+  const sampleCount = 64; // front bins carry most energy visually
+  for (let i = 0; i < sampleCount; i++) sum += dataArray[i] * dataArray[i];
+  const rms = Math.sqrt(sum / sampleCount) / 255; // 0..1
+  if (albumArt) {
+    const scale = 1 + rms * 0.12;
+    albumArt.style.transform = `scale(${scale})`;
+    albumArt.style.boxShadow = `0 8px 24px rgba(107,123,255,${0.25 + rms * 0.35})`;
+  }
+
+  // MIRRORED BARS (top and bottom)
   const barCount = Math.min(96, bufferLength);
   const spacing = 2;
   const barWidth = Math.max(2, (W - (barCount - 1) * spacing) / barCount);
@@ -1991,21 +2008,45 @@ function visualize() {
   visualizerCtx.shadowBlur = 14;
   for (let i = 0; i < barCount; i++) {
     const v = dataArray[i];
-    const barHeight = Math.max(2, (v / 255) * (H * 0.78));
-    const y = H - barHeight;
-    const grad = visualizerCtx.createLinearGradient(0, y, 0, H);
-    grad.addColorStop(0, '#9db0ff');
-    grad.addColorStop(0.5, '#8e5cff');
-    grad.addColorStop(1, '#5c2ea3');
-    visualizerCtx.fillStyle = grad;
-    visualizerCtx.fillRect(x, y, barWidth, barHeight);
+    const barH = Math.max(2, (v / 255) * (H * 0.42));
+    const yTop = midY - barH;
+    const yBot = midY;
+    const gradTop = visualizerCtx.createLinearGradient(0, yTop, 0, midY);
+    gradTop.addColorStop(0, '#cfe2ff');
+    gradTop.addColorStop(0.5, '#8e5cff');
+    gradTop.addColorStop(1, '#5c2ea3');
+    visualizerCtx.fillStyle = gradTop;
+    visualizerCtx.fillRect(x, yTop, barWidth, barH);
+
+    const gradBot = visualizerCtx.createLinearGradient(0, yBot, 0, yBot + barH);
+    gradBot.addColorStop(0, '#8e5cff');
+    gradBot.addColorStop(1, 'rgba(93,46,163,0.2)');
+    visualizerCtx.fillStyle = gradBot;
+    visualizerCtx.fillRect(x, yBot, barWidth, barH);
+
+    // Neon caps
     visualizerCtx.beginPath();
-    visualizerCtx.fillStyle = '#cfd6ff';
-    visualizerCtx.arc(x + barWidth / 2, y - 2, Math.min(5, barWidth * 0.45), 0, Math.PI * 2);
+    visualizerCtx.fillStyle = '#e8ecff';
+    visualizerCtx.arc(x + barWidth / 2, yTop - 2, Math.min(4.5, barWidth * 0.45), 0, Math.PI * 2);
     visualizerCtx.fill();
+    visualizerCtx.beginPath();
+    visualizerCtx.arc(x + barWidth / 2, yBot + barH + 2, Math.min(3.5, barWidth * 0.4), 0, Math.PI * 2);
+    visualizerCtx.fill();
+
     x += barWidth + spacing;
   }
   visualizerCtx.shadowBlur = 0;
+
+  // CENTER PULSE RING
+  const maxRadius = Math.min(W, H) * 0.35;
+  const radius = Math.max(6, maxRadius * (0.25 + rms * 0.55));
+  const ringGrad = visualizerCtx.createRadialGradient(W/2, midY, radius*0.2, W/2, midY, radius);
+  ringGrad.addColorStop(0, 'rgba(157,176,255,0.25)');
+  ringGrad.addColorStop(1, 'rgba(157,176,255,0)');
+  visualizerCtx.beginPath();
+  visualizerCtx.fillStyle = ringGrad;
+  visualizerCtx.arc(W/2, midY, radius, 0, Math.PI * 2);
+  visualizerCtx.fill();
 }
 
 function formatTime(seconds) {

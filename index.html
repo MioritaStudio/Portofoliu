@@ -642,6 +642,26 @@
     height:100%;
     display:block;
   }
+  /* Player loading overlay */
+  .loading-overlay{
+    position:absolute;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,0.18);
+    z-index:2;
+  }
+  .loading-overlay.active{display:flex}
+  .spinner{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:3px solid rgba(255,255,255,0.25);
+    border-top-color:#ffffff;
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
 
   .now-playing{
     display:flex;
@@ -912,6 +932,7 @@
     cursor:pointer;
     transition:all 0.3s ease;
   }
+  .track-item.disabled{opacity:0.5; cursor:not-allowed}
   .track-item:hover{
     background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
     border-color: rgba(255,255,255,0.15);
@@ -1446,7 +1467,7 @@
         <div class="player-controls">
           <button class="control-btn" id="prevBtn" title="Previous (←)">
             <svg viewBox="0 0 24 24">
-              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+              <path d="M16 18h2V6h-2zm-11-7l8.5-6v12z"/>
             </svg>
           </button>
           
@@ -1461,7 +1482,7 @@
           
           <button class="control-btn" id="nextBtn" title="Next (→)">
             <svg viewBox="0 0 24 24">
-              <path d="M16 18h2V6h-2zm-11-7l8.5-6v12z"/>
+              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
             </svg>
           </button>
         </div>
@@ -1495,6 +1516,7 @@
         <!-- Supported: MP3, WAV, OGG                     -->
         <!-- ============================================ -->
         <audio id="audioElement" preload="metadata"></audio>
+        <div class="loading-overlay" id="playerLoading"><div class="spinner"></div></div>
       </div>
     </div>
   </section>
@@ -1861,7 +1883,7 @@ const playlists = {
     {title: "Promo Track 3", artist: "Miorița Studio", url: ""}
   ],
   personalizate: [
-    {title: "Stardust", artist: "Miorița Studio", url: "https://limewire.com/d/FHouW#qe9jXIfogV"},
+    {title: "Stardust", artist: "Miorița Studio", url: ""},
     {title: "Custom Track 2", artist: "Your Artist", url: ""},
     {title: "Custom Track 3", artist: "Your Artist", url: ""}
   ]
@@ -1894,18 +1916,28 @@ const visualizerCanvas = document.getElementById('audioVisualizer');
 const visualizerCtx = visualizerCanvas.getContext('2d');
 visualizerCanvas.width = visualizerCanvas.offsetWidth;
 visualizerCanvas.height = visualizerCanvas.offsetHeight;
+const playerLoading = document.getElementById('playerLoading');
 
-let audioContext, analyser, dataArray, bufferLength;
+let audioContext, analyser, dataArray, bufferLength, mediaSourceNode;
 
 function initAudio() {
   if (!audioContext) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioContext.state === 'suspended') {
+    audioContext.resume().catch(() => {});
+  }
+  if (!analyser) {
     analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audioElement);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
     analyser.fftSize = 256;
-    bufferLength = analyser.frequencyBinCount;
+  }
+  if (!mediaSourceNode) {
+    mediaSourceNode = audioContext.createMediaElementSource(audioElement);
+    mediaSourceNode.connect(analyser);
+    analyser.connect(audioContext.destination);
+  }
+  bufferLength = analyser.frequencyBinCount;
+  if (!dataArray || dataArray.length !== bufferLength) {
     dataArray = new Uint8Array(bufferLength);
   }
 }
@@ -1913,7 +1945,10 @@ function initAudio() {
 function loadTrack(index) {
   const track = playlists[currentCategory][index];
   if (track && track.url) {
+    // signal loading state
+    playerLoading.classList.add('active');
     audioElement.src = track.url;
+    try { audioElement.load(); } catch (_) {}
     trackTitle.textContent = track.title;
     trackArtist.textContent = track.artist;
     updateTrackList();
@@ -1937,7 +1972,13 @@ function togglePlayPause() {
     playIcon.style.display = 'block';
     pauseIcon.style.display = 'none';
   } else {
-    audioElement.play();
+    audioElement.play().catch(() => {
+      // autoplay blocked or error; ensure UI reflects paused state
+      isPlaying = false;
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      return;
+    });
     isPlaying = true;
     playIcon.style.display = 'none';
     pauseIcon.style.display = 'block';
@@ -1945,24 +1986,34 @@ function togglePlayPause() {
   }
 }
 
+function findNextPlayable(startIdx, direction) {
+  const list = playlists[currentCategory];
+  const len = list.length;
+  for (let i = 1; i <= len; i++) {
+    const idx = (startIdx + direction * i + len) % len;
+    if (list[idx] && list[idx].url) return idx;
+  }
+  return startIdx; // fallback
+}
+
 function playNext() {
-  currentTrackIndex = (currentTrackIndex + 1) % playlists[currentCategory].length;
+  currentTrackIndex = findNextPlayable(currentTrackIndex, 1);
   loadTrack(currentTrackIndex);
   if (isPlaying) {
-    audioElement.play();
+    audioElement.play().catch(() => {});
   }
 }
 
 function playPrev() {
-  currentTrackIndex = (currentTrackIndex - 1 + playlists[currentCategory].length) % playlists[currentCategory].length;
+  currentTrackIndex = findNextPlayable(currentTrackIndex, -1);
   loadTrack(currentTrackIndex);
   if (isPlaying) {
-    audioElement.play();
+    audioElement.play().catch(() => {});
   }
 }
 
 function visualize() {
-  if (!isPlaying) return;
+  if (!isPlaying || !analyser) return;
   requestAnimationFrame(visualize);
   analyser.getByteFrequencyData(dataArray);
   visualizerCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
@@ -1988,7 +2039,13 @@ function formatTime(seconds) {
 }
 
 function updateProgress() {
-  const progress = (audioElement.currentTime / audioElement.duration) * 100;
+  if (!isFinite(audioElement.duration) || audioElement.duration <= 0) {
+    progressFill.style.width = '0%';
+    currentTimeEl.textContent = formatTime(audioElement.currentTime || 0);
+    totalTimeEl.textContent = '0:00';
+    return;
+  }
+  const progress = Math.min(100, Math.max(0, (audioElement.currentTime / audioElement.duration) * 100));
   progressFill.style.width = `${progress}%`;
   currentTimeEl.textContent = formatTime(audioElement.currentTime);
   totalTimeEl.textContent = formatTime(audioElement.duration);
@@ -1998,7 +2055,8 @@ function updateTrackList() {
   trackList.innerHTML = '';
   playlists[currentCategory].forEach((track, index) => {
     const trackItem = document.createElement('div');
-    trackItem.className = `track-item ${index === currentTrackIndex ? 'active' : ''}`;
+    const disabled = !track.url;
+    trackItem.className = `track-item ${index === currentTrackIndex ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
     trackItem.innerHTML = `
       <div class="track-number">${index + 1}</div>
       <div class="track-details">
@@ -2007,10 +2065,11 @@ function updateTrackList() {
       </div>
     `;
     trackItem.addEventListener('click', () => {
+      if (disabled) return;
       currentTrackIndex = index;
       loadTrack(index);
       if (isPlaying) {
-        audioElement.play();
+        audioElement.play().catch(() => {});
       }
       playlistModal.classList.remove('active');
     });
@@ -2026,11 +2085,42 @@ audioElement.addEventListener('ended', playNext);
 audioElement.addEventListener('loadedmetadata', () => {
   totalTimeEl.textContent = formatTime(audioElement.duration);
 });
+audioElement.addEventListener('loadstart', () => {
+  playerLoading.classList.add('active');
+});
+audioElement.addEventListener('canplay', () => {
+  playerLoading.classList.remove('active');
+});
+audioElement.addEventListener('stalled', () => {
+  playerLoading.classList.add('active');
+});
+audioElement.addEventListener('error', () => {
+  playerLoading.classList.remove('active');
+});
+audioElement.addEventListener('waiting', () => {
+  playerLoading.classList.add('active');
+});
+audioElement.addEventListener('canplaythrough', () => {
+  playerLoading.classList.remove('active');
+});
+audioElement.addEventListener('play', () => {
+  isPlaying = true;
+  playIcon.style.display = 'none';
+  pauseIcon.style.display = 'block';
+  visualize();
+});
+audioElement.addEventListener('pause', () => {
+  isPlaying = false;
+  playIcon.style.display = 'block';
+  pauseIcon.style.display = 'none';
+});
 
 progressBar.addEventListener('click', (e) => {
   const rect = progressBar.getBoundingClientRect();
   const percent = (e.clientX - rect.left) / rect.width;
-  audioElement.currentTime = percent * audioElement.duration;
+  if (isFinite(audioElement.duration) && audioElement.duration > 0) {
+    audioElement.currentTime = percent * audioElement.duration;
+  }
 });
 
 volumeSlider.addEventListener('click', (e) => {
@@ -2048,6 +2138,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     currentTrackIndex = 0;
     loadTrack(0);
     updateTrackList();
+  // if current category has no playable items, keep UI paused
+  const playable = playlists[currentCategory].some(t => t.url);
+  if (!playable) {
+    isPlaying = false;
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+  }
   });
 });
 

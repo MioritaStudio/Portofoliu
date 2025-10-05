@@ -1086,6 +1086,66 @@
     border-radius:10px;
   }
   ::-webkit-scrollbar-thumb:hover{background: linear-gradient(180deg, var(--accent2), var(--accent1))}
+  
+  /* SCROLL TO TOP — ROCKET BUTTON */
+  .scroll-top{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:64px;
+    height:64px;
+    border-radius:18px;
+    background: linear-gradient(135deg, rgba(107,123,255,0.2), rgba(142,92,255,0.18));
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 14px 40px rgba(107,123,255,0.28), inset 0 1px 0 rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px) saturate(1.3);
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    z-index:900;
+    overflow:visible;
+    transform: translateY(20px) scale(0.6);
+    opacity:0;
+    pointer-events:none;
+    transition: box-shadow .35s ease;
+  }
+  .scroll-top:hover{
+    box-shadow:0 18px 55px rgba(107,123,255,0.38), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .scroll-top .rocket-emoji{font-size:26px; transform: translateY(-2px)}
+  .scroll-top .flame{
+    position:absolute;
+    bottom:-10px;
+    left:50%;
+    transform:translateX(-50%) scaleY(0.9);
+    width:14px;
+    height:22px;
+    border-radius:10px 10px 14px 14px;
+    background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.85) 0%, rgba(255,180,120,0.9) 25%, rgba(255,120,64,0.85) 55%, rgba(255,80,40,0.6) 75%, rgba(255,60,30,0.0) 100%);
+    filter: blur(1px) drop-shadow(0 8px 12px rgba(255,120,64,0.4));
+    opacity:0.85;
+    pointer-events:none;
+    transform-origin:50% 0%;
+    animation: flameFlicker 0.9s ease-in-out infinite;
+  }
+  @keyframes flameFlicker{
+    0%{ transform:translateX(-50%) scaleY(0.85) }
+    50%{ transform:translateX(-50%) scaleY(1.25) }
+    100%{ transform:translateX(-50%) scaleY(0.85) }
+  }
+  .rocket-star{
+    position:fixed;
+    width:8px;height:8px;
+    border-radius:50%;
+    background: linear-gradient(135deg, #6b7bff, #8e5cff);
+    box-shadow:0 0 0 rgba(255,255,255,0.4), 0 0 18px rgba(107,123,255,0.6);
+    z-index:880;
+    pointer-events:none;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scroll-top{transition:none}
+    .scroll-top .flame{animation:none}
+  }
 </style>
 <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
 </head>
@@ -1538,6 +1598,13 @@
     </p>
   </div>
 </footer>
+
+<!-- Scroll To Top Rocket Button -->
+<button id="scrollTopBtn" class="scroll-top" aria-label="Înapoi sus">
+  <span class="rocket-emoji" aria-hidden="true">🚀</span>
+  <span class="flame" aria-hidden="true"></span>
+  <span class="sr-only" style="position:absolute;left:-9999px">Back to top</span>
+</button>
 
 <!-- Policies Modal -->
 <div class="modal" id="policiesModal">
@@ -2231,6 +2298,134 @@ document.querySelectorAll('footer a').forEach(link => {
     e.target.style.color = 'var(--muted)';
   });
 });
+</script>
+
+<!-- Anime.js for advanced motion -->
+<script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js"></script>
+
+<!-- Scroll To Top logic with anime.js liftoff -->
+<script>
+  (function(){
+    const btn = document.getElementById('scrollTopBtn');
+    if (!btn) return;
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let isVisible = false;
+    let isAnimating = false;
+
+    const showBtn = () => {
+      if (isVisible) return;
+      isVisible = true;
+      btn.style.pointerEvents = 'auto';
+      if (window.anime && !prefersReduced){
+        anime({
+          targets: btn,
+          opacity: [0,1],
+          translateY: [20,0],
+          scale: [0.6,1],
+          easing: 'spring(1, 80, 12, 0)',
+          duration: 700
+        });
+      } else {
+        btn.style.opacity = '1';
+        btn.style.transform = 'translateY(0) scale(1)';
+      }
+    };
+    const hideBtn = () => {
+      if (!isVisible || isAnimating) return;
+      isVisible = false;
+      btn.style.pointerEvents = 'none';
+      if (window.anime && !prefersReduced){
+        anime({
+          targets: btn,
+          opacity: [1,0],
+          translateY: [0, 20],
+          scale: [1, 0.6],
+          easing: 'easeInOutQuad',
+          duration: 300
+        });
+      } else {
+        btn.style.opacity = '0';
+        btn.style.transform = 'translateY(20px) scale(0.6)';
+      }
+    };
+
+    const onScroll = () => {
+      const y = window.pageYOffset || document.documentElement.scrollTop;
+      if (y > 480){ showBtn(); } else { hideBtn(); }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    const burst = (x, y) => {
+      const count = 14 + Math.round(Math.random()*6);
+      for (let i=0;i<count;i++){
+        const star = document.createElement('div');
+        star.className = 'rocket-star';
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+        document.body.appendChild(star);
+        if (window.anime && !prefersReduced){
+          anime({
+            targets: star,
+            translateX: (Math.random()*2-1) * 180,
+            translateY: -60 - Math.random()*200,
+            scale: [{value: 1, duration: 0}, {value: 0, duration: 800}],
+            opacity: [{value:1, duration:0}, {value:0, duration: 900}],
+            rotate: Math.random()*360,
+            easing: 'easeOutCubic',
+            duration: 700 + Math.random()*600,
+            complete: () => star.remove()
+          });
+        } else {
+          // Fallback: immediate remove
+          star.remove();
+        }
+      }
+    };
+
+    btn.addEventListener('mouseenter', () => {
+      if (!window.anime || prefersReduced) return;
+      anime({ targets: btn.querySelector('.rocket-emoji'), translateY: [{value:-4, duration:180}, {value:-2, duration:180}], easing:'easeInOutSine' });
+    });
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isAnimating) return;
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top + rect.height/2;
+      if (!window.anime || prefersReduced){
+        window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+        return;
+      }
+      isAnimating = true;
+      // Flame boost
+      const flame = btn.querySelector('.flame');
+      anime({ targets: flame, scaleY: [{value:1.6, duration:220, easing:'easeOutQuad'}, {value:1.0, duration:260, easing:'easeInQuad'}] });
+      // Wiggle + liftoff
+      anime({ targets: btn, rotate: [{value:-8, duration:120}, {value:8, duration:150}, {value:-4, duration:120}, {value:0, duration:120}], easing:'easeInOutSine' });
+      burst(cx, cy+10);
+      // Smooth scroll to top
+      const scroller = document.scrollingElement || document.documentElement;
+      anime({ targets: scroller, scrollTop: 0, duration: 1100, easing:'easeInOutCubic' });
+      // Rocket flies up
+      anime({
+        targets: btn,
+        translateY: [0, -window.innerHeight - 120],
+        scale: [{value:1.08, duration:200, easing:'easeOutSine'}, {value:1, duration:180}],
+        easing: 'easeInCubic',
+        duration: 800,
+        complete: () => {
+          // Reset below and hide
+          btn.style.transform = 'translateY(20px) scale(0.6)';
+          btn.style.opacity = '0';
+          btn.style.pointerEvents = 'none';
+          isVisible = false;
+          isAnimating = false;
+        }
+      });
+    });
+  })();
 </script>
 
 </body>

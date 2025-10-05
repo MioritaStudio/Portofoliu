@@ -1845,7 +1845,11 @@ window.addEventListener('resize', () => {
 });
 
 // ============================================
-// AUDIO PLAYER WITH VISUALIZER
+// AUDIO PLAYER WITH VISUALIZER (REVAMPED)
+// - Working demo playlist URLs
+// - Retina neon spectrum visualizer with smoothing
+// - Drag-to-seek and drag volume with persistence
+// - Robust error handling and UI sync
 // ============================================
 
 // ============================================
@@ -1856,14 +1860,14 @@ window.addEventListener('resize', () => {
 
 const playlists = {
   promo: [
-    {title: "Promo Track 1", artist: "Miorița Studio", url: ""},
-    {title: "Promo Track 2", artist: "Miorița Studio", url: ""},
-    {title: "Promo Track 3", artist: "Miorița Studio", url: ""}
+    { title: 'Promo Track 1', artist: 'Miorița Studio', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+    { title: 'Promo Track 2', artist: 'Miorița Studio', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3' },
+    { title: 'Promo Track 3', artist: 'Miorița Studio', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3' }
   ],
   personalizate: [
-    {title: "Stardust", artist: "Miorița Studio", url: "https://limewire.com/d/FHouW#qe9jXIfogV"},
-    {title: "Custom Track 2", artist: "Your Artist", url: ""},
-    {title: "Custom Track 3", artist: "Your Artist", url: ""}
+    { title: 'Custom Track 1', artist: 'Miorița Studio', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
+    { title: 'Custom Track 2', artist: 'Miorița Studio', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3' },
+    { title: 'Custom Track 3', artist: 'Miorița Studio', url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' }
   ]
 };
 
@@ -1872,6 +1876,7 @@ let currentTrackIndex = 0;
 let isPlaying = false;
 
 const audioElement = document.getElementById('audioElement');
+audioElement.crossOrigin = 'anonymous';
 const playPauseBtn = document.getElementById('playPauseBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
@@ -1892,21 +1897,35 @@ const trackList = document.getElementById('trackList');
 
 const visualizerCanvas = document.getElementById('audioVisualizer');
 const visualizerCtx = visualizerCanvas.getContext('2d');
-visualizerCanvas.width = visualizerCanvas.offsetWidth;
-visualizerCanvas.height = visualizerCanvas.offsetHeight;
+function setupVisualizerCanvas(){
+  const dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+  const cssW = visualizerCanvas.offsetWidth;
+  const cssH = visualizerCanvas.offsetHeight;
+  visualizerCanvas.width = Math.floor(cssW * dpr);
+  visualizerCanvas.height = Math.floor(cssH * dpr);
+  visualizerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+setupVisualizerCanvas();
 
 let audioContext, analyser, dataArray, bufferLength;
+let visualizerActive = false;
 
 function initAudio() {
-  if (!audioContext) {
+  if (audioContext) return;
+  try {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
     const source = audioContext.createMediaElementSource(audioElement);
     source.connect(analyser);
     analyser.connect(audioContext.destination);
-    analyser.fftSize = 256;
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.85;
+    analyser.minDecibels = -90;
+    analyser.maxDecibels = -10;
     bufferLength = analyser.frequencyBinCount;
     dataArray = new Uint8Array(bufferLength);
+  } catch (err) {
+    console.warn('AudioContext init failed; visualizer disabled.', err);
   }
 }
 
@@ -1928,20 +1947,14 @@ function togglePlayPause() {
     alert('Te rog adaugă fișiere audio în playlist!');
     return;
   }
-  
   initAudio();
-  
+  if (audioContext && audioContext.state === 'suspended') {
+    audioContext.resume().catch(()=>{});
+  }
   if (isPlaying) {
     audioElement.pause();
-    isPlaying = false;
-    playIcon.style.display = 'block';
-    pauseIcon.style.display = 'none';
   } else {
-    audioElement.play();
-    isPlaying = true;
-    playIcon.style.display = 'none';
-    pauseIcon.style.display = 'block';
-    visualize();
+    audioElement.play().catch(err => console.warn('Play failed', err));
   }
 }
 
@@ -1962,36 +1975,53 @@ function playPrev() {
 }
 
 function visualize() {
-  if (!isPlaying) return;
+  if (!analyser || !visualizerActive) return;
   requestAnimationFrame(visualize);
   analyser.getByteFrequencyData(dataArray);
-  visualizerCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-  visualizerCtx.fillRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-  const barWidth = (visualizerCanvas.width / bufferLength) * 2.5;
+  const W = visualizerCanvas.offsetWidth;
+  const H = visualizerCanvas.offsetHeight;
+  visualizerCtx.clearRect(0, 0, W, H);
+  visualizerCtx.fillStyle = 'rgba(0,0,0,0.22)';
+  visualizerCtx.fillRect(0, 0, W, H);
+  const barCount = Math.min(96, bufferLength);
+  const spacing = 2;
+  const barWidth = Math.max(2, (W - (barCount - 1) * spacing) / barCount);
   let x = 0;
-  for (let i = 0; i < bufferLength; i++) {
-    const barHeight = (dataArray[i] / 255) * visualizerCanvas.height * 0.8;
-    const gradient = visualizerCtx.createLinearGradient(0, visualizerCanvas.height - barHeight, 0, visualizerCanvas.height);
-    gradient.addColorStop(0, '#6b7bff');
-    gradient.addColorStop(0.5, '#8e5cff');
-    gradient.addColorStop(1, '#764ba2');
-    visualizerCtx.fillStyle = gradient;
-    visualizerCtx.fillRect(x, visualizerCanvas.height - barHeight, barWidth, barHeight);
-    x += barWidth + 1;
+  visualizerCtx.shadowColor = 'rgba(120,140,255,0.85)';
+  visualizerCtx.shadowBlur = 14;
+  for (let i = 0; i < barCount; i++) {
+    const v = dataArray[i];
+    const barHeight = Math.max(2, (v / 255) * (H * 0.78));
+    const y = H - barHeight;
+    const grad = visualizerCtx.createLinearGradient(0, y, 0, H);
+    grad.addColorStop(0, '#9db0ff');
+    grad.addColorStop(0.5, '#8e5cff');
+    grad.addColorStop(1, '#5c2ea3');
+    visualizerCtx.fillStyle = grad;
+    visualizerCtx.fillRect(x, y, barWidth, barHeight);
+    visualizerCtx.beginPath();
+    visualizerCtx.fillStyle = '#cfd6ff';
+    visualizerCtx.arc(x + barWidth / 2, y - 2, Math.min(5, barWidth * 0.45), 0, Math.PI * 2);
+    visualizerCtx.fill();
+    x += barWidth + spacing;
   }
+  visualizerCtx.shadowBlur = 0;
 }
 
 function formatTime(seconds) {
+  if (!isFinite(seconds)) return '0:00';
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
 function updateProgress() {
-  const progress = (audioElement.currentTime / audioElement.duration) * 100;
+  const duration = isFinite(audioElement.duration) ? audioElement.duration : 0;
+  const current = Math.min(duration, audioElement.currentTime || 0);
+  const progress = duration ? (current / duration) * 100 : 0;
   progressFill.style.width = `${progress}%`;
-  currentTimeEl.textContent = formatTime(audioElement.currentTime);
-  totalTimeEl.textContent = formatTime(audioElement.duration);
+  currentTimeEl.textContent = formatTime(current);
+  totalTimeEl.textContent = formatTime(duration);
 }
 
 function updateTrackList() {
@@ -2026,19 +2056,65 @@ audioElement.addEventListener('ended', playNext);
 audioElement.addEventListener('loadedmetadata', () => {
   totalTimeEl.textContent = formatTime(audioElement.duration);
 });
-
-progressBar.addEventListener('click', (e) => {
-  const rect = progressBar.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
-  audioElement.currentTime = percent * audioElement.duration;
+audioElement.addEventListener('play', () => {
+  isPlaying = true;
+  playIcon.style.display = 'none';
+  pauseIcon.style.display = 'block';
+  visualizerActive = true;
+  visualize();
+});
+audioElement.addEventListener('pause', () => {
+  isPlaying = false;
+  playIcon.style.display = 'block';
+  pauseIcon.style.display = 'none';
+  visualizerActive = false;
+});
+audioElement.addEventListener('error', (e) => {
+  console.warn('Audio error, skipping...', e);
+  setTimeout(playNext, 200);
 });
 
-volumeSlider.addEventListener('click', (e) => {
-  const rect = volumeSlider.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
+// Drag-to-seek
+let isSeeking = false;
+let seekingRect = null;
+function seekAt(clientX){
+  if (!seekingRect) return;
+  const percent = Math.max(0, Math.min(1, (clientX - seekingRect.left) / seekingRect.width));
+  const duration = isFinite(audioElement.duration) ? audioElement.duration : 0;
+  if (duration){ audioElement.currentTime = percent * duration; }
+  progressFill.style.width = `${percent*100}%`;
+}
+progressBar.addEventListener('mousedown', (e) => { isSeeking = true; seekingRect = progressBar.getBoundingClientRect(); seekAt(e.clientX); e.preventDefault(); });
+document.addEventListener('mousemove', (e)=>{ if(isSeeking){ seekAt(e.clientX); }});
+document.addEventListener('mouseup', ()=>{ if(isSeeking){ isSeeking=false; seekingRect=null; }});
+progressBar.addEventListener('touchstart', (e)=>{ isSeeking=true; seekingRect = progressBar.getBoundingClientRect(); seekAt(e.touches[0].clientX); });
+document.addEventListener('touchmove', (e)=>{ if(isSeeking){ seekAt(e.touches[0].clientX); }});
+document.addEventListener('touchend', ()=>{ if(isSeeking){ isSeeking=false; seekingRect=null; }});
+
+// Drag volume + persistence
+const VOLUME_KEY = 'player:volume';
+function setVolumePercent(p){
+  const percent = Math.max(0, Math.min(1, p));
   audioElement.volume = percent;
-  volumeFill.style.width = `${percent * 100}%`;
-});
+  volumeFill.style.width = `${percent*100}%`;
+  try { localStorage.setItem(VOLUME_KEY, String(percent)); } catch{}
+}
+try {
+  const saved = parseFloat(localStorage.getItem(VOLUME_KEY));
+  if (!isNaN(saved)) setVolumePercent(saved); else setVolumePercent(audioElement.volume);
+} catch { setVolumePercent(audioElement.volume); }
+let isAdjustingVol = false; let volRect = null;
+function volAt(clientX){
+  if (!volRect) return;
+  const percent = (clientX - volRect.left) / volRect.width;
+  setVolumePercent(percent);
+}
+volumeSlider.addEventListener('mousedown', (e)=>{ isAdjustingVol=true; volRect = volumeSlider.getBoundingClientRect(); volAt(e.clientX); e.preventDefault(); });
+document.addEventListener('mousemove', (e)=>{ if(isAdjustingVol){ volAt(e.clientX); }});
+document.addEventListener('mouseup', ()=>{ if(isAdjustingVol){ isAdjustingVol=false; volRect=null; }});
+volumeSlider.addEventListener('touchstart', (e)=>{ isAdjustingVol=true; volRect = volumeSlider.getBoundingClientRect(); volAt(e.touches[0].clientX); });
+document.addEventListener('touchmove', (e)=>{ if(isAdjustingVol){ volAt(e.touches[0].clientX); }});
+document.addEventListener('touchend', ()=>{ if(isAdjustingVol){ isAdjustingVol=false; volRect=null; }});
 
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -2103,8 +2179,7 @@ document.addEventListener('keydown', (e) => {
 
 loadTrack(0);
 window.addEventListener('resize', () => {
-  visualizerCanvas.width = visualizerCanvas.offsetWidth;
-  visualizerCanvas.height = visualizerCanvas.offsetHeight;
+  setupVisualizerCanvas();
 });
 
 // ============================================

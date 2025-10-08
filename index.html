@@ -27,8 +27,11 @@
             overflow-x: hidden;
             min-height: 200vh; /* Pentru a testa scroll-ul și animațiile */
             
-            /* FIXUL CRUCIAL APLICAT AICI */
-            /* Forțează bara de scroll verticală să fie întotdeauna vizibilă, eliminând flicker-ul (CLS). */
+            /* FIXUL CRUCIAL APLICAT AICI: 
+               Forțează bara de scroll verticală să fie mereu vizibilă, eliminând flicker-ul (CLS). 
+               Acest lucru e important pentru a preveni re-render-ul la deschiderea/închiderea modalelor. 
+               Totuși, la deschiderea modalelor, JS va seta acest lucru la 'hidden' pentru a bloca fundalul.
+            */
             overflow-y: scroll; 
         }
 
@@ -154,31 +157,37 @@
         }
 
         /* ----------------------------------- */
-        /* 6. MODAL STYLING (Poziționare verticală sus și scroll intern) */
+        /* 6. MODAL STYLING (Poziționare și Scroll) */
         /* ----------------------------------- */
         .modal-container {
             /* Stil comun pentru toate modalele */
             position: fixed;
             inset: 0;
             z-index: 50;
-            display: none; /* Ascuns inițial (Managed by JS) */
+            display: none; 
             justify-content: center;
-            padding: 1rem;
+            /* Padding pentru a preveni lipirea de marginile ecranului pe mobil */
+            padding: 1rem; 
             background-color: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             transition: opacity 0.3s ease;
-            /* Scroll-ul principal este BLOCAT în JS pe body, deci nu mai e nevoie aici. */
+            /* Ne asigurăm că acest container suportă scroll în cazul în care conținutul depășește.
+               Deși forțăm scroll-ul intern, e o măsură de siguranță. */
+            overflow-y: auto; 
         }
 
-        /* RULE: Poziționează conținutul mai sus în viewport */
-        .modal-container > div {
+        /* RULE: Poziționează conținutul modalului mai sus și îi dă o înălțime max */
+        .modal-content {
+             /* Înălțime maximă fixată pentru a forța scroll-ul intern */
+             max-height: 90vh; 
+             overflow-y: auto;
              /* Margine superioară pe mobil, să nu fie lipit de sus */
              margin-top: 2rem; 
              margin-bottom: 2rem; 
         }
         
         @media (min-width: 640px) {
-            .modal-container > div {
+            .modal-content {
                 /* Margine mai mare pe desktop (echivalent mt-20) */
                 margin-top: 5rem; 
                 margin-bottom: 5rem;
@@ -201,7 +210,31 @@
         }
 
         /* ----------------------------------- */
-        /* 7. SCROLL TO TOP BUTTON */
+        /* 7. SECȚIUNEA PROCESULUI (Timeline fix mobil) */
+        /* ----------------------------------- */
+        
+        /* Pe mobil, eliminăm alinierea stânga-dreapta și facem totul centrat pe linie */
+        @media (max-width: 767px) {
+            .right-timeline, .left-timeline {
+                /* Resetăm flex-ul pentru a le pune pe o singură coloană */
+                flex-direction: column; 
+            }
+            .right-timeline > div, .left-timeline > div {
+                /* Lățime maximă pentru carduri */
+                width: 100% !important; 
+            }
+            .right-timeline > div:nth-child(3), .left-timeline > div:nth-child(1) {
+                /* Ascundem div-urile goale folosite doar pentru alinierea desktop */
+                display: none; 
+            }
+            .right-timeline > div:nth-child(2), .left-timeline > div:nth-child(2) {
+                /* Mutăm icoana deasupra textului (ordine vizuală) */
+                order: -1; 
+            }
+        }
+
+        /* ----------------------------------- */
+        /* 8. SCROLL TO TOP BUTTON */
         /* ----------------------------------- */
         #scroll-to-top {
             position: fixed;
@@ -285,6 +318,7 @@
 
             <!-- Buton Meniu Mobil (Hamburger) -->
             <button id="mobile-menu-button" class="lg:hidden p-2 text-gray-300 hover:text-purple-400 transition duration-300 cinematic-fade-in" style="transition-delay: 0.9s;">
+                <!-- FIX: Iconița era lipsă -->
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </nav>
@@ -420,34 +454,35 @@
 
             <!-- Timeline Vertical Responsive -->
             <div class="max-w-3xl mx-auto relative">
-                <!-- Linia verticală centrală -->
+                <!-- Linia verticală centrală (Ascunsă pe mobil pentru a preveni suprapunerea) -->
                 <div class="absolute hidden md:block w-0.5 bg-gray-700 h-full left-1/2 transform -translate-x-1/2"></div>
                 
                 <!-- PAS 1: Descoperire & Planificare -->
+                <!-- Am păstrat structura flex, dar am adăugat stilurile CSS de mai sus pentru a o forța pe coloană pe mobil -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
-                    <div class="md:w-5/12 cinematic-fade-in">
+                    <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
                             <h3 class="text-2xl font-bold text-white mb-2">1. Descoperire & Planificare</h3>
                             <p class="text-gray-400">Înțelegem viziunea, publicul țintă și obiectivele. Stabilim împreună structura și tehnologiile necesare.</p>
                         </div>
                     </div>
-                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0 order-1 md:order-none">
                         <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
                             <i class="fas fa-lightbulb"></i>
                         </div>
                     </div>
-                    <div class="md:w-5/12"></div>
+                    <div class="md:w-5/12 hidden md:block"></div>
                 </div>
 
                 <!-- PAS 2: Design Cinematic -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full left-timeline">
-                    <div class="md:w-5/12"></div>
-                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                    <div class="md:w-5/12 hidden md:block"></div>
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0 order-1 md:order-none">
                         <div class="w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
                             <i class="fas fa-drafting-compass"></i>
                         </div>
                     </div>
-                    <div class="md:w-5/12 cinematic-fade-in">
+                    <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
                          <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-cyan-500/30">
                             <h3 class="text-2xl font-bold text-white mb-2">2. Design Cinematic</h3>
                             <p class="text-gray-400">Creăm prototipuri vizuale moderne, axate pe experiența utilizatorului (UX) și estetică de înaltă clasă.</p>
@@ -457,29 +492,29 @@
                 
                 <!-- PAS 3: Dezvoltare Avansată -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
-                    <div class="md:w-5/12 cinematic-fade-in">
+                    <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
                             <h3 class="text-2xl font-bold text-white mb-2">3. Dezvoltare Avansată</h3>
                             <p class="text-gray-400">Transformăm designul în cod curat, optimizat, folosind tehnologii de ultimă oră pentru viteză și stabilitate.</p>
                         </div>
                     </div>
-                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0 order-1 md:order-none">
                         <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
                             <i class="fas fa-code"></i>
                         </div>
                     </div>
-                    <div class="md:w-5/12"></div>
+                    <div class="md:w-5/12 hidden md:block"></div>
                 </div>
 
                 <!-- PAS 4: Lansare & Suport -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full left-timeline">
-                    <div class="md:w-5/12"></div>
-                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                    <div class="md:w-5/12 hidden md:block"></div>
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0 order-1 md:order-none">
                         <div class="w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
                             <i class="fas fa-paper-plane"></i>
                         </div>
                     </div>
-                    <div class="md:w-5/12 cinematic-fade-in">
+                    <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
                          <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-cyan-500/30">
                             <h3 class="text-2xl font-bold text-white mb-2">4. Lansare & Suport</h3>
                             <p class="text-gray-400">Publicăm proiectul, asigurăm mentenanța și oferim instruire pentru a prelua controlul complet.</p>
@@ -636,7 +671,7 @@
             </div>
             <p class="mb-2">&copy; 2025 Miorița Studio. Toate drepturile rezervate.</p>
             
-            <!-- LOGO ACTUALIZAT AICI (Imagine cu link și text) -->
+            <!-- LOGO ACTUALIZAT (Imagine cu link și text) -->
             <p class="text-sm flex justify-center items-center">
                 Creat cu viziune și pasiune de 
                 <a href="#acasa" class="inline-block ml-1 transition transform hover:scale-105">
@@ -654,8 +689,8 @@
 
 <!-- Modal pentru Pachete (Ascuns inițial) -->
 <div id="pachet-modal" class="modal-container hidden" aria-modal="true" role="dialog">
-    <!-- Am adăugat max-h-[90vh] și overflow-y-auto pentru a permite scroll-ul intern -->
-    <div id="modal-content-container-pachet" class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
+    <!-- FIX: Clasa modal-content aplicată aici pentru max-h și overflow-y:auto -->
+    <div id="modal-content-container-pachet" class="modal-content relative w-full max-w-2xl bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
         <!-- Buton Închidere -->
         <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('pachet-modal')">
             <i class="fas fa-times text-2xl"></i>
@@ -688,8 +723,8 @@
 
 <!-- Modal Contact Formular -->
 <div id="contact-form-modal" class="modal-container hidden" aria-modal="true" role="dialog">
-    <!-- Am adăugat max-h-[90vh] și overflow-y-auto pentru a permite scroll-ul intern -->
-    <div id="modal-content-container-contact" class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
+    <!-- FIX: Clasa modal-content aplicată aici pentru max-h și overflow-y:auto -->
+    <div id="modal-content-container-contact" class="modal-content relative w-full max-w-lg bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
         <!-- Buton Închidere -->
         <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('contact-form-modal')">
             <i class="fas fa-times text-2xl"></i>
@@ -727,8 +762,8 @@
 
 <!-- Modal Legal & GDPR -->
 <div id="legal-modal" class="modal-container hidden" aria-modal="true" role="dialog">
-    <!-- Am adăugat max-h-[90vh] și overflow-y-auto pentru a permite scroll-ul intern -->
-    <div id="modal-content-container-legal" class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
+    <!-- FIX: Clasa modal-content aplicată aici pentru max-h și overflow-y:auto -->
+    <div id="modal-content-container-legal" class="modal-content relative w-full max-w-4xl bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
         <!-- Buton Închidere (Fixat) -->
         <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('legal-modal')">
             <i class="fas fa-times text-2xl"></i>
@@ -799,10 +834,6 @@
                     "Formular de contact (simplu)",
                     "Optimizare Viteză de Bază",
                     "Certificat SSL gratuit (1 an)",
-                    "Suport 30 de zile post-lansare",
-                    "Lista de detalii este special făcută lungă aici pentru a testa funcția de scroll intern al modalului pe dispozitivele mici, asigurând că nu mai este blocat scroll-ul pe body. Acest text suplimentar nu este vizibil pe desktop în modalul de bază, dar va declanșa bara de scroll pe ecranele mai mici.",
-                    "Aceasta este o linie suplimentară de text pentru a forța scroll-ul pe mobil, garantând că toți termenii și condițiile sunt lizibile, indiferent de dimensiunea ecranului utilizatorului.",
-                    "Încă o linie pentru siguranță. Dacă vedeți această linie, înseamnă că scroll-ul intern funcționează perfect!"
                 ]
             },
             pro: {
@@ -864,7 +895,6 @@
             introScreen.style.visibility = 'hidden';
             mainContent.classList.remove('content-hidden');
             mainContent.classList.add('cinematic-fade-in', 'animated-visible');
-            // FIX: Nu mai setăm document.body.style.overflow = ''; AICI. CSS-ul se ocupă de 'overflow-y: scroll;'
         }
 
         enterButton.addEventListener('click', () => {
@@ -907,6 +937,7 @@
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.remove('hidden');
             // Când deschidem meniul mobil, blocăm scroll-ul pe body pentru a preveni interacțiunea cu fundalul
+            // FIX: Blochează scroll-ul pe body când meniul mobil e deschis
             document.body.style.overflow = 'hidden'; 
             setTimeout(() => {
                  mobileMenu.classList.remove('translate-y-full');
@@ -915,7 +946,7 @@
 
         function closeMobileMenu() {
             mobileMenu.classList.add('translate-y-full');
-            // Când închidem meniul mobil, restabilim scroll-ul body-ului la valoarea fixată
+            // Când închidem meniul mobil, restabilim scroll-ul body-ului
             document.body.style.overflow = 'scroll'; 
             setTimeout(() => {
                 mobileMenu.classList.add('hidden');
@@ -962,7 +993,7 @@
                                        'modal-content-container-contact';
             const contentContainer = document.getElementById(contentContainerId);
             
-            // BLOCARE: Setăm scroll-ul la 'hidden' pentru a bloca fundalul modalului
+            // FIX: BLOCARE: Setăm scroll-ul la 'hidden' pentru a bloca fundalul modalului
             document.body.style.overflow = 'hidden'; 
             
             modal.classList.remove('hidden');
@@ -973,8 +1004,8 @@
                 contentContainer.classList.remove('scale-90', 'opacity-0');
                 contentContainer.classList.add('modal-content-enter-active');
                 
-                // Centrare vizuală cu scrollIntoView
-                contentContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Centrare vizuală cu scrollIntoView - ajută ca modalul să apară în viewport imediat
+                contentContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 10);
         }
 
@@ -1000,7 +1031,7 @@
                 modal.classList.remove('flex');
                 modal.style.opacity = '1';
                 
-                // RESTABILIRE: Setăm scroll-ul body-ului la 'scroll' (fix-ul CLS)
+                // FIX: RESTABILIRE: Setăm scroll-ul body-ului la 'scroll' (valoarea inițială)
                 document.body.style.overflow = 'scroll';
                 
             }, 300);
@@ -1031,16 +1062,24 @@
         // Deschide Modal Contact Formular
         window.openContactModal = function(e) {
             e.preventDefault();
-            // Închide modalul de pachete dacă este deschis
-            if (document.getElementById('pachet-modal').classList.contains('flex')) {
-                closeModal('pachet-modal'); 
-            }
+            // Închide modalul de pachete/legal dacă este deschis
+            document.querySelectorAll('.modal-container').forEach(m => {
+                if (m.classList.contains('flex') && m.id !== 'contact-form-modal') {
+                    closeModal(m.id);
+                }
+            });
             openModal('contact-form-modal');
         }
         
         // Deschide Modal Legal & GDPR
         window.openLegalModal = function(e) {
             e.preventDefault();
+             // Închide modalul de pachete/contact dacă este deschis
+            document.querySelectorAll('.modal-container').forEach(m => {
+                if (m.classList.contains('flex') && m.id !== 'legal-modal') {
+                    closeModal(m.id);
+                }
+            });
             openModal('legal-modal');
         }
 
@@ -1068,6 +1107,7 @@
         document.querySelectorAll('.modal-container').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 // Verifică dacă click-ul a fost direct pe containerul modal (nu pe conținut)
+                // Folosim e.target === modal pentru a ne asigura că este click-ul pe fundal
                 if (e.target === modal) {
                     const modalId = modal.id;
                     closeModal(modalId);
@@ -1076,13 +1116,11 @@
         });
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                 if (document.getElementById('legal-modal').classList.contains('flex')) {
-                    closeModal('legal-modal');
-                } else if (document.getElementById('contact-form-modal').classList.contains('flex')) {
-                    closeModal('contact-form-modal');
-                } else if (document.getElementById('pachet-modal').classList.contains('flex')) {
-                    closeModal('pachet-modal');
-                }
+                 // Închide doar primul modal vizibil
+                 const visibleModal = Array.from(document.querySelectorAll('.modal-container.flex')).pop();
+                 if (visibleModal) {
+                    closeModal(visibleModal.id);
+                 }
             }
         });
 
@@ -1150,12 +1188,17 @@
         const container = document.body;
 
         container.addEventListener('mousemove', (e) => {
-            mouseGlow.style.opacity = '0.1';
-            mouseGlow.style.transform = `translate(${e.clientX - 75}px, ${e.clientY - 75}px)`;
+            // Verifică dacă este pe mobil (de obicei, telefoanele nu au mousemove)
+            if (window.innerWidth >= 768) {
+                mouseGlow.style.opacity = '0.1';
+                mouseGlow.style.transform = `translate(${e.clientX - 75}px, ${e.clientY - 75}px)`;
+            }
         });
 
         container.addEventListener('mouseleave', () => {
-            mouseGlow.style.opacity = '0';
+             if (window.innerWidth >= 768) {
+                mouseGlow.style.opacity = '0';
+             }
         });
 
         // Asigură tranziția smooth la click pe linkurile hash

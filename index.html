@@ -25,14 +25,22 @@
             color: #E5E7EB; /* Gray-200 */
             scroll-behavior: smooth;
             overflow-x: hidden;
-            min-height: 200vh; /* Pentru a testa scroll-ul și animațiile */
+            min-height: 200vh;
             
-            /* FIXUL CRUCIAL APLICAT AICI: 
-               Forțează bara de scroll verticală să fie mereu vizibilă, eliminând flicker-ul (CLS). 
-               Totuși, la deschiderea modalelor/meniului, JS va seta acest lucru la 'hidden' pentru a bloca fundalul.
-            */
+            /* FIXUL CRUCIAL: Forțează bara de scroll verticală */
             overflow-y: scroll; 
+            
+            /* Adaugă padding jos pe mobil pentru a nu acoperi dock-ul */
+            padding-bottom: 4rem; /* 4rem = 64px, se potrivește cu h-16 al dock-ului */
         }
+        
+        @media (min-width: 1024px) {
+            body {
+                /* Pe desktop, eliminăm padding-ul de jos */
+                padding-bottom: 0; 
+            }
+        }
+
 
         /* ----------------------------------- */
         /* 1. FUNDAL LIVE FLUID (LIVE GRADIENT) */
@@ -46,7 +54,7 @@
             background: linear-gradient(-45deg, var(--color-dark-bg), #111827, #2563EB, #C026D3);
             background-size: 400% 400%;
             animation: gradient-flow 15s ease infinite;
-            opacity: 0.4; /* Subtil, nu distrage atenția */
+            opacity: 0.4;
             z-index: -10;
         }
 
@@ -89,15 +97,13 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* Stil specific pentru imaginea logo în header/footer */
         .logo-img {
-            max-height: 40px; /* Înălțime maximă pentru logo în header */
+            max-height: 40px;
             width: auto;
         }
 
-        /* Stil specific pentru imaginea logo în footer (mai mică și subtilă) */
         .footer-logo-img {
-            height: 20px; /* Înălțime mai mică pentru footer */
+            height: 20px;
             width: auto;
             display: inline;
             vertical-align: middle;
@@ -110,90 +116,50 @@
 
 
         /* ----------------------------------- */
-        /* 4. INTRO SCREEN (Mascare conținut) */
+        /* 4. MOUSE TRACKING GLOW (WOW FACTOR) */
         /* ----------------------------------- */
-        #intro-screen {
-            background-color: var(--color-dark-bg);
-            z-index: 50;
-            transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
-        }
-
-        /* ----------------------------------- */
-        /* 5. CARUSEL & PROIECTE CARD HOVER */
-        /* ----------------------------------- */
-        .project-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        /* Efect de iluminare pe hover */
-        .card-glow-effect {
-            position: relative;
-            overflow: hidden;
-        }
-        .card-glow-effect::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(139, 92, 246, 0.3);
-            border-radius: 50%;
-            transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-        }
-        .card-glow-effect:hover::before {
-            width: 300%;
-            height: 300%;
-            opacity: 1;
-        }
-
-        /* Pentru a asigura că imaginea și textul sunt deasupra pseudo-elementului */
-        .card-content > * {
-            position: relative;
+        .mouse-glow {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--color-primary), transparent 60%);
+            pointer-events: none;
             z-index: 10;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            border-radius: 50%;
         }
-
+        
         /* ----------------------------------- */
-        /* 6. MODAL STYLING (Poziționare și Scroll) */
+        /* 5. MODAL STYLING */
         /* ----------------------------------- */
         .modal-container {
-            /* Stil comun pentru toate modalele */
             position: fixed;
             inset: 0;
             z-index: 50;
             display: none; 
             justify-content: center;
-            /* Padding pentru a preveni lipirea de marginile ecranului pe mobil */
             padding: 1rem; 
             background-color: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(5px);
             transition: opacity 0.3s ease;
-            /* Ne asigurăm că acest container suportă scroll în cazul în care conținutul depășește.
-               Deși forțăm scroll-ul intern, e o măsură de siguranță. */
             overflow-y: auto; 
         }
 
-        /* RULE: Poziționează conținutul modalului mai sus și îi dă o înălțime max */
         .modal-content {
-             /* Înălțime maximă fixată pentru a forța scroll-ul intern */
              max-height: 90vh; 
              overflow-y: auto;
-             /* Margine superioară pe mobil, să nu fie lipit de sus */
              margin-top: 2rem; 
              margin-bottom: 2rem; 
         }
         
         @media (min-width: 640px) {
             .modal-content {
-                /* Margine mai mare pe desktop (echivalent mt-20) */
                 margin-top: 5rem; 
                 margin-bottom: 5rem;
             }
         }
         
-        /* Intrările și ieșirile modale */
         .modal-enter-active {
             opacity: 1;
         }
@@ -209,51 +175,17 @@
         }
 
         /* ----------------------------------- */
-        /* 7. SECȚIUNEA PROCESULUI (Timeline fix mobil) */
+        /* 6. Meniu Mai Multe Overlay (Mobile) */
         /* ----------------------------------- */
-        
-        /* Pe mobil, eliminăm alinierea stânga-dreapta și facem totul centrat pe linie */
-        @media (max-width: 767px) {
-            .right-timeline, .left-timeline {
-                /* Resetăm flex-ul pentru a le pune pe o singură coloană */
-                flex-direction: column; 
-            }
-            .right-timeline > div, .left-timeline > div {
-                /* Lățime maximă pentru carduri */
-                width: 100% !important; 
-            }
-            .right-timeline > div:nth-child(3), .left-timeline > div:nth-child(1) {
-                /* Ascundem div-urile goale folosite doar pentru alinierea desktop */
-                display: none; 
-            }
-            .right-timeline > div:nth-child(2), .left-timeline > div:nth-child(2) {
-                /* Mutăm icoana deasupra textului (ordine vizuală) */
-                order: -1; 
-            }
-        }
-
-        /* ----------------------------------- */
-        /* 8. SCROLL TO TOP BUTTON */
-        /* ----------------------------------- */
-        #scroll-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 30;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            transform: translateY(20px);
-        }
-        #scroll-to-top.show {
-            opacity: 1;
+        #more-menu-overlay.show {
             transform: translateY(0);
+            display: block;
         }
-
-
-        /* Utility pentru a ascunde elemente înainte de intro */
-        .content-hidden {
+        #more-menu-overlay:not(.show) {
+            transform: translateY(100%);
             display: none;
         }
+        
     </style>
 </head>
 <body>
@@ -284,7 +216,7 @@
         <button id="enter-button" 
                 class="cinematic-scale-in opacity-0 text-white font-semibold py-3 px-8 rounded-full transition duration-500 transform hover:scale-105 shadow-xl"
                 style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
-            <i class="fas fa-meteor mr-2"></i> Intră
+            <i class="fas fa-meteor mr-2"></i> Intră în Experiență
         </button>
     </div>
 </div>
@@ -292,10 +224,10 @@
 <!-- Conținutul Principal (Vizibil după intro) -->
 <main id="main-content" class="content-hidden">
     
-    <!-- 2. HEADER STICKY -->
+    <!-- 2. HEADER STICKY (Pentru Desktop și Logo pe Mobil) -->
     <header id="main-header" class="header-sticky fixed w-full top-0 z-40">
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <!-- Logo și Nume Studio -->
+            <!-- Logo și Nume Studio (Vizibil pe toate ecranele) -->
             <a href="#acasa" class="flex items-center space-x-2 cinematic-fade-in" style="transition-delay: 0.8s;">
                 <!-- LOGO ACTUALIZAT AICI (Imagine) -->
                 <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
@@ -305,39 +237,69 @@
                 <span class="text-xl font-bold tracking-wider">Miorița Studio</span>
             </a>
 
-            <!-- Meniu Desktop -->
+            <!-- Meniu Desktop (Vizibil DOAR pe Desktop) -->
             <div class="hidden lg:flex space-x-8 text-gray-300">
                 <a href="#acasa" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Acasă</a>
                 <a href="#servicii" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Servicii</a>
                 <a href="#pachete" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Pachete</a>
                 <a href="#proiecte" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Proiecte</a>
                 <a href="#despre" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Despre</a>
-                <a href="#contact" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Contact</a>
+                <a href="#contact" onclick="openContactModal(event)" class="hover:text-cyan-400 transition duration-300 hover:scale-105 cursor-pointer">Contact</a>
             </div>
 
-            <!-- Buton Meniu Mobil (Hamburger) -->
-            <button id="mobile-menu-button" class="lg:hidden p-2 text-gray-300 hover:text-purple-400 transition duration-300 cinematic-fade-in" style="transition-delay: 0.9s;">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
+            <!-- Buton Contact pe Desktop (Dacă nu este inclus în meniul de mai sus) -->
+             <a href="#" onclick="openContactModal(event)" class="hidden lg:block cinematic-fade-in" style="transition-delay: 0.9s;">
+                <button class="py-2 px-6 rounded-full font-semibold text-sm text-white transition duration-300 hover:scale-105"
+                        style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+                    <i class="fas fa-handshake mr-1"></i> Contact
+                </button>
+            </a>
+            
+             <!-- ATENȚIE: Meniul Hamburger (mobil) A FOST ELIMINAT din acest header -->
         </nav>
-
-        <!-- Meniu Mobil (Overlay) -->
-        <!-- FIX: Meniul este populat cu toate linkurile necesare, inclusiv cel legal. -->
-        <div id="mobile-menu" class="hidden lg:hidden fixed top-0 left-0 w-full h-full bg-slate-900/95 backdrop-blur-md z-40 flex flex-col items-center justify-center space-y-8 transition-transform duration-300 ease-in-out transform translate-y-full">
-            <button id="close-menu-button" class="absolute top-6 right-6 text-gray-300 hover:text-red-500">
-                <i class="fas fa-times text-3xl"></i>
-            </button>
-            <a href="#acasa" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="acasa">Acasă</a>
-            <a href="#servicii" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="servicii">Servicii</a>
-            <a href="#pachete" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="pachete">Pachete</a>
-            <a href="#proiecte" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="proiecte">Proiecte</a>
-            <a href="#despre" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="despre">Despre</a>
-            <a href="#contact" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="contact">Contact</a>
-            <!-- Link NOU pentru Legal care deschide modalul -->
-            <a href="#" onclick="openLegalModal(event)" class="text-3xl font-bold text-cyan-400 hover:text-white transition duration-300 menu-item">Legal & GDPR</a>
-        </div>
     </header>
+    
+    <!-- NOU: Dock de Navigare Mobil (Vizibil DOAR pe ecrane mici) -->
+    <nav id="mobile-dock" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/90 backdrop-blur-lg border-t border-purple-700/50 shadow-[0_-5px_20px_rgba(139,92,246,0.3)]">
+        <div class="flex justify-around items-center h-16 max-w-lg mx-auto">
+            <!-- Acasă -->
+            <a href="#acasa" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 text-xs w-1/5">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span>Acasă</span>
+            </a>
+            <!-- Pachete -->
+            <a href="#pachete" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 text-xs w-1/5">
+                <i class="fas fa-box-open text-xl mb-1"></i>
+                <span>Pachete</span>
+            </a>
+            <!-- Proiecte -->
+            <a href="#proiecte" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 text-xs w-1/5">
+                <i class="fas fa-rocket text-xl mb-1"></i>
+                <span>Proiecte</span>
+            </a>
+            <!-- Mai Multe Toggle -->
+            <div id="more-menu-toggle" class="relative flex flex-col items-center justify-center p-2 text-gray-300 hover:text-purple-400 transition duration-200 text-xs w-1/5 cursor-pointer">
+                <i class="fas fa-ellipsis-h text-xl mb-1"></i>
+                <span>Mai Multe</span>
+            </div>
+        </div>
 
+        <!-- Meniu Ascuns (Overlay pentru Mai Multe) -->
+        <div id="more-menu-overlay" class="absolute bottom-16 left-0 right-0 bg-slate-800/95 backdrop-blur-md rounded-t-xl py-4 transition-transform duration-300 ease-out transform translate-y-full">
+            <div class="flex flex-col space-y-3 px-6 pb-2">
+                <a href="#despre" class="more-menu-item flex items-center text-gray-300 hover:text-cyan-400 transition duration-200 font-medium py-2 border-b border-slate-700/50">
+                    <i class="fas fa-info-circle mr-3 w-5"></i> Despre Studio
+                </a>
+                <a href="#" onclick="openLegalModal(event); closeMoreMenu()" class="more-menu-item flex items-center text-gray-300 hover:text-cyan-400 transition duration-200 font-medium py-2 border-b border-slate-700/50">
+                    <i class="fas fa-gavel mr-3 w-5"></i> Legal & GDPR
+                </a>
+                <a href="#" onclick="openContactModal(event); closeMoreMenu()" class="more-menu-item flex items-center text-purple-400 hover:text-white transition duration-200 font-bold py-2">
+                    <i class="fas fa-handshake mr-3 w-5"></i> Contact Rapid
+                </a>
+            </div>
+        </div>
+    </nav>
+    
     <!-- 3. HERO SECTION (Acasă) -->
     <section id="acasa" class="relative pt-40 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">
         <div class="max-w-4xl mx-auto cinematic-fade-in">
@@ -459,7 +421,6 @@
                 <div class="absolute hidden md:block w-0.5 bg-gray-700 h-full left-1/2 transform -translate-x-1/2"></div>
                 
                 <!-- PAS 1: Descoperire & Planificare -->
-                <!-- Am păstrat structura flex, dar am adăugat stilurile CSS de mai sus pentru a o forța pe coloană pe mobil -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
                     <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
@@ -666,7 +627,7 @@
                 <a href="#pachete" class="hover:text-white transition duration-300">Pachete</a>
                 <a href="#proiecte" class="hover:text-white transition duration-300">Proiecte</a>
                 <a href="#despre" class="hover:text-white transition duration-300">Despre</a>
-                <a href="#contact" class="hover:text-white transition duration-300">Contact</a>
+                <a href="#contact" onclick="openContactModal(event)" class="hover:text-white transition duration-300 cursor-pointer">Contact</a>
                 <!-- Linkul Legal & GDPR deschide modalul -->
                 <a href="#" onclick="openLegalModal(event)" class="text-cyan-400 hover:text-white transition duration-300">Legal & GDPR</a>
             </div>
@@ -690,7 +651,6 @@
 
 <!-- Modal pentru Pachete (Ascuns inițial) -->
 <div id="pachet-modal" class="modal-container hidden" aria-modal="true" role="dialog">
-    <!-- FIX: Clasa modal-content aplicată aici pentru max-h și overflow-y:auto -->
     <div id="modal-content-container-pachet" class="modal-content relative w-full max-w-2xl bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
         <!-- Buton Închidere -->
         <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('pachet-modal')">
@@ -724,7 +684,6 @@
 
 <!-- Modal Contact Formular -->
 <div id="contact-form-modal" class="modal-container hidden" aria-modal="true" role="dialog">
-    <!-- FIX: Clasa modal-content aplicată aici pentru max-h și overflow-y:auto -->
     <div id="modal-content-container-contact" class="modal-content relative w-full max-w-lg bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
         <!-- Buton Închidere -->
         <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('contact-form-modal')">
@@ -763,7 +722,6 @@
 
 <!-- Modal Legal & GDPR -->
 <div id="legal-modal" class="modal-container hidden" aria-modal="true" role="dialog">
-    <!-- FIX: Clasa modal-content aplicată aici pentru max-h și overflow-y:auto -->
     <div id="modal-content-container-legal" class="modal-content relative w-full max-w-4xl bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
         <!-- Buton Închidere (Fixat) -->
         <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('legal-modal')">
@@ -835,6 +793,10 @@
                     "Formular de contact (simplu)",
                     "Optimizare Viteză de Bază",
                     "Certificat SSL gratuit (1 an)",
+                    "Suport 30 de zile post-lansare",
+                    "Lista de detalii este special făcută lungă aici pentru a testa funcția de scroll intern a modalului pe dispozitivele mici, asigurând că nu mai este blocat scroll-ul pe body. Acest text suplimentar nu este vizibil pe desktop în modalul de bază, dar va declanșa bara de scroll pe ecranele mai mici.",
+                    "Aceasta este o linie suplimentară de text pentru a forța scroll-ul pe mobil, garantând că toți termenii și condițiile sunt lizibile, indiferent de dimensiunea ecranului utilizatorului.",
+                    "Încă o linie pentru siguranță. Dacă vedeți această linie, înseamnă că scroll-ul intern funcționează perfect!"
                 ]
             },
             pro: {
@@ -929,35 +891,26 @@
             });
         };
 
-        // --- 3. MOBILE MENU (JS) ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMenuButton = document.getElementById('close-menu-button');
-        const menuItems = document.querySelectorAll('.menu-item');
+        // --- 3. MOBILE DOCK & MORE MENU (NOU) ---
+        const moreMenuToggle = document.getElementById('more-menu-toggle');
+        const moreMenuOverlay = document.getElementById('more-menu-overlay');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-            // FIX: Blochează scroll-ul pe body când meniul mobil e deschis
-            document.body.style.overflow = 'hidden'; 
-            setTimeout(() => {
-                 mobileMenu.classList.remove('translate-y-full');
-            }, 10);
+        // Toggle pentru meniul "Mai Multe"
+        moreMenuToggle.addEventListener('click', () => {
+            moreMenuOverlay.classList.toggle('show');
         });
 
-        function closeMobileMenu() {
-            mobileMenu.classList.add('translate-y-full');
-            // FIX: Când închidem meniul mobil, restabilim scroll-ul body-ului
-            document.body.style.overflow = 'scroll'; 
-            setTimeout(() => {
-                mobileMenu.classList.add('hidden');
-            }, 300); 
-        }
-
-        closeMenuButton.addEventListener('click', closeMobileMenu);
+        // Închide meniul "Mai Multe" când se dă click pe un item
+        document.querySelectorAll('.more-menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                closeMoreMenu();
+            });
+        });
         
-        menuItems.forEach(item => {
-            item.addEventListener('click', closeMobileMenu);
-        });
+        // Functie globala de inchidere (utilizata si in modale)
+        window.closeMoreMenu = function() {
+            moreMenuOverlay.classList.remove('show');
+        }
 
 
         // --- 4. SCROLL ANIMATIONS (Intersection Observer) ---
@@ -1106,8 +1059,6 @@
         // Închide modalele la click in afara ferestrei sau pe tasta ESC
         document.querySelectorAll('.modal-container').forEach(modal => {
             modal.addEventListener('click', (e) => {
-                // Verifică dacă click-ul a fost direct pe containerul modal (nu pe conținut)
-                // Folosim e.target === modal pentru a ne asigura că este click-ul pe fundal
                 if (e.target === modal) {
                     const modalId = modal.id;
                     closeModal(modalId);
@@ -1116,6 +1067,12 @@
         });
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
+                 // Închide meniul Mai Multe dacă e deschis
+                 if(moreMenuOverlay.classList.contains('show')) {
+                     closeMoreMenu();
+                     return;
+                 }
+                 
                  // Închide doar primul modal vizibil
                  const visibleModal = Array.from(document.querySelectorAll('.modal-container.flex')).pop();
                  if (visibleModal) {
@@ -1188,7 +1145,6 @@
         const container = document.body;
 
         container.addEventListener('mousemove', (e) => {
-            // Verifică dacă este pe mobil (de obicei, telefoanele nu au mousemove)
             if (window.innerWidth >= 768) {
                 mouseGlow.style.opacity = '0.1';
                 mouseGlow.style.transform = `translate(${e.clientX - 75}px, ${e.clientY - 75}px)`;
@@ -1204,7 +1160,6 @@
         // Asigură tranziția smooth la click pe linkurile hash
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                // Nu intrerupe comportamentul linkurilor care deschid modale
                 if (this.getAttribute('href') !== '#') {
                     e.preventDefault();
                     document.querySelector(this.getAttribute('href')).scrollIntoView({

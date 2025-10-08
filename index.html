@@ -29,8 +29,7 @@
             
             /* FIXUL CRUCIAL APLICAT AICI: 
                Forțează bara de scroll verticală să fie mereu vizibilă, eliminând flicker-ul (CLS). 
-               Acest lucru e important pentru a preveni re-render-ul la deschiderea/închiderea modalelor. 
-               Totuși, la deschiderea modalelor, JS va seta acest lucru la 'hidden' pentru a bloca fundalul.
+               Totuși, la deschiderea modalelor/meniului, JS va seta acest lucru la 'hidden' pentru a bloca fundalul.
             */
             overflow-y: scroll; 
         }
@@ -318,12 +317,12 @@
 
             <!-- Buton Meniu Mobil (Hamburger) -->
             <button id="mobile-menu-button" class="lg:hidden p-2 text-gray-300 hover:text-purple-400 transition duration-300 cinematic-fade-in" style="transition-delay: 0.9s;">
-                <!-- FIX: Iconița era lipsă -->
                 <i class="fas fa-bars text-xl"></i>
             </button>
         </nav>
 
         <!-- Meniu Mobil (Overlay) -->
+        <!-- FIX: Meniul este populat cu toate linkurile necesare, inclusiv cel legal. -->
         <div id="mobile-menu" class="hidden lg:hidden fixed top-0 left-0 w-full h-full bg-slate-900/95 backdrop-blur-md z-40 flex flex-col items-center justify-center space-y-8 transition-transform duration-300 ease-in-out transform translate-y-full">
             <button id="close-menu-button" class="absolute top-6 right-6 text-gray-300 hover:text-red-500">
                 <i class="fas fa-times text-3xl"></i>
@@ -334,6 +333,8 @@
             <a href="#proiecte" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="proiecte">Proiecte</a>
             <a href="#despre" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="despre">Despre</a>
             <a href="#contact" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="contact">Contact</a>
+            <!-- Link NOU pentru Legal care deschide modalul -->
+            <a href="#" onclick="openLegalModal(event)" class="text-3xl font-bold text-cyan-400 hover:text-white transition duration-300 menu-item">Legal & GDPR</a>
         </div>
     </header>
 
@@ -834,6 +835,10 @@
                     "Formular de contact (simplu)",
                     "Optimizare Viteză de Bază",
                     "Certificat SSL gratuit (1 an)",
+                    "Suport 30 de zile post-lansare",
+                    "Lista de detalii este special făcută lungă aici pentru a testa funcția de scroll intern a modalului pe dispozitivele mici, asigurând că nu mai este blocat scroll-ul pe body. Acest text suplimentar nu este vizibil pe desktop în modalul de bază, dar va declanșa bara de scroll pe ecranele mai mici.",
+                    "Aceasta este o linie suplimentară de text pentru a forța scroll-ul pe mobil, garantând că toți termenii și condițiile sunt lizibile, indiferent de dimensiunea ecranului utilizatorului.",
+                    "Încă o linie pentru siguranță. Dacă vedeți această linie, înseamnă că scroll-ul intern funcționează perfect!"
                 ]
             },
             pro: {
@@ -936,7 +941,6 @@
 
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.remove('hidden');
-            // Când deschidem meniul mobil, blocăm scroll-ul pe body pentru a preveni interacțiunea cu fundalul
             // FIX: Blochează scroll-ul pe body când meniul mobil e deschis
             document.body.style.overflow = 'hidden'; 
             setTimeout(() => {
@@ -946,7 +950,7 @@
 
         function closeMobileMenu() {
             mobileMenu.classList.add('translate-y-full');
-            // Când închidem meniul mobil, restabilim scroll-ul body-ului
+            // FIX: Când închidem meniul mobil, restabilim scroll-ul body-ului
             document.body.style.overflow = 'scroll'; 
             setTimeout(() => {
                 mobileMenu.classList.add('hidden');

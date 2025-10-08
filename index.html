@@ -1,2431 +1,1177 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Miorița Studio — Premium Web Development & Design</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miorița Studio | Viitorul Digital, Creat Astăzi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Definirea culorilor și fontului */
+        :root {
+            --color-primary: #8B5CF6; /* Purple-500 */
+            --color-secondary: #06B6D4; /* Cyan-500 */
+            --color-dark-bg: #030712; /* Extra Dark */
+            --color-card-bg: #0F172A; /* Slate-900 */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark-bg);
+            color: #E5E7EB; /* Gray-200 */
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            min-height: 200vh; /* Pentru a testa scroll-ul și animațiile */
+            
+            /* FIXUL CRUCIAL APLICAT AICI */
+            /* Forțează bara de scroll verticală să fie întotdeauna vizibilă, eliminând flicker-ul (CLS). */
+            overflow-y: scroll; 
+        }
 
-<!-- SEO Meta Tags -->
-<meta name="description" content="Miorița Studio - Agenție premium de web development și design din Maramureș. Creăm experiențe digitale interactive și moderne pentru afacerea ta. Servicii complete de dezvoltare web, UI/UX design, e-commerce și branding.">
-<meta name="keywords" content="web development maramures, web design romania, UI/UX design, dezvoltare web, design web, agenție web, SEO, marketing digital, e-commerce, branding audio, branding vizual">
-<meta name="author" content="Miorița Studio">
-<meta property="og:title" content="Miorita Studio - Premium Web Development">
-<meta property="og:description" content="Transformăm idei în experiențe digitale premium">
-<meta property="og:type" content="website">
-<link rel="canonical" href="https://mioritastudio.ro">
+        /* ----------------------------------- */
+        /* 1. FUNDAL LIVE FLUID (LIVE GRADIENT) */
+        /* ----------------------------------- */
+        .live-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, var(--color-dark-bg), #111827, #2563EB, #C026D3);
+            background-size: 400% 400%;
+            animation: gradient-flow 15s ease infinite;
+            opacity: 0.4; /* Subtil, nu distrage atenția */
+            z-index: -10;
+        }
 
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-<style>
-  :root{
-    --bg:#06060a;
-    --glass-bg: rgba(255,255,255,0.04);
-    --accent1: #6b7bff;
-    --accent2: #8e5cff;
-    --accent3: #764ba2;
-    --muted: rgba(255,255,255,0.75);
-    --glass-border: rgba(255,255,255,0.06);
-    --maxw:1200px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;scroll-behavior:smooth}
-  body{
-    margin:0;
-    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    background:var(--bg);
-    color:#fff;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    overflow-x:hidden;
-  }
+        /* ------------------------------- */
+        /* 2. EFECTE CINEMATICE (SCROLL) */
+        /* ------------------------------- */
+        .cinematic-fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-  /* CANVAS BACKGROUND */
-  #bg-canvas{
-    position:fixed;
-    inset:0;
-    width:100%;
-    height:100%;
-    z-index:-3;
-    display:block;
-    background: linear-gradient(180deg,#041022 0%, #070617 45%, #06060a 100%);
-  }
+        .cinematic-scale-in {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-  /* LIQUID LAYERS */
-  .liquid-layer{
-    position:fixed;
-    inset:0;
-    z-index:-2;
-    pointer-events:none;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .glass-frame{
-    width:120%;
-    max-width:1600px;
-    opacity:0.08;
-    transform:translateY(-10vh) scale(1.05);
-    filter: blur(20px) saturate(1.2);
-  }
+        .animated-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
 
-  /* HEADER */
-  header{
-    position:fixed;
-    top:16px;
-    left:50%;
-    transform:translateX(-50%);
-    width:calc(100% - 48px);
-    max-width:var(--maxw);
-    z-index:40;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-  }
+        /* ----------------------------------- */
+        /* 3. STICKY HEADER & SCROLL EFFECT */
+        /* ----------------------------------- */
+        .header-sticky {
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-bottom-color 0.3s ease;
+        }
 
-  /* ============================================ */
-  /* LOGO - REPLACE WITH YOUR OWN LOGO           */
-  /* To customize: Edit the SVG paths below      */
-  /* Or replace entire .logo-svg with <img>      */
-  /* ============================================ */
-  .logo-wrap{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border-radius:16px;
-    padding:10px 16px;
-    border:1px solid var(--glass-border);
-    backdrop-filter: blur(20px) saturate(1.5);
-    transition:all 0.3s ease;
-    cursor:pointer;
-  }
-  .logo-wrap:hover{
-    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-    border-color: rgba(255,255,255,0.15);
-    transform:translateY(-2px);
-  }
-  .logo-svg {
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
-  }
-  .brand{line-height:1}
-  .brand .title{font-weight:700;letter-spacing:0.4px;font-size:15px}
-  .brand .sub{font-size:12px;opacity:0.8;margin-top:3px}
+        .header-scrolled {
+            background-color: rgba(3, 7, 18, 0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Stil specific pentru imaginea logo în header/footer */
+        .logo-img {
+            max-height: 40px; /* Înălțime maximă pentru logo în header */
+            width: auto;
+        }
 
-  nav{display:flex;gap:12px;align-items:center}
-  .nav-btn{
-    color:#fff;
-    text-decoration:none;
-    padding:10px 18px;
-    border-radius:12px;
-    font-size:14px;
-    font-weight:500;
-    transition:all 0.3s ease;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    border:1px solid var(--glass-border);
-    backdrop-filter: blur(20px);
-  }
-  .nav-btn:hover{
-    background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
-    border-color: rgba(255,255,255,0.15);
-    transform:translateY(-2px);
-  }
-  .nav-btn.primary{
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    border:none;
-    box-shadow:0 4px 20px rgba(107,123,255,0.4);
-  }
-  .nav-btn.primary:hover{
-    box-shadow:0 6px 28px rgba(107,123,255,0.5);
-    transform:translateY(-2px) scale(1.02);
-  }
+        /* Stil specific pentru imaginea logo în footer (mai mică și subtilă) */
+        .footer-logo-img {
+            height: 20px; /* Înălțime mai mică pentru footer */
+            width: auto;
+            display: inline;
+            vertical-align: middle;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .footer-logo-img:hover {
+            opacity: 1;
+        }
 
-  main{position:relative;z-index:1;padding-top:100px}
-  .container{max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
-  /* HERO SECTION */
-  .hero{
-    min-height:90vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    padding:60px 0;
-  }
+        /* ----------------------------------- */
+        /* 4. INTRO SCREEN (Mascare conținut) */
+        /* ----------------------------------- */
+        #intro-screen {
+            background-color: var(--color-dark-bg);
+            z-index: 50;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
+        }
 
-  .hero-content{
-    text-align:center;
-    position:relative;
-    z-index:2;
-  }
+        /* ----------------------------------- */
+        /* 5. CARUSEL & PROIECTE CARD HOVER */
+        /* ----------------------------------- */
+        .project-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-  /* 3D Floating Cards */
-  .floating-cards{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-  }
-  .float-card{
-    position:absolute;
-    width:120px;
-    height:120px;
-    background: linear-gradient(135deg, rgba(107,123,255,0.15), rgba(142,92,255,0.15));
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:20px;
-    backdrop-filter: blur(10px);
-    animation: float 20s infinite ease-in-out;
-    transition:all 0.3s ease;
-  }
-  .float-card:hover{
-    transform:scale(1.2) rotate(10deg) !important;
-    background: linear-gradient(135deg, rgba(107,123,255,0.3), rgba(142,92,255,0.3));
-    cursor:pointer;
-  }
-  .float-card:nth-child(1){top:10%;left:10%;animation-delay:0s}
-  .float-card:nth-child(2){top:20%;right:15%;animation-delay:2s}
-  .float-card:nth-child(3){bottom:15%;left:20%;animation-delay:4s}
-  .float-card:nth-child(4){bottom:25%;right:10%;animation-delay:6s}
+        /* Efect de iluminare pe hover */
+        .card-glow-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .card-glow-effect::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
+            transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+        .card-glow-effect:hover::before {
+            width: 300%;
+            height: 300%;
+            opacity: 1;
+        }
 
-  @keyframes float {
-    0%, 100% {transform:translateY(0) rotate(0deg)}
-    25% {transform:translateY(-30px) rotate(5deg)}
-    50% {transform:translateY(-60px) rotate(-5deg)}
-    75% {transform:translateY(-30px) rotate(3deg)}
-  }
+        /* Pentru a asigura că imaginea și textul sunt deasupra pseudo-elementului */
+        .card-content > * {
+            position: relative;
+            z-index: 10;
+        }
 
-  .hero h1{
-    font-size:clamp(2.8rem,7vw,5.5rem);
-    font-weight:900;
-    margin:0 0 24px;
-    line-height:1.05;
-    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-    position:relative;
-    cursor:pointer;
-    transition:all 0.3s ease;
-  }
-  .hero h1:hover{
-    transform:scale(1.02);
-    letter-spacing:2px;
-  }
+        /* ----------------------------------- */
+        /* 6. MODAL STYLING (Poziționare verticală sus și scroll intern) */
+        /* ----------------------------------- */
+        .modal-container {
+            /* Stil comun pentru toate modalele */
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: none; /* Ascuns inițial (Managed by JS) */
+            justify-content: center;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+            /* Scroll-ul principal este BLOCAT în JS pe body, deci nu mai e nevoie aici. */
+        }
 
-  .gradient-text{
-    background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3), var(--accent1));
-    background-size:300% 100%;
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-    animation: gradientShift 3s ease infinite;
-  }
-  @keyframes gradientShift {
-    0%, 100% {background-position:0% 50%}
-    50% {background-position:100% 50%}
-  }
+        /* RULE: Poziționează conținutul mai sus în viewport */
+        .modal-container > div {
+             /* Margine superioară pe mobil, să nu fie lipit de sus */
+             margin-top: 2rem; 
+             margin-bottom: 2rem; 
+        }
+        
+        @media (min-width: 640px) {
+            .modal-container > div {
+                /* Margine mai mare pe desktop (echivalent mt-20) */
+                margin-top: 5rem; 
+                margin-bottom: 5rem;
+            }
+        }
+        
+        /* Intrările și ieșirile modale */
+        .modal-enter-active {
+            opacity: 1;
+        }
+        .modal-enter-from, .modal-leave-to {
+            opacity: 0;
+        }
+        .modal-content-enter-active {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-content-enter-from {
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+        }
 
-  .hero p{
-    font-size:clamp(1.1rem,2.5vw,1.4rem);
-    color:var(--muted);
-    max-width:750px;
-    margin:0 auto 50px;
-    line-height:1.7;
-  }
+        /* ----------------------------------- */
+        /* 7. SCROLL TO TOP BUTTON */
+        /* ----------------------------------- */
+        #scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 30;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(20px);
+        }
+        #scroll-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-  /* Interactive Stats */
-  .hero-stats{
-    display:flex;
-    gap:40px;
-    justify-content:center;
-    margin:50px 0;
-    flex-wrap:wrap;
-  }
-  .stat-item{
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border:1px solid var(--glass-border);
-    border-radius:20px;
-    padding:24px 32px;
-    backdrop-filter: blur(20px);
-    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-  }
-  .stat-item::before{
-    content:'';
-    position:absolute;
-    inset:0;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    opacity:0;
-    transition:opacity 0.4s ease;
-  }
-  .stat-item:hover::before{opacity:0.1}
-  .stat-item:hover{
-    transform:translateY(-8px) scale(1.05);
-    border-color: rgba(107,123,255,0.4);
-    box-shadow:0 20px 60px rgba(107,123,255,0.3);
-  }
-  .stat-number{
-    font-size:2.5rem;
-    font-weight:800;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-    display:block;
-    position:relative;
-    z-index:1;
-  }
-  .stat-label{
-    font-size:0.9rem;
-    color:var(--muted);
-    margin-top:8px;
-    position:relative;
-    z-index:1;
-  }
 
-  /* CTA Buttons */
-  .hero-cta{
-    display:inline-flex;
-    gap:20px;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:16px 36px;
-    border-radius:14px;
-    font-weight:600;
-    text-decoration:none;
-    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size:16px;
-    position:relative;
-    overflow:hidden;
-  }
-  .btn::before{
-    content:'';
-    position:absolute;
-    inset:0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-    opacity:0;
-    transition:opacity 0.3s ease;
-  }
-  .btn:hover::before{opacity:1}
-  .btn-primary{
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    color:#fff;
-    box-shadow:0 10px 30px rgba(107,123,255,0.4);
-  }
-  .btn-primary:hover{
-    box-shadow:0 15px 40px rgba(107,123,255,0.5);
-    transform:translateY(-3px) scale(1.02);
-  }
-  .btn-secondary{
-    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    color:#fff;
-    border:1px solid var(--glass-border);
-    backdrop-filter: blur(20px);
-  }
-  .btn-secondary:hover{
-    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-    border-color: rgba(255,255,255,0.2);
-    transform:translateY(-3px);
-  }
-
-  .scroll-indicator{
-    position:absolute;
-    bottom:40px;
-    left:50%;
-    transform:translateX(-50%);
-    animation: bounce 2s infinite;
-    cursor:pointer;
-    opacity:0.6;
-    transition:opacity 0.3s ease;
-  }
-  .scroll-indicator:hover{opacity:1}
-  @keyframes bounce {
-    0%, 100% {transform:translateX(-50%) translateY(0)}
-    50% {transform:translateX(-50%) translateY(10px)}
-  }
-
-  /* SERVICES */
-  .services{padding:100px 0}
-  .section-header{text-align:center;margin-bottom:60px}
-  .section-header h2{
-    font-size:clamp(2rem,5vw,3rem);
-    font-weight:800;
-    margin:0 0 16px;
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-  }
-  .section-header p{color:var(--muted);font-size:1.1rem;margin:0}
-
-  .services-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:28px;
-  }
-  .service-card{
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border:1px solid var(--glass-border);
-    border-radius:24px;
-    padding:36px;
-    backdrop-filter: blur(20px) saturate(1.3);
-    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position:relative;
-    overflow:hidden;
-  }
-  .service-card::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  }
-  .service-card:hover{
-    transform:translateY(-8px);
-    border-color: rgba(255,255,255,0.2);
-    box-shadow:0 20px 60px rgba(0,0,0,0.5);
-  }
-  .service-icon{
-    width:64px;
-    height:64px;
-    border-radius:16px;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:24px;
-    box-shadow:0 8px 24px rgba(107,123,255,0.4);
-  }
-  .service-icon svg{width:32px;height:32px;fill:#fff}
-  .service-card h3{font-size:1.4rem;font-weight:700;margin:0 0 12px}
-  .service-card p{color:var(--muted);line-height:1.7;margin:0;font-size:1rem}
-
-  /* PROJECTS */
-  .projects{padding:100px 0}
-  .projects-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-    gap:32px;
-  }
-  .project-card{
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border:1px solid var(--glass-border);
-    border-radius:24px;
-    overflow:hidden;
-    backdrop-filter: blur(20px) saturate(1.3);
-    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position:relative;
-  }
-  .project-card::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  }
-  .project-card:hover{
-    transform:translateY(-10px);
-    border-color: rgba(255,255,255,0.2);
-    box-shadow:0 25px 70px rgba(0,0,0,0.6);
-  }
-  .project-image{
-    width:100%;
-    height:260px;
-    background: linear-gradient(135deg, rgba(107,123,255,0.25), rgba(142,92,255,0.25));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:hidden;
-  }
-  .project-image::after{
-    content:'';
-    position:absolute;
-    inset:0;
-    background: linear-gradient(180deg, transparent 0%, rgba(6,6,10,0.9) 100%);
-  }
-  .project-placeholder{font-size:4rem;opacity:0.4;z-index:1}
-  .project-content{padding:32px}
-  .project-content h3{font-size:1.5rem;font-weight:700;margin:0 0 10px}
-  .project-content p{color:var(--muted);line-height:1.7;margin:0 0 24px;font-size:1rem}
-  .project-link{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:var(--accent1);
-    text-decoration:none;
-    font-weight:600;
-    font-size:1rem;
-    transition:all 0.3s ease;
-  }
-  .project-link:hover{gap:14px;color:var(--accent2)}
-  .project-link svg{width:18px;height:18px;fill:currentColor}
-
-  /* PRICING */
-  .pricing{padding:100px 0}
-  .pricing-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    gap:28px;
-    margin-top:60px;
-  }
-  .price-card{
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border:1px solid var(--glass-border);
-    border-radius:24px;
-    padding:44px 36px;
-    backdrop-filter: blur(20px) saturate(1.3);
-    transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position:relative;
-    overflow:hidden;
-    cursor:pointer;
-  }
-  .price-card::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  }
-  .price-card:hover{
-    transform:translateY(-10px);
-    border-color: rgba(255,255,255,0.2);
-    box-shadow:0 25px 70px rgba(0,0,0,0.6);
-  }
-  .price-card.featured{
-    border-color: rgba(107,123,255,0.4);
-    background: linear-gradient(135deg, rgba(107,123,255,0.12), rgba(142,92,255,0.06));
-  }
-  .price-card.featured::before{
-    background: linear-gradient(90deg, transparent, rgba(107,123,255,0.6), transparent);
-  }
-  .price-badge{
-    display:inline-block;
-    padding:8px 18px;
-    border-radius:24px;
-    font-size:12px;
-    font-weight:700;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    margin-bottom:20px;
-    text-transform:uppercase;
-    letter-spacing:1px;
-  }
-  .price-card h3{font-size:1.6rem;font-weight:800;margin:0 0 10px}
-  .price-card .desc{color:var(--muted);font-size:0.95rem;margin:0 0 28px}
-  .price{
-    font-size:3.5rem;
-    font-weight:900;
-    margin:0 0 10px;
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-  }
-  .price-period{color:var(--muted);font-size:0.95rem;margin:0 0 36px}
-  .features{list-style:none;padding:0;margin:0 0 36px}
-  .features li{
-    padding:14px 0;
-    color:var(--muted);
-    font-size:1rem;
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
-  .features li::before{
-    content:'✓';
-    color:var(--accent1);
-    font-weight:800;
-    font-size:1.2rem;
-  }
-  .price-card .btn{width:100%;text-align:center;justify-content:center}
-  .learn-more-btn{
-    width:100%;
-    padding:12px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:12px;
-    color:#fff;
-    font-weight:600;
-    cursor:pointer;
-    transition:all 0.3s ease;
-    margin-top:auto;
-  }
-  .learn-more-btn:hover{
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    border-color: rgba(255,255,255,0.2);
-  }
-  
-  /* Align price cards to same height */
-  .price-card{
-    display:flex;
-    flex-direction:column;
-  }
-  .price-card .features{
-    flex:1;
-  }
-
-  /* AUDIO PLAYER */
-  .audio-player-section{
-    padding:100px 0;
-    position:relative;
-  }
-
-  .player-container{
-    max-width:900px;
-    margin:0 auto;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border:1px solid rgba(255,255,255,0.1);
-    border-radius:32px;
-    padding:40px;
-    backdrop-filter: blur(30px) saturate(1.5);
-    box-shadow:0 20px 80px rgba(0,0,0,0.4);
-    position:relative;
-    overflow:hidden;
-  }
-  .player-container::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:2px;
-    background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), transparent);
-  }
-
-  .player-header{
-    text-align:center;
-    margin-bottom:40px;
-  }
-  .player-header h2{
-    font-size:2.2rem;
-    font-weight:800;
-    margin:0 0 12px;
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-  }
-  .player-header p{
-    color:var(--muted);
-    margin:0;
-    font-size:1rem;
-  }
-
-  .visualizer-wrapper{
-    position:relative;
-    width:100%;
-    height:200px;
-    background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
-    border-radius:20px;
-    overflow:hidden;
-    margin-bottom:30px;
-    border:1px solid rgba(255,255,255,0.05);
-  }
-  #audioVisualizer{
-    width:100%;
-    height:100%;
-    display:block;
-  }
-
-  .now-playing{
-    display:flex;
-    align-items:center;
-    gap:20px;
-    margin-bottom:25px;
-    padding:20px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,0.05);
-  }
-  .album-art{
-    width:80px;
-    height:80px;
-    border-radius:12px;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:2rem;
-    flex-shrink:0;
-    box-shadow:0 8px 24px rgba(107,123,255,0.3);
-  }
-  .track-info{
-    flex:1;
-    min-width:0;
-  }
-  .track-title{
-    font-size:1.2rem;
-    font-weight:700;
-    margin:0 0 6px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .track-artist{
-    color:var(--muted);
-    font-size:0.95rem;
-    margin:0;
-  }
-
-  .progress-container{
-    margin-bottom:25px;
-  }
-  .progress-bar{
-    width:100%;
-    height:8px;
-    background: rgba(255,255,255,0.1);
-    border-radius:10px;
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-  }
-  .progress-fill{
-    height:100%;
-    background: linear-gradient(90deg, var(--accent1), var(--accent2));
-    border-radius:10px;
-    width:0%;
-    transition:width 0.1s linear;
-    position:relative;
-  }
-  .progress-fill::after{
-    content:'';
-    position:absolute;
-    right:0;
-    top:50%;
-    transform:translateY(-50%);
-    width:16px;
-    height:16px;
-    background:#fff;
-    border-radius:50%;
-    box-shadow:0 2px 8px rgba(0,0,0,0.3);
-  }
-  .time-display{
-    display:flex;
-    justify-content:space-between;
-    margin-top:8px;
-    font-size:0.85rem;
-    color:var(--muted);
-  }
-
-  .player-controls{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:20px;
-    margin-bottom:25px;
-  }
-  .control-btn{
-    width:56px;
-    height:56px;
-    border-radius:50%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    border:1px solid rgba(255,255,255,0.1);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-  .control-btn:hover{
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
-    transform:scale(1.1);
-    border-color: rgba(255,255,255,0.2);
-  }
-  .control-btn.play-pause{
-    width:72px;
-    height:72px;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    border:none;
-    box-shadow:0 8px 30px rgba(107,123,255,0.4);
-  }
-  .control-btn.play-pause:hover{
-    box-shadow:0 12px 40px rgba(107,123,255,0.5);
-    transform:scale(1.15);
-  }
-  .control-btn svg{
-    width:24px;
-    height:24px;
-    fill:#fff;
-  }
-  .control-btn.play-pause svg{
-    width:28px;
-    height:28px;
-  }
-
-  .category-tabs{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    margin-bottom:20px;
-  }
-  .tab-btn{
-    padding:12px 28px;
-    border-radius:12px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    border:1px solid rgba(255,255,255,0.08);
-    color:var(--muted);
-    cursor:pointer;
-    transition:all 0.3s ease;
-    font-weight:600;
-    font-size:0.95rem;
-    backdrop-filter: blur(10px);
-  }
-  .tab-btn:hover{
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    border-color: rgba(255,255,255,0.15);
-  }
-  .tab-btn.active{
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    border:none;
-    color:#fff;
-    box-shadow:0 4px 20px rgba(107,123,255,0.4);
-  }
-
-  .playlist-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border:1px solid rgba(255,255,255,0.1);
-    color:#fff;
-    cursor:pointer;
-    transition:all 0.3s ease;
-    font-weight:600;
-    backdrop-filter: blur(10px);
-  }
-  .playlist-btn:hover{
-    background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-    border-color: rgba(255,255,255,0.2);
-    transform:translateY(-2px);
-  }
-
-  .volume-control{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-top:20px;
-  }
-  .volume-slider{
-    flex:1;
-    height:6px;
-    background: rgba(255,255,255,0.1);
-    border-radius:10px;
-    cursor:pointer;
-    position:relative;
-  }
-  .volume-fill{
-    height:100%;
-    background: linear-gradient(90deg, var(--accent1), var(--accent2));
-    border-radius:10px;
-    width:70%;
-    transition:width 0.1s linear;
-  }
-
-  /* MODAL */
-  .modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(10px);
-    z-index:1000;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-  }
-  .modal.active{display:flex}
-  .modal-content{
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    border:1px solid rgba(255,255,255,0.15);
-    border-radius:24px;
-    padding:40px;
-    max-width:600px;
-    width:100%;
-    max-height:80vh;
-    overflow-y:auto;
-    backdrop-filter: blur(30px) saturate(1.5);
-    box-shadow:0 30px 100px rgba(0,0,0,0.5);
-    position:relative;
-  }
-  .modal-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:30px;
-  }
-  .modal-header h3{
-    font-size:1.8rem;
-    font-weight:700;
-    margin:0;
-  }
-  .close-modal{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background: rgba(255,255,255,0.1);
-    border:1px solid rgba(255,255,255,0.1);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:all 0.3s ease;
-  }
-  .close-modal:hover{
-    background: rgba(255,255,255,0.2);
-    transform:rotate(90deg);
-  }
-
-  .track-list{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .track-item{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    padding:16px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-    border:1px solid rgba(255,255,255,0.05);
-    border-radius:12px;
-    cursor:pointer;
-    transition:all 0.3s ease;
-  }
-  .track-item:hover{
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-    border-color: rgba(255,255,255,0.15);
-    transform:translateX(8px);
-  }
-  .track-item.active{
-    background: linear-gradient(135deg, rgba(107,123,255,0.2), rgba(142,92,255,0.1));
-    border-color: rgba(107,123,255,0.3);
-  }
-  .track-number{
-    width:32px;
-    height:32px;
-    border-radius:8px;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2));
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:700;
-    font-size:0.9rem;
-    flex-shrink:0;
-  }
-  .track-details{
-    flex:1;
-    min-width:0;
-  }
-  .track-name{
-    font-weight:600;
-    margin:0 0 4px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .track-duration{
-    font-size:0.85rem;
-    color:var(--muted);
-    margin:0;
-  }
-
-  .shortcuts-info{
-    margin-top:30px;
-    padding:20px;
-    background: linear-gradient(135deg, rgba(107,123,255,0.1), rgba(142,92,255,0.05));
-    border:1px solid rgba(107,123,255,0.2);
-    border-radius:16px;
-  }
-  .shortcuts-info h4{
-    font-size:1.1rem;
-    margin:0 0 16px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .shortcut-item{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    font-size:0.9rem;
-  }
-  .shortcut-key{
-    background: rgba(255,255,255,0.1);
-    padding:4px 12px;
-    border-radius:6px;
-    font-family:monospace;
-    font-weight:600;
-  }
-
-  .price-modal-content{
-    max-width:700px;
-  }
-  .price-story{
-    margin:20px 0;
-    padding:24px;
-    background: linear-gradient(135deg, rgba(107,123,255,0.1), rgba(142,92,255,0.05));
-    border-radius:16px;
-    border:1px solid rgba(107,123,255,0.2);
-  }
-  .price-story h4{
-    font-size:1.3rem;
-    margin:0 0 16px;
-    color:var(--accent1);
-  }
-  .price-story p{
-    color:var(--muted);
-    line-height:1.7;
-    margin:0 0 12px;
-  }
-  .price-story ul{
-    list-style:none;
-    padding:0;
-    margin:16px 0 0;
-  }
-  .price-story ul li{
-    padding:10px 0;
-    color:var(--muted);
-    display:flex;
-    align-items:center;
-    gap:12px;
-  }
-  .price-story ul li::before{
-    content:'💡';
-    font-size:1.2rem;
-  }
-
-  /* FINAL CTA */
-  .final-cta{padding:120px 0;text-align:center}
-  .cta-card{
-    background: linear-gradient(135deg, rgba(107,123,255,0.15), rgba(142,92,255,0.1));
-    border:1px solid rgba(107,123,255,0.3);
-    border-radius:32px;
-    padding:70px 50px;
-    backdrop-filter: blur(30px) saturate(1.5);
-    position:relative;
-    overflow:hidden;
-  }
-  .cta-card::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:3px;
-    background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), transparent);
-  }
-  .cta-card h2{
-    font-size:clamp(2.2rem,6vw,3.5rem);
-    font-weight:900;
-    margin:0 0 24px;
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    background-clip:text;
-  }
-  .cta-card p{
-    color:var(--muted);
-    font-size:1.2rem;
-    max-width:700px;
-    margin:0 auto 50px;
-    line-height:1.8;
-  }
-
-  /* FOOTER */
-  footer{padding:70px 0 50px;border-top:1px solid var(--glass-border);text-align:center}
-  footer p{color:var(--muted);font-size:0.95rem;margin:0}
-
-  /* RESPONSIVE */
-  @media(max-width:768px){
-    header{width:calc(100% - 32px);flex-wrap:wrap}
-    nav{gap:8px;width:100%;justify-content:center}
-    .nav-btn{padding:8px 14px;font-size:13px}
-    .hero{min-height:auto;padding:80px 0 60px}
-    .hero-stats{gap:20px}
-    .stat-item{padding:20px 24px}
-    .stat-number{font-size:2rem}
-    .float-card{width:80px;height:80px}
-    .player-container{padding:28px 20px}
-    .visualizer-wrapper{height:150px}
-    .now-playing{flex-direction:column;text-align:center}
-    .player-controls{gap:16px}
-    .control-btn{width:48px;height:48px}
-    .control-btn.play-pause{width:64px;height:64px}
-    .modal-content{padding:28px 20px}
-    .services-grid,.projects-grid,.pricing-grid{grid-template-columns:1fr}
-    .cta-card{padding:50px 32px}
-    .category-tabs{flex-wrap:wrap}
-    .tab-btn{padding:10px 20px;font-size:0.9rem}
-  }
-
-  ::-webkit-scrollbar{width:10px}
-  ::-webkit-scrollbar-track{background:rgba(255,255,255,0.05)}
-  ::-webkit-scrollbar-thumb{
-    background: linear-gradient(180deg, var(--accent1), var(--accent2));
-    border-radius:10px;
-  }
-  ::-webkit-scrollbar-thumb:hover{background: linear-gradient(180deg, var(--accent2), var(--accent1))}
-  
-  /* SCROLL TO TOP — ROCKET BUTTON */
-  .scroll-top{
-    position:fixed;
-    right:24px;
-    bottom:24px;
-    width:64px;
-    height:64px;
-    border-radius:18px;
-    background: linear-gradient(135deg, rgba(107,123,255,0.2), rgba(142,92,255,0.18));
-    border:1px solid rgba(255,255,255,0.12);
-    box-shadow:0 14px 40px rgba(107,123,255,0.28), inset 0 1px 0 rgba(255,255,255,0.08);
-    backdrop-filter: blur(14px) saturate(1.3);
-    display:grid;
-    place-items:center;
-    cursor:pointer;
-    z-index:900;
-    overflow:visible;
-    transform: translateY(20px) scale(0.6);
-    opacity:0;
-    pointer-events:none;
-    transition: box-shadow .35s ease;
-  }
-  .scroll-top:hover{
-    box-shadow:0 18px 55px rgba(107,123,255,0.38), inset 0 1px 0 rgba(255,255,255,0.1);
-  }
-  .scroll-top .rocket-emoji{font-size:26px; transform: translateY(-2px)}
-  .scroll-top .flame{
-    position:absolute;
-    bottom:-10px;
-    left:50%;
-    transform:translateX(-50%) scaleY(0.9);
-    width:14px;
-    height:22px;
-    border-radius:10px 10px 14px 14px;
-    background: radial-gradient(circle at 50% 20%, rgba(255,255,255,0.85) 0%, rgba(255,180,120,0.9) 25%, rgba(255,120,64,0.85) 55%, rgba(255,80,40,0.6) 75%, rgba(255,60,30,0.0) 100%);
-    filter: blur(1px) drop-shadow(0 8px 12px rgba(255,120,64,0.4));
-    opacity:0.85;
-    pointer-events:none;
-    transform-origin:50% 0%;
-    animation: flameFlicker 0.9s ease-in-out infinite;
-  }
-  @keyframes flameFlicker{
-    0%{ transform:translateX(-50%) scaleY(0.85) }
-    50%{ transform:translateX(-50%) scaleY(1.25) }
-    100%{ transform:translateX(-50%) scaleY(0.85) }
-  }
-  .rocket-star{
-    position:fixed;
-    width:8px;height:8px;
-    border-radius:50%;
-    background: linear-gradient(135deg, #6b7bff, #8e5cff);
-    box-shadow:0 0 0 rgba(255,255,255,0.4), 0 0 18px rgba(107,123,255,0.6);
-    z-index:880;
-    pointer-events:none;
-  }
-  @media (prefers-reduced-motion: reduce){
-    .scroll-top{transition:none}
-    .scroll-top .flame{animation:none}
-  }
-</style>
-<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+        /* Utility pentru a ascunde elemente înainte de intro */
+        .content-hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<!-- Fundal Live Fluid Animiat -->
+<div class="live-bg"></div>
 
-<div class="liquid-layer">
-  <svg class="glass-frame" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:rgb(107,123,255);stop-opacity:0.3" />
-        <stop offset="100%" style="stop-color:rgb(142,92,255);stop-opacity:0.3" />
-      </linearGradient>
-    </defs>
-    <ellipse cx="400" cy="300" rx="350" ry="250" fill="url(#grad1)" />
-  </svg>
+<!-- 1. ECRAN DE INTRO CINEMATIC -->
+<div id="intro-screen" class="fixed inset-0 flex items-center justify-center h-screen w-screen cinematic-fade-in animated-visible">
+    <div class="text-center p-8">
+        <!-- Logo animat (simulat cu CSS și JS) -->
+        <div id="logo-container" class="transition duration-1000 ease-in-out transform scale-75 opacity-0">
+            <!-- LOGO ACTUALIZAT AICI (Imagine) -->
+            <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
+                 alt="Miorița Studio Logo" 
+                 class="h-28 md:h-32 mx-auto mb-6 drop-shadow-lg" 
+                 onerror="this.onerror=null; this.src='https://placehold.co/120x120/8B5CF6/ffffff?text=Logo';" />
+            
+            <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400">
+                Miorița Studio
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-10 font-light italic">
+                Viitorul Digital, Creat Astăzi
+            </p>
+        </div>
+        
+        <!-- Butonul "Intră" -->
+        <button id="enter-button" 
+                class="cinematic-scale-in opacity-0 text-white font-semibold py-3 px-8 rounded-full transition duration-500 transform hover:scale-105 shadow-xl"
+                style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+            <i class="fas fa-meteor mr-2"></i> Intră în Experiență
+        </button>
+    </div>
 </div>
 
-<header>
-  <div class="logo-wrap">
-    <!-- ============================================ -->
-    <!-- LOGO CUSTOMIZATION:                          -->
-    <!-- Replace the SVG below with your own logo     -->
-    <!-- Or use: <img src="logo.png" alt="Logo">      -->
-    <!-- ============================================ -->
-    <img src="logo.png" alt="Miorița Studio Logo" class="logo-svg" width="58" height="58" />
-    <div class="brand">
-      <div class="title">Miorița Studio</div>
-      <div class="sub">Web Development</div>
-    </div>
-  </div>
-  <nav>
-    <a href="#services" class="nav-btn">Servicii</a>
-    <a href="#projects" class="nav-btn">Proiecte</a>
-    <a href="#pricing" class="nav-btn">Prețuri</a>
-    <a href="#contact" class="nav-btn primary">Contact</a>
-  </nav>
-</header>
-
-<main>
-  <section class="hero">
-    <div class="floating-cards">
-      <div class="float-card"></div>
-      <div class="float-card"></div>
-      <div class="float-card"></div>
-      <div class="float-card"></div>
-    </div>
+<!-- Conținutul Principal (Vizibil după intro) -->
+<main id="main-content" class="content-hidden">
     
-    <div class="container hero-content">
-      <h1>Transformăm idei în <span class="gradient-text">experiențe digitale</span> premium</h1>
-      <p>Dezvoltare web modernă, design elegant și soluții personalizate pentru afacerea ta. Creăm site-uri care impresionează și convertesc.</p>
-      
-      <div class="hero-stats">
-        <div class="stat-item">
-          <span class="stat-number">10+</span>
-          <span class="stat-label">Ani Experiență</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">100%</span>
-          <span class="stat-label">Dedicare</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">24/7</span>
-          <span class="stat-label">Disponibilitate</span>
-        </div>
-      </div>
-      
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-          </svg>
-          <span>Vezi Proiecte</span>
-        </a>
-        <a href="#player" class="btn btn-secondary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
-          </svg>
-          <span>Branding Audio</span>
-        </a>
-      </div>
-    </div>
-    
-    <div class="scroll-indicator">
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,0.6)">
-        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-      </svg>
-    </div>
-  </section>
-
-  <section class="services" id="services">
-    <div class="container">
-      <div class="section-header">
-        <h2>Servicii Premium</h2>
-        <p>Soluții complete pentru prezența ta online</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm10 0h2v2h-2zm0-4h2v2h-2z"/>
-            </svg>
-          </div>
-          <h3>Web Development</h3>
-          <p>Site-uri web moderne, responsive și optimizate pentru performanță maximă. Tehnologii de ultimă generație pentru rezultate excepționale.</p>
-        </div>
-        
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-          </div>
-          <h3>UI/UX Design</h3>
-          <p>Design elegant și intuitiv care pune utilizatorul pe primul loc. Interfețe moderne care îmbină estetica cu funcționalitatea.</p>
-        </div>
-        
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-            </svg>
-          </div>
-          <h3>E-commerce</h3>
-          <p>Magazine online complete cu sisteme de plată integrate, management produse și experiență de cumpărare optimizată pentru conversii maxime.</p>
-        </div>
-        
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
-            </svg>
-          </div>
-          <h3>Branding Audio</h3>
-          <p>Identitate sonoră unică pentru brandul tău. Jingle-uri, muzică de fundal și design audio care amplifică mesajul brandului tău.</p>
-        </div>
-        
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-            </svg>
-          </div>
-          <h3>Branding Vizual</h3>
-          <p>Logo design, ghiduri de stil și identitate vizuală completă. Creăm branduri memorabile care se diferențiază și rezonează cu audiența ta.</p>
-        </div>
-        
-        <div class="service-card">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-            </svg>
-          </div>
-          <h3>SEO & Marketing</h3>
-          <p>Optimizare pentru motoarele de căutare și strategii de marketing digital pentru vizibilitate maximă și creștere organică sustenabilă.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="projects" id="projects">
-    <div class="container">
-      <div class="section-header">
-        <h2>Proiecte Finalizate</h2>
-        <p>Portofoliu selectat de proiecte realizate</p>
-      </div>
-      <div class="projects-grid">
-        <div class="project-card">
-          <div class="project-image">
-            <div class="project-placeholder">🏥</div>
-          </div>
-          <div class="project-content">
-            <h3>Dr. Lazuran</h3>
-            <p>Platformă medicală modernă pentru cabinet stomatologic. Design elegant, sistem de programări online și prezentare completă a serviciilor.</p>
-            <a href="https://dr-lazuran.ro" target="_blank" class="project-link">
-              Vizitează site-ul
-              <svg viewBox="0 0 24 24">
-                <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-              </svg>
+    <!-- 2. HEADER STICKY -->
+    <header id="main-header" class="header-sticky fixed w-full top-0 z-40">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <!-- Logo și Nume Studio -->
+            <a href="#acasa" class="flex items-center space-x-2 cinematic-fade-in" style="transition-delay: 0.8s;">
+                <!-- LOGO ACTUALIZAT AICI (Imagine) -->
+                <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
+                     alt="Miorița Studio Logo" 
+                     class="logo-img" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/40x40/8B5CF6/ffffff?text=MS';" />
+                <span class="text-xl font-bold tracking-wider">Miorița Studio</span>
             </a>
-          </div>
+
+            <!-- Meniu Desktop -->
+            <div class="hidden lg:flex space-x-8 text-gray-300">
+                <a href="#acasa" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Acasă</a>
+                <a href="#servicii" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Servicii</a>
+                <a href="#pachete" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Pachete</a>
+                <a href="#proiecte" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Proiecte</a>
+                <a href="#despre" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Despre</a>
+                <a href="#contact" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Contact</a>
+            </div>
+
+            <!-- Buton Meniu Mobil (Hamburger) -->
+            <button id="mobile-menu-button" class="lg:hidden p-2 text-gray-300 hover:text-purple-400 transition duration-300 cinematic-fade-in" style="transition-delay: 0.9s;">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </nav>
+
+        <!-- Meniu Mobil (Overlay) -->
+        <div id="mobile-menu" class="hidden lg:hidden fixed top-0 left-0 w-full h-full bg-slate-900/95 backdrop-blur-md z-40 flex flex-col items-center justify-center space-y-8 transition-transform duration-300 ease-in-out transform translate-y-full">
+            <button id="close-menu-button" class="absolute top-6 right-6 text-gray-300 hover:text-red-500">
+                <i class="fas fa-times text-3xl"></i>
+            </button>
+            <a href="#acasa" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="acasa">Acasă</a>
+            <a href="#servicii" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="servicii">Servicii</a>
+            <a href="#pachete" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="pachete">Pachete</a>
+            <a href="#proiecte" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="proiecte">Proiecte</a>
+            <a href="#despre" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="despre">Despre</a>
+            <a href="#contact" class="text-3xl font-bold text-white hover:text-cyan-400 transition duration-300 menu-item" data-section="contact">Contact</a>
         </div>
-        
-        <div class="project-card">
-          <div class="project-image">
-            <div class="project-placeholder">💼</div>
-          </div>
-          <div class="project-content">
-            <h3>WorkMatch</h3>
-            <p>Platformă inovatoare de recrutare și management al talentelor. Interfață intuitivă, sistem avansat de matching și dashboard complet.</p>
-            <a href="https://workmatch.ro" target="_blank" class="project-link">
-              Vizitează site-ul
-              <svg viewBox="0 0 24 24">
-                <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-              </svg>
+    </header>
+
+    <!-- 3. HERO SECTION (Acasă) -->
+    <section id="acasa" class="relative pt-40 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">
+        <div class="max-w-4xl mx-auto cinematic-fade-in">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight mb-6 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
+                Design Modern, <br class="sm:hidden"> Rezultate Extraordinare
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-10 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.4s;">
+                Dezvoltăm identități digitale personalizate, accesibile și optimizate, transformând viziunea ta în realitate web.
+            </p>
+            <a href="#pachete" class="inline-block cinematic-scale-in animated-visible" style="transition-delay: 0.6s;">
+                <button class="font-bold py-4 px-12 rounded-lg text-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg shadow-purple-500/50"
+                        style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+                    Explorează Pachetele <i class="fas fa-arrow-right ml-2"></i>
+                </button>
             </a>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="pricing" id="pricing">
-    <div class="container">
-      <div class="section-header">
-        <h2>Pachete & Prețuri</h2>
-        <p>Alege pachetul potrivit pentru nevoile tale</p>
-      </div>
-      <div class="pricing-grid">
-        <div class="price-card" data-package="standard">
-          <h3>Standard</h3>
-          <p class="desc">Perfect pentru prezență online profesională</p>
-          <div class="price">600€</div>
-          <p class="price-period">Pachet complet</p>
-          <ul class="features">
-            <li>Design responsive modern</li>
-            <li>Până la 5 pagini</li>
-            <li>Optimizare SEO de bază</li>
-            <li>Formular de contact</li>
-            <li>Integrare Google Maps</li>
-            <li>Suport post-lansare</li>
-          </ul>
-          <button class="learn-more-btn">Află Mai Multe</button>
-        </div>
+    <!-- 4. SECȚIUNEA SERVICII / PACHETE -->
+    <section id="pachete" class="py-20 lg:py-32 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 cinematic-fade-in">
+                <span class="text-purple-400">Pachete</span> de Servicii Premium
+            </h2>
+            
+            <div id="pachete-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- CARD 1: STARTER -->
+                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="starter">
+                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl">
+                        <i class="fas fa-rocket text-4xl text-cyan-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Starter</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Lansarea rapidă. Ideal pentru prezența online minimală.</p>
+                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> 1 Pagină Principală</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Design Responsive</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Formular de Contact</li>
+                        </ul>
+                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
+                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
+                            Vezi Detalii
+                        </button>
+                    </div>
+                </div>
 
-        <div class="price-card featured" data-package="business">
-          <span class="price-badge">Recomandat</span>
-          <h3>Business</h3>
-          <p class="desc">Soluție completă pentru afaceri în creștere</p>
-          <div class="price">1500€</div>
-          <p class="price-period">Pachet complet</p>
-          <ul class="features">
-            <li>Tot din Standard, plus:</li>
-            <li>Până la 10 pagini</li>
-            <li>Blog integrat</li>
-            <li>Optimizare SEO avansată</li>
-            <li>Integrări social media</li>
-            <li>Analytics & rapoarte</li>
-            <li>Suport extins post-lansare</li>
-          </ul>
-          <button class="learn-more-btn">Află Mai Multe</button>
-        </div>
+                <!-- CARD 2: PRO -->
+                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="pro" style="transition-delay: 0.1s;">
+                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl border-2 border-purple-500">
+                        <i class="fas fa-chart-line text-4xl text-purple-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Pro <span class="text-xs ml-2 px-2 py-0.5 bg-purple-600 rounded-full">Recomandat</span></h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Soluția completă pentru afacerile în creștere.</p>
+                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Până la 5 Pagini</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Optimizare SEO de Bază</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Integrare Social Media</li>
+                        </ul>
+                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
+                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
+                            Vezi Detalii
+                        </button>
+                    </div>
+                </div>
 
-        <div class="price-card" data-package="premium">
-          <h3>Premium</h3>
-          <p class="desc">Soluție enterprise cu funcționalități avansate</p>
-          <div class="price">2500€</div>
-          <p class="price-period">Pachet complet</p>
-          <ul class="features">
-            <li>Tot din Business, plus:</li>
-            <li>Pagini nelimitate</li>
-            <li>E-commerce / Portal</li>
-            <li>Sistem de management conținut</li>
-            <li>Integrări API personalizate</li>
-            <li>Training & documentație</li>
-            <li>Suport prioritar extins</li>
-          </ul>
-          <button class="learn-more-btn">Află Mai Multe</button>
-        </div>
-      </div>
-    </div>
-  </section>
+                <!-- CARD 3: STUDIO -->
+                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="studio" style="transition-delay: 0.2s;">
+                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl">
+                        <i class="fas fa-crown text-4xl text-amber-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Studio</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Pachetul fără limite. Soluții personalizate la cheie.</p>
+                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Proiect Complex Personalizat</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Suport Premium 24/7</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Funcționalități Avansate</li>
+                        </ul>
+                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
+                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
+                            Vezi Detalii
+                        </button>
+                    </div>
+                </div>
 
-  <!-- ============================================ -->
-  <!-- AUDIO PLAYER - MOVED LOWER ON PAGE           -->
-  <!-- ============================================ -->
-  <section class="audio-player-section" id="player">
-    <div class="container">
-      <div class="player-container">
-        <div class="player-header">
-          <h2>🎵 Audio Player Premium</h2>
-          <p>Experiență audio-vizuală interactivă cu control complet</p>
+                <!-- CARD 4: SERVICII EXTRA (Actualizat cu Branding Vizual/Audio) -->
+                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="extra" style="transition-delay: 0.3s;">
+                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl">
+                        <i class="fas fa-tools text-4xl text-gray-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2 text-white">Servicii Extra</h3>
+                        <p class="text-gray-400 mb-4 flex-grow">Adaugă un plus de valoare proiectului tău existent.</p>
+                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
+                            <!-- Servicii noi adăugate: Branding Vizual și Branding Audio -->
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Branding Vizual</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Branding Audio</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Mentenanță și Actualizări</li>
+                        </ul>
+                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
+                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
+                            Vezi Detalii
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Call to action subtil -->
+            <div class="text-center mt-16 cinematic-fade-in" style="transition-delay: 0.4s;">
+                <p class="text-xl text-gray-400 italic">Nu ești sigur ce pachet ți se potrivește? <a href="#" onclick="openContactModal(event)" class="text-cyan-400 hover:underline font-medium">Contactează-ne pentru o ofertă personalizată!</a></p>
+            </div>
         </div>
+    </section>
 
-        <div class="visualizer-wrapper">
-          <canvas id="audioVisualizer"></canvas>
-        </div>
+    <!-- 5. PROCESUL DE COLABORARE -->
+    <section id="servicii" class="py-20 lg:py-32 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 cinematic-fade-in">
+                <span class="text-cyan-400">Procesul</span> Nostru de Colaborare
+            </h2>
 
-        <div class="now-playing">
-          <div class="album-art">🎵</div>
-          <div class="track-info">
-            <div class="track-title" id="trackTitle">Selectează o melodie</div>
-            <div class="track-artist" id="trackArtist">Miorița Studio</div>
-          </div>
-        </div>
+            <!-- Timeline Vertical Responsive -->
+            <div class="max-w-3xl mx-auto relative">
+                <!-- Linia verticală centrală -->
+                <div class="absolute hidden md:block w-0.5 bg-gray-700 h-full left-1/2 transform -translate-x-1/2"></div>
+                
+                <!-- PAS 1: Descoperire & Planificare -->
+                <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
+                    <div class="md:w-5/12 cinematic-fade-in">
+                        <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
+                            <h3 class="text-2xl font-bold text-white mb-2">1. Descoperire & Planificare</h3>
+                            <p class="text-gray-400">Înțelegem viziunea, publicul țintă și obiectivele. Stabilim împreună structura și tehnologiile necesare.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                        <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                    </div>
+                    <div class="md:w-5/12"></div>
+                </div>
 
-        <div class="progress-container">
-          <div class="progress-bar" id="progressBar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <div class="time-display">
-            <span id="currentTime">0:00</span>
-            <span id="totalTime">0:00</span>
-          </div>
-        </div>
+                <!-- PAS 2: Design Cinematic -->
+                <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full left-timeline">
+                    <div class="md:w-5/12"></div>
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                        <div class="w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
+                            <i class="fas fa-drafting-compass"></i>
+                        </div>
+                    </div>
+                    <div class="md:w-5/12 cinematic-fade-in">
+                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-cyan-500/30">
+                            <h3 class="text-2xl font-bold text-white mb-2">2. Design Cinematic</h3>
+                            <p class="text-gray-400">Creăm prototipuri vizuale moderne, axate pe experiența utilizatorului (UX) și estetică de înaltă clasă.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PAS 3: Dezvoltare Avansată -->
+                <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
+                    <div class="md:w-5/12 cinematic-fade-in">
+                        <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
+                            <h3 class="text-2xl font-bold text-white mb-2">3. Dezvoltare Avansată</h3>
+                            <p class="text-gray-400">Transformăm designul în cod curat, optimizat, folosind tehnologii de ultimă oră pentru viteză și stabilitate.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                        <div class="w-12 h-12 rounded-full bg-purple-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    </div>
+                    <div class="md:w-5/12"></div>
+                </div>
 
-        <div class="player-controls">
-          <button class="control-btn" id="prevBtn" title="Previous (←)">
-            <svg viewBox="0 0 24 24">
-              <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-            </svg>
-          </button>
-          
-          <button class="control-btn play-pause" id="playPauseBtn" title="Play/Pause (Space)">
-            <svg id="playIcon" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"/>
-            </svg>
-            <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none">
-              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-            </svg>
-          </button>
-          
-          <button class="control-btn" id="nextBtn" title="Next (→)">
-            <svg viewBox="0 0 24 24">
-              <path d="M16 18h2V6h-2zm-11-7l8.5-6v12z"/>
-            </svg>
-          </button>
-        </div>
+                <!-- PAS 4: Lansare & Suport -->
+                <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full left-timeline">
+                    <div class="md:w-5/12"></div>
+                    <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0">
+                        <div class="w-12 h-12 rounded-full bg-cyan-500 flex items-center justify-center text-white shadow-lg border-4 border-slate-900">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                    </div>
+                    <div class="md:w-5/12 cinematic-fade-in">
+                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-cyan-500/30">
+                            <h3 class="text-2xl font-bold text-white mb-2">4. Lansare & Suport</h3>
+                            <p class="text-gray-400">Publicăm proiectul, asigurăm mentenanța și oferim instruire pentru a prelua controlul complet.</p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="category-tabs">
-          <button class="tab-btn active" data-category="promo">🎁 Promo</button>
-          <button class="tab-btn" data-category="personalizate">✨ Personalizate</button>
+            </div>
         </div>
+    </section>
 
-        <button class="playlist-btn" id="openPlaylistBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/>
-          </svg>
-          <span>Deschide Playlist</span>
-        </button>
+    <!-- 6. PROIECTE FINALIZATE (Carusel "Wow") -->
+    <section id="proiecte" class="py-20 lg:py-32 px-4 bg-slate-900/50">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 cinematic-fade-in">
+                <span class="text-purple-400">Portofoliu</span> de Proiecte
+            </h2>
+            
+            <!-- Am restrâns lățimea caruselului la max-w-3xl -->
+            <div class="relative max-w-3xl mx-auto">
+                
+                <!-- Carusel Principal -->
+                <div id="projects-carousel" class="relative overflow-hidden rounded-2xl shadow-2xl h-80 md:h-96">
+                    <!-- Elementele Caruselului (Slides) -->
+                    <!-- Proiect 1 -->
+                    <a href="https://dr-lazuran.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="dr-lazuran">
+                        <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
+                             style="background-image: url('https://placehold.co/1200x600/1E3A8A/ffffff?text=Proiect+Dr.+Lazuran');">
+                            <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
+                                <h3 class="text-3xl font-bold text-white">Dr. Lazuran</h3>
+                                <p class="text-gray-300">Dezvoltare web complexă pentru un cabinet medical. Design curat și funcțional.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Proiect 2 -->
+                    <a href="https://workmatch.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="workmatch">
+                        <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
+                             style="background-image: url('https://placehold.co/1200x600/059669/ffffff?text=Proiect+WorkMatch');">
+                            <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
+                                <h3 class="text-3xl font-bold text-white">WorkMatch</h3>
+                                <p class="text-gray-300">Platformă de recrutare specializată cu interfață utilizator intuitivă și rapidă.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Proiect 3 -->
+                    <a href="https://raropem.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="raropem">
+                        <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
+                             style="background-image: url('https://placehold.co/1200x600/9D174D/ffffff?text=Proiect+Raropem');">
+                            <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
+                                <h3 class="text-3xl font-bold text-white">Raropem</h3>
+                                <p class="text-gray-300">Site de prezentare pentru o agenție de turism. Imagini de impact și rezervare rapidă.</p>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Proiect Special: Proiectul Tău -->
+                    <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" data-project="your-project">
+                         <div class="h-full w-full bg-gradient-to-br from-purple-800 to-cyan-800 flex flex-col items-center justify-center text-center p-8">
+                            <div class="cinematic-scale-in animated-visible">
+                                <i class="fas fa-hands-helping text-6xl text-white mb-4"></i>
+                                <h3 class="text-4xl font-extrabold text-white mb-4">Proiectul Tău</h3>
+                                <p class="text-xl text-gray-200 mb-6">Explorează posibilitățile și transformă-ți ideea în următorul nostru studiu de caz de succes.</p>
+                                <button onclick="openContactModal(event)" class="inline-block cinematic-fade-in animated-visible font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-105 shadow-xl bg-white/20 hover:bg-white/30">
+                                    Începe Colaborarea <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="volume-control">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-          </svg>
-          <div class="volume-slider" id="volumeSlider">
-            <div class="volume-fill" id="volumeFill"></div>
-          </div>
-        </div>
+                <!-- Navigare Carusel (Săgeți) -->
+                <button id="carousel-prev" class="absolute top-1/2 left-4 transform -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full z-10 transition duration-300">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="carousel-next" class="absolute top-1/2 right-4 transform -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full z-10 transition duration-300">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
 
-        <!-- ============================================ -->
-        <!-- TO ADD YOUR MUSIC FILES:                     -->
-        <!-- Edit the playlists object in JavaScript      -->
-        <!-- Replace empty url: "" with your file paths   -->
-        <!-- Example: url: "music/song.mp3"               -->
-        <!-- Supported: MP3, WAV, OGG                     -->
-        <!-- ============================================ -->
-        <audio id="audioElement" preload="metadata"></audio>
-      </div>
-    </div>
-  </section>
+                <!-- Indicatori/Thumbnails (Mini) -->
+                <div id="carousel-indicators" class="mt-4 flex justify-center space-x-2">
+                    <!-- Indicatorii vor fi generați de JS -->
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <div class="modal" id="playlistModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>📀 Playlist</h3>
-        <button class="close-modal" id="closeModalBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
-      </div>
-      
-      <div class="track-list" id="trackList"></div>
+    <!-- 7. DESPRE & CONTACT -->
+    <section id="despre" class="py-20 lg:py-32 px-4">
+        <div class="container mx-auto max-w-4xl">
+             <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 cinematic-fade-in">
+                <i class="fas fa-building text-purple-400 mr-3"></i> Despre <span class="text-cyan-400">Miorița Studio</span>
+            </h2>
 
-      <div class="shortcuts-info">
-        <h4>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>
-          </svg>
-          Keyboard Shortcuts
-        </h4>
-        <div class="shortcut-item">
-          <span>Play / Pause</span>
-          <span class="shortcut-key">Space</span>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="cinematic-fade-in">
+                    <h3 class="text-2xl font-bold mb-4 text-white">Viziunea Noastră</h3>
+                    <p class="text-gray-400 leading-relaxed mb-4">
+                        Miorița Studio s-a născut din pasiunea pentru designul digital de excepție. Credem că fiecare afacere merită o prezență online care nu doar funcționează, ci și inspiră. Ne concentrăm pe soluții personalizate, ușor de administrat și scalabile, eliminând barierele tehnice pentru clienții noștri.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed">
+                        Procesul nostru creativ este transparent și colaborativ. Începem cu o cafea (virtuală) și o discuție despre obiectivele tale, transformând apoi ideile în concepte vizuale și, în final, în aplicații web rapide și sigure.
+                    </p>
+                    <div class="mt-6 p-4 bg-purple-900/30 rounded-lg border border-purple-700/50">
+                        <p class="text-lg font-semibold text-purple-300">
+                            🏢 Despre Miorița Studio
+                        </p>
+                        <p class="text-sm text-gray-300 mt-2">
+                            Miorița Studio este un freelancer independent, nu o firmă înregistrată. Toate serviciile sunt oferite de o persoană fizică autorizată (PFA).
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="contact" class="cinematic-fade-in" style="transition-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-4 text-white">Contact Direct</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center p-3 bg-slate-800/60 rounded-lg shadow-md transition duration-300 hover:shadow-cyan-500/20">
+                            <i class="fas fa-envelope text-cyan-400 text-2xl mr-4"></i>
+                            <div>
+                                <p class="text-gray-400 text-sm">Email:</p>
+                                <a href="mailto:ScontactM@proton.me" class="text-white font-medium hover:text-cyan-300 transition">ScontactM@proton.me</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center p-3 bg-slate-800/60 rounded-lg shadow-md transition duration-300 hover:shadow-purple-500/20">
+                            <i class="fab fa-whatsapp text-green-400 text-2xl mr-4"></i>
+                            <div>
+                                <p class="text-gray-400 text-sm">WhatsApp (Răspuns Rapid):</p>
+                                <a href="https://wa.me/40749566723" target="_blank" class="text-white font-medium hover:text-green-300 transition">0749566723</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Butonul care deschide modalul de contact -->
+                    <a href="#" onclick="openContactModal(event)" class="mt-8 inline-block w-full">
+                        <button class="w-full py-3 px-6 rounded-lg font-semibold text-white transition duration-300 transform hover:scale-[1.03] shadow-lg shadow-purple-500/30"
+                                style="background: var(--color-primary);">
+                            <i class="fas fa-handshake mr-2"></i> Începe Discuția
+                        </button>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="shortcut-item">
-          <span>Next Track</span>
-          <span class="shortcut-key">→</span>
-        </div>
-        <div class="shortcut-item">
-          <span>Previous Track</span>
-          <span class="shortcut-key">←</span>
-        </div>
-        <div class="shortcut-item">
-          <span>Volume Up</span>
-          <span class="shortcut-key">↑</span>
-        </div>
-        <div class="shortcut-item">
-          <span>Volume Down</span>
-          <span class="shortcut-key">↓</span>
-        </div>
-        <div class="shortcut-item">
-          <span>Open Playlist</span>
-          <span class="shortcut-key">P</span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="modal" id="priceModal">
-    <div class="modal-content price-modal-content">
-      <div class="modal-header">
-        <h3 id="priceModalTitle">Pachet Standard</h3>
-        <button class="close-modal" id="closePriceModalBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
-      </div>
-      
-      <div id="priceModalBody"></div>
-    </div>
-  </div>
+    <!-- 8. FOOTER -->
+    <footer class="bg-slate-900/50 py-12 border-t border-slate-700/50">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-8 mb-6">
+                <a href="#acasa" class="hover:text-white transition duration-300">Acasă</a>
+                <a href="#pachete" class="hover:text-white transition duration-300">Pachete</a>
+                <a href="#proiecte" class="hover:text-white transition duration-300">Proiecte</a>
+                <a href="#despre" class="hover:text-white transition duration-300">Despre</a>
+                <a href="#contact" class="hover:text-white transition duration-300">Contact</a>
+                <!-- Linkul Legal & GDPR deschide modalul -->
+                <a href="#" onclick="openLegalModal(event)" class="text-cyan-400 hover:text-white transition duration-300">Legal & GDPR</a>
+            </div>
+            <p class="mb-2">&copy; 2025 Miorița Studio. Toate drepturile rezervate.</p>
+            
+            <!-- LOGO ACTUALIZAT AICI (Imagine cu link și text) -->
+            <p class="text-sm flex justify-center items-center">
+                Creat cu viziune și pasiune de 
+                <a href="#acasa" class="inline-block ml-1 transition transform hover:scale-105">
+                    <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
+                         alt="Miorița Studio Logo" 
+                         class="footer-logo-img" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/20x20/8B5CF6/ffffff?text=MS';" />
+                </a>
+            </p>
 
-  <section class="final-cta" id="contact">
-    <div class="container">
-      <div class="cta-card">
-        <h2>Gata să începem?</h2>
-        <p>Hai să transformăm împreună viziunea ta digitală în realitate. Contactează-ne astăzi pentru o consultație gratuită și o ofertă personalizată.</p>
-        <div class="hero-cta">
-          <a href="mailto:contact@mioritastudio.ro" class="btn btn-primary">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-            </svg>
-            <span>Trimite Email</span>
-          </a>
-          <a href="https://wa.me/40749566723" target="_blank" class="btn btn-secondary">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-            </svg>
-            <span>WhatsApp</span>
-          </a>
         </div>
-      </div>
-    </div>
-  </section>
+    </footer>
+
 </main>
 
-<footer>
-  <div class="container">
-    <p>&copy; 2025 Miorița Studio. Toate drepturile rezervate. | Dezvoltat cu ❤️ în inima Maramureșului</p>
-    <p style="margin-top:16px;font-size:0.85rem;opacity:0.7">
-      <a href="#" id="openPoliciesBtn" style="color:var(--muted);text-decoration:none;margin:0 12px;transition:color 0.3s ease">Politici & Termeni</a>
-      <span style="opacity:0.5">|</span>
-      <a href="#" id="openCookiesBtn" style="color:var(--muted);text-decoration:none;margin:0 12px;transition:color 0.3s ease">Cookies</a>
-      <span style="opacity:0.5">|</span>
-      <a href="#" id="openShortcutsBtn" style="color:var(--muted);text-decoration:none;margin:0 12px;transition:color 0.3s ease">Shortcuts</a>
-    </p>
-  </div>
-</footer>
+<!-- Modal pentru Pachete (Ascuns inițial) -->
+<div id="pachet-modal" class="modal-container hidden" aria-modal="true" role="dialog">
+    <!-- Am adăugat max-h-[90vh] și overflow-y-auto pentru a permite scroll-ul intern -->
+    <div id="modal-content-container-pachet" class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
+        <!-- Buton Închidere -->
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('pachet-modal')">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        
+        <div id="modal-title" class="text-3xl font-bold mb-4 text-cyan-400">Titlu Pachet</div>
+        
+        <div id="modal-details" class="space-y-4">
+            <p id="modal-description" class="text-gray-300 text-lg"></p>
+            
+            <h4 class="text-xl font-semibold text-purple-400 mt-6">Ce Include:</h4>
+            <ul id="modal-features" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-300">
+                <!-- Detaliile vor fi injectate aici -->
+            </ul>
 
-<!-- Scroll To Top Rocket Button -->
-<button id="scrollTopBtn" class="scroll-top" aria-label="Înapoi sus">
-  <span class="rocket-emoji" aria-hidden="true">🚀</span>
-  <span class="flame" aria-hidden="true"></span>
-  <span class="sr-only" style="position:absolute;left:-9999px">Back to top</span>
+            <div id="modal-price" class="mt-8 text-2xl font-extrabold text-right p-4 rounded-lg bg-slate-700/50">
+                Cost orientativ: <span class="text-green-400">~0 €</span>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <button onclick="openContactModal(event)" class="font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg"
+                    style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+                Demarează Proiectul <i class="fas fa-paper-plane ml-2"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Contact Formular -->
+<div id="contact-form-modal" class="modal-container hidden" aria-modal="true" role="dialog">
+    <!-- Am adăugat max-h-[90vh] și overflow-y-auto pentru a permite scroll-ul intern -->
+    <div id="modal-content-container-contact" class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
+        <!-- Buton Închidere -->
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('contact-form-modal')">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        
+        <div class="text-3xl font-bold mb-4 text-purple-400 text-center">Trimite-ne Viziunea Ta</div>
+        <p class="text-gray-300 text-center mb-6">Completează formularul și te vom contacta în cel mai scurt timp.</p>
+        
+        <form id="project-contact-form" onsubmit="handleContactFormSubmit(event)">
+            <div class="space-y-4">
+                <div>
+                    <label for="form-name" class="block text-sm font-medium text-gray-400 mb-1">Numele Tău / Companie</label>
+                    <input type="text" id="form-name" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500">
+                </div>
+                <div>
+                    <label for="form-email" class="block text-sm font-medium text-gray-400 mb-1">Adresă Email</label>
+                    <input type="email" id="form-email" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500">
+                </div>
+                <div>
+                    <label for="form-project" class="block text-sm font-medium text-gray-400 mb-1">Despre ce proiect este vorba?</label>
+                    <textarea id="form-project" rows="4" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button type="submit" class="font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg w-full"
+                        style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+                    Trimite Solicitarea <i class="fas fa-envelope-open-text ml-2"></i>
+                </button>
+            </div>
+            <p id="form-message" class="text-center mt-3 text-sm text-green-400 hidden">Mesaj trimis! Te vom contacta în curând.</p>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Legal & GDPR -->
+<div id="legal-modal" class="modal-container hidden" aria-modal="true" role="dialog">
+    <!-- Am adăugat max-h-[90vh] și overflow-y-auto pentru a permite scroll-ul intern -->
+    <div id="modal-content-container-legal" class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
+        <!-- Buton Închidere (Fixat) -->
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('legal-modal')">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        
+        <h3 class="text-3xl font-extrabold text-white mb-8">
+            <i class="fas fa-gavel text-cyan-400 mr-2"></i> Politici și Termeni Legali
+        </h3>
+
+        <div class="space-y-8 text-gray-400">
+            <!-- Termeni și Condiții & Limitări de Răspundere -->
+            <div>
+                <h4 class="text-xl font-bold text-purple-400 mb-3">📝 Termeni și Condiții & ⚖️ Limitări de Răspundere</h4>
+                <!-- CLASA break-words ESTE MENȚINUTĂ PENTRU A REPARA SCROLL-UL LATERAL -->
+                <ul class="list-disc list-inside space-y-3 text-sm ml-4 break-words"> 
+                    <li><span class="font-semibold text-white">✍️ Contractare:</span> Fiecare proiect începe cu un contract clar care definește obiectivele, livrabilele, termenele, costurile și responsabilitățile ambelor părți. Toate modificările neprevăzute se discută și se aprobă prin act adițional. Comunicarea clară pe parcursul proiectului este esențială.</li>
+                    <li><span class="font-semibold text-white">💰 Plată:</span> Se solicită un avans de 50% la începerea proiectului, iar restul de 50% la finalizare, înainte de livrarea fișierelor finale. Modalitățile de plată sunt specificate în contract (transfer bancar, PayPal, card etc.). Plata la timp asigură respectarea termenelor stabilite.</li>
+                    <li><span class="font-semibold text-white">🔄 Revizii:</span> Fiecare pachet include un număr limitat de revizii (specificat în contract). Reviziile suplimentare sau modificările majore după aprobare pot fi oferite contra cost suplimentar. Feedback-ul clar și punctual ajută ca proiectul să fie finalizat rapid și eficient.</li>
+                    <li><span class="font-semibold text-white">🎨 Drepturi de autor:</span> După plata integrală, clientul primește toate drepturile asupra codului, designului și materialelor livrate. Până la plata completă, drepturile rămân la furnizor. Acest lucru garantează protecția muncii creative și transparența proprietății.</li>
+                    <li><span class="font-semibold text-white">🛠️ Suport post-lansare:</span> Oferim suport tehnic gratuit timp de 30 de zile de la lansarea proiectului pentru probleme legate de funcționalitate, bug-uri sau erori de afișare. Modificările de design sau adăugarea de funcționalități noi se pot oferi contra cost, la cerere.</li>
+                    <li><span class="font-semibold text-white">⚠️ Garanție:</span> Nu oferim garanții privind rezultate de business (trafic, vânzări, conversii), deoarece acestea depind de factori externi precum marketing, concurență și comportamentul utilizatorilor. Garanția acoperă doar funcționarea corectă a codului și livrabilele convenite în contract.</li>
+                    <li><span class="font-semibold text-white">🔒 Confidențialitate:</span> Toate informațiile, datele și materialele partajate de client rămân confidențiale și nu vor fi divulgate terților fără acordul explicit. Aceasta include datele sensibile, parolele și conținutul proprietar.</li>
+                    <li><span class="font-semibold text-white">❌ Anularea proiectului:</span> Dacă clientul decide să oprească proiectul înainte de finalizare, plata pentru munca efectuată până în acel moment rămâne datorată conform contractului. Se recomandă comunicarea cât mai rapidă pentru a evita pierderi de timp și resurse.</li>
+                    <li><span class="font-semibold text-white">⏰ Termene și întârzieri:</span> Termenele de livrare sunt orientative; întârzierile cauzate de livrări tardive de la client, schimbări de cerințe sau factori externi nu implică penalități. Recomandăm transmiterea tuturor materialelor și informațiilor necesare la timp pentru a respecta calendarul proiectului.</li>
+                    <li><span class="font-semibold text-white">📝 Documentație:</span> La finalul proiectului, se poate oferi documentație sumară care explică structura site-ului, administrarea conținutului și recomandări pentru întreținere. Aceasta poate fi inclusă în contract sau ca extra opțiune.</li>
+                </ul>
+            </div>
+            
+            <!-- GDPR, Confidențialitate, Cookies -->
+            <div class="mt-8">
+                <h4 class="text-xl font-bold text-cyan-400 mb-3">🛡️ GDPR, Confidențialitate & Cookies</h4>
+                <p class="text-sm">
+                    Ne angajăm să respectăm regulamentul GDPR. Datele colectate (doar prin formularele de contact) sunt utilizate exclusiv pentru comunicarea directă și nu sunt partajate cu terți. Prin navigarea pe acest site, sunteți de acord cu utilizarea de cookie-uri strict necesare pentru funcționarea optimă și analiză (Google Analytics, dacă este cazul). Pentru detalii complete, vă rugăm să ne contactați direct.
+                </p>
+            </div>
+             
+             <!-- Contact în modalul legal -->
+            <div class="mt-8">
+                <h4 class="text-xl font-bold text-cyan-400 mb-3">📧 Contact</h4>
+                <p class="text-sm">
+                    Pentru orice întrebări: ScontactM@proton.me sau WhatsApp: 0749566723
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Buton Scroll-to-Top -->
+<button id="scroll-to-top" onclick="scrollToTop()" class="p-3 rounded-full bg-purple-600 text-white shadow-xl hover:bg-purple-500 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-400/50">
+    <i class="fas fa-arrow-up text-lg"></i>
 </button>
 
-<!-- Policies Modal -->
-<div class="modal" id="policiesModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>📋 Politici & Termeni</h3>
-      <button class="close-modal" id="closePoliciesBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      </button>
-    </div>
-    <div class="price-story">
-      <h4>🏢 Despre Miorița Studio</h4>
-      <p><strong>Miorița Studio</strong> este un freelancer independent, nu o firmă înregistrată. Toate serviciile sunt oferite de o persoană fizică autorizată (PFA).</p>
-      
-      <h4 style="margin-top:24px">📝 Termeni și Condiții & ⚖️ Limitări de Răspundere</h4>
-<ul style="line-height:1.8;">
-  <li><strong>✍️ Contractare:</strong> Fiecare proiect începe cu un contract clar care definește obiectivele, livrabilele, termenele, costurile și responsabilitățile ambelor părți. Toate modificările neprevăzute se discută și se aprobă prin act adițional. Comunicarea clară pe parcursul proiectului este esențială.</li>
-  
-  <li><strong>💰 Plată:</strong> Se solicită un avans de 50% la începerea proiectului, iar restul de 50% la finalizare, înainte de livrarea fișierelor finale. Modalitățile de plată sunt specificate în contract (transfer bancar, PayPal, card etc.). Plata la timp asigură respectarea termenelor stabilite.</li>
-  
-  <li><strong>🔄 Revizii:</strong> Fiecare pachet include un număr limitat de revizii (specificat în contract). Reviziile suplimentare sau modificările majore după aprobare pot fi oferite contra cost suplimentar. Feedback-ul clar și punctual ajută ca proiectul să fie finalizat rapid și eficient.</li>
-  
-  <li><strong>🎨 Drepturi de autor:</strong> După plata integrală, clientul primește toate drepturile asupra codului, designului și materialelor livrate. Până la plata completă, drepturile rămân la furnizor. Acest lucru garantează protecția muncii creative și transparența proprietății.</li>
-  
-  <li><strong>🛠️ Suport post-lansare:</strong> Oferim suport tehnic gratuit timp de 30 de zile de la lansarea proiectului pentru probleme legate de funcționalitate, bug-uri sau erori de afișare. Modificările de design sau adăugarea de funcționalități noi se pot oferi contra cost, la cerere.</li>
-  
-  <li><strong>⚠️ Garanție:</strong> Nu oferim garanții privind rezultate de business (trafic, vânzări, conversii), deoarece acestea depind de factori externi precum marketing, concurență și comportamentul utilizatorilor. Garanția acoperă doar funcționarea corectă a codului și livrabilele convenite în contract.</li>
-  
-  <li><strong>🔒 Confidențialitate:</strong> Toate informațiile, datele și materialele partajate de client rămân confidențiale și nu vor fi divulgate terților fără acordul explicit. Aceasta include datele sensibile, parolele și conținutul proprietar.</li>
-  
-  <li><strong>❌ Anularea proiectului:</strong> Dacă clientul decide să oprească proiectul înainte de finalizare, plata pentru munca efectuată până în acel moment rămâne datorată conform contractului. Se recomandă comunicarea cât mai rapidă pentru a evita pierderi de timp și resurse.</li>
-  
-  <li><strong>⏰ Termene și întârzieri:</strong> Termenele de livrare sunt orientative; întârzierile cauzate de livrări tardive de la client, schimbări de cerințe sau factori externi nu implică penalități. Recomandăm transmiterea tuturor materialelor și informațiilor necesare la timp pentru a respecta calendarul proiectului.</li>
-  
-  <li><strong>📣 Comunicare și feedback:</strong> Comunicarea transparentă este cheia unui proiect de succes. Feedback-ul prompt și detaliat din partea clientului contribuie la finalizarea rapidă și calitativă a proiectului.</li>
-  
-  <li><strong>📝 Documentație:</strong> La finalul proiectului, se poate oferi documentație sumară care explică structura site-ului, administrarea conținutului și recomandări pentru întreținere. Aceasta poate fi inclusă în contract sau ca extra opțiune.</li>
-</ul>
-      
-      <h4 style="margin-top:24px">📧 Contact</h4>
-      <p>Pentru orice întrebări: <strong>ScontactM@proton.me</strong> sau WhatsApp: <strong>0749566723</strong></p>
-    </div>
-  </div>
-</div>
-
-<!-- Cookies Modal -->
-<div class="modal" id="cookiesModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>🍪 Politica de Cookies</h3>
-      <button class="close-modal" id="closeCookiesBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      </button>
-    </div>
-    <div class="price-story">
-      <h4>🍪 Ce sunt Cookie-urile?</h4>
-      <p>Cookie-urile sunt fișiere text mici stocate pe dispozitivul tău când vizitezi un site web. Ele ajută site-ul să funcționeze corect și să-ți ofere o experiență mai bună.</p>
-      
-      <h4 style="margin-top:24px">📊 Ce Cookie-uri Folosim</h4>
-      <ul>
-        <li><strong>Cookie-uri Esențiale:</strong> Necesare pentru funcționarea de bază a site-ului (ex: preferințe audio player)</li>
-        <li><strong>Cookie-uri de Performanță:</strong> Ne ajută să înțelegem cum folosești site-ul (Google Analytics - dacă este activat)</li>
-        <li><strong>Cookie-uri de Preferințe:</strong> Memorează setările tale (volum, temă, limbă)</li>
-      </ul>
-      
-      <h4 style="margin-top:24px">🔒 Confidențialitate</h4>
-      <ul>
-        <li>Nu colectăm date personale fără consimțământul tău</li>
-        <li>Nu vindem sau partajăm datele tale cu terțe părți</li>
-        <li>Poți șterge cookie-urile oricând din setările browser-ului</li>
-        <li>Poți dezactiva cookie-urile, dar unele funcții pot să nu mai funcționeze</li>
-      </ul>
-      
-      <h4 style="margin-top:24px">⚙️ Gestionare Cookie-uri</h4>
-      <p>Poți gestiona cookie-urile din setările browser-ului tău:</p>
-      <ul>
-        <li><strong>Chrome:</strong> Setări → Confidențialitate și securitate → Cookie-uri</li>
-        <li><strong>Firefox:</strong> Opțiuni → Confidențialitate și securitate</li>
-        <li><strong>Safari:</strong> Preferințe → Confidențialitate</li>
-        <li><strong>Edge:</strong> Setări → Cookie-uri și permisiuni site</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<!-- Shortcuts Modal -->
-<div class="modal" id="shortcutsModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>⌨️ Keyboard Shortcuts</h3>
-      <button class="close-modal" id="closeShortcutsBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
-      </button>
-    </div>
-    <div class="shortcuts-info">
-      <h4>🎵 Audio Player</h4>
-      <div class="shortcut-item">
-        <span>Play / Pause</span>
-        <span class="shortcut-key">Space</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Next Track</span>
-        <span class="shortcut-key">→</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Previous Track</span>
-        <span class="shortcut-key">←</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Volume Up</span>
-        <span class="shortcut-key">↑</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Volume Down</span>
-        <span class="shortcut-key">↓</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Open Playlist</span>
-        <span class="shortcut-key">P</span>
-      </div>
-    </div>
-    
-    <div class="shortcuts-info" style="margin-top:20px">
-      <h4>🌐 Navigation</h4>
-      <div class="shortcut-item">
-        <span>Scroll to Top</span>
-        <span class="shortcut-key">Home</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Scroll to Bottom</span>
-        <span class="shortcut-key">End</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Page Up</span>
-        <span class="shortcut-key">Page Up</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Page Down</span>
-        <span class="shortcut-key">Page Down</span>
-      </div>
-    </div>
-    
-    <div class="shortcuts-info" style="margin-top:20px">
-      <h4>🔍 Quick Actions</h4>
-      <div class="shortcut-item">
-        <span>Search Page</span>
-        <span class="shortcut-key">Ctrl + F</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Refresh Page</span>
-        <span class="shortcut-key">F5</span>
-      </div>
-      <div class="shortcut-item">
-        <span>Close Modal</span>
-        <span class="shortcut-key">Esc</span>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Element pentru Mouse Tracking Glow (Wow Factor) -->
+<div id="mouse-glow" class="mouse-glow"></div>
 
 <script>
-// ============================================
-// PARTICLE ANIMATION (SLOWER SPEED)
-// ============================================
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
+    document.addEventListener('DOMContentLoaded', () => {
+        // Obiect de date pentru Pachet Modal (ACTUALIZAT)
+        const pacheteData = {
+            starter: {
+                title: "Pachet Starter: Lansare Rapidă",
+                description: "Soluția perfectă pentru a obține o prezență online profesională și rapidă. Ideal pentru portofolii, carduri de vizită digitale sau landing page-uri simple.",
+                price: "599 €",
+                features: [
+                    "Design & Dezvoltare (1 pagină)",
+                    "Design Mobile Responsive",
+                    "Formular de contact (simplu)",
+                    "Optimizare Viteză de Bază",
+                    "Certificat SSL gratuit (1 an)",
+                    "Suport 30 de zile post-lansare",
+                    "Lista de detalii este special făcută lungă aici pentru a testa funcția de scroll intern al modalului pe dispozitivele mici, asigurând că nu mai este blocat scroll-ul pe body. Acest text suplimentar nu este vizibil pe desktop în modalul de bază, dar va declanșa bara de scroll pe ecranele mai mici.",
+                    "Aceasta este o linie suplimentară de text pentru a forța scroll-ul pe mobil, garantând că toți termenii și condițiile sunt lizibile, indiferent de dimensiunea ecranului utilizatorului.",
+                    "Încă o linie pentru siguranță. Dacă vedeți această linie, înseamnă că scroll-ul intern funcționează perfect!"
+                ]
+            },
+            pro: {
+                title: "Pachet PRO: Afacere în Creștere",
+                description: "Proiectul de bază pentru afacerile care au nevoie de mai multe secțiuni și instrumente de marketing. Conținut complex, optimizare SEO și integrare socială.",
+                price: "1499 €",
+                features: [
+                    "Design & Dezvoltare (până la 5 pagini)",
+                    "Design Cinematic & Personalizat",
+                    "Optimizare SEO avansată (cuvinte cheie)",
+                    "Hărți Google Maps & Integrare Social Media",
+                    "Galerie Imagini & Portofoliu",
+                    "Sesiune de consultanță (1 oră)"
+                ]
+            },
+            studio: {
+                title: "Pachet STUDIO: Soluții La Cheie",
+                description: "Pentru proiecte complexe, care necesită funcționalități unice, integrare cu API-uri sau sisteme de gestionare avansate. O soluție digitală completă.",
+                price: "2999 €+",
+                features: [
+                    "Număr nelimitat de pagini/secțiuni",
+                    "Funcționalități personalizate (ex: calculatoare, sisteme de rezervare)",
+                    "Integrare Baze de Date și API-uri Externe",
+                    "Audit de Securitate și Viteză",
+                    "Sistem de Administrare (CMS) Premium",
+                    "Suport Prioritar (6 luni)"
+                ]
+            },
+            extra: {
+                title: "Servicii Extra & Mentenanță",
+                description: "Acoperă toate nevoile de după lansare: îmbunătățiri, actualizări de securitate, adăugare de funcționalități noi sau optimizare continuă a performanței.",
+                price: "Preț Personalizat (pe oră/proiect)",
+                features: [
+                    "Branding Vizual (Logo, Identitate Cromatică)", 
+                    "Branding Audio (Jingle, Sound Design)",    
+                    "Mentenanță Tehnică lunară",
+                    "Dezvoltare funcționalități noi",
+                    "Audit SEO/UX și Rapoarte",
+                    "Consultanță în Strategie Digitală"
+                ]
+            }
+        };
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+        // --- 1. ECRAN DE INTRO CINEMATIC (JS) ---
+        const introScreen = document.getElementById('intro-screen');
+        const mainContent = document.getElementById('main-content');
+        const logoContainer = document.getElementById('logo-container');
+        const enterButton = document.getElementById('enter-button');
 
-const particles = [];
-const particleCount = 80;
+        // Aplică animațiile de la început
+        setTimeout(() => {
+            logoContainer.classList.remove('opacity-0', 'scale-75');
+            enterButton.classList.remove('opacity-0');
+            enterButton.classList.add('animated-visible');
+        }, 100);
 
-class Particle {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.15;
-    this.vy = (Math.random() - 0.5) * 0.15;
-    this.radius = Math.random() * 2 + 1;
-    this.opacity = Math.random() * 0.5 + 0.2;
-  }
-
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-  }
-
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(107, 123, 255, ${this.opacity})`;
-    ctx.fill();
-  }
-}
-
-for (let i = 0; i < particleCount; i++) {
-  particles.push(new Particle());
-}
-
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(particle => {
-    particle.update();
-    particle.draw();
-  });
-  particles.forEach((p1, i) => {
-    particles.slice(i + 1).forEach(p2 => {
-      const dx = p1.x - p2.x;
-      const dy = p1.y - p2.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < 120) {
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.strokeStyle = `rgba(107, 123, 255, ${0.15 * (1 - distance / 120)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    });
-  });
-  requestAnimationFrame(animateParticles);
-}
-
-animateParticles();
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-// ============================================
-// AUDIO PLAYER WITH VISUALIZER
-// ============================================
-
-// ============================================
-// TO ADD YOUR MUSIC FILES:
-// Replace the empty url: "" with your file paths
-// Example: url: "music/promo-track-1.mp3"
-// ============================================
-
-const playlists = {
-  promo: [
-    {title: "Promo Track 1", artist: "Miorița Studio", url: ""},
-    {title: "Promo Track 2", artist: "Miorița Studio", url: ""},
-    {title: "Promo Track 3", artist: "Miorița Studio", url: ""}
-  ],
-  personalizate: [
-    {title: "Stardust", artist: "Miorița Studio", url: "https://limewire.com/d/FHouW#qe9jXIfogV"},
-    {title: "Custom Track 2", artist: "Your Artist", url: ""},
-    {title: "Custom Track 3", artist: "Your Artist", url: ""}
-  ]
-};
-
-let currentCategory = 'promo';
-let currentTrackIndex = 0;
-let isPlaying = false;
-
-const audioElement = document.getElementById('audioElement');
-const playPauseBtn = document.getElementById('playPauseBtn');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const playIcon = document.getElementById('playIcon');
-const pauseIcon = document.getElementById('pauseIcon');
-const progressBar = document.getElementById('progressBar');
-const progressFill = document.getElementById('progressFill');
-const currentTimeEl = document.getElementById('currentTime');
-const totalTimeEl = document.getElementById('totalTime');
-const trackTitle = document.getElementById('trackTitle');
-const trackArtist = document.getElementById('trackArtist');
-const volumeSlider = document.getElementById('volumeSlider');
-const volumeFill = document.getElementById('volumeFill');
-const openPlaylistBtn = document.getElementById('openPlaylistBtn');
-const playlistModal = document.getElementById('playlistModal');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const trackList = document.getElementById('trackList');
-
-const visualizerCanvas = document.getElementById('audioVisualizer');
-const visualizerCtx = visualizerCanvas.getContext('2d');
-visualizerCanvas.width = visualizerCanvas.offsetWidth;
-visualizerCanvas.height = visualizerCanvas.offsetHeight;
-
-let audioContext, analyser, dataArray, bufferLength;
-
-function initAudio() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audioElement);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-    analyser.fftSize = 256;
-    bufferLength = analyser.frequencyBinCount;
-    dataArray = new Uint8Array(bufferLength);
-  }
-}
-
-function loadTrack(index) {
-  const track = playlists[currentCategory][index];
-  if (track && track.url) {
-    audioElement.src = track.url;
-    trackTitle.textContent = track.title;
-    trackArtist.textContent = track.artist;
-    updateTrackList();
-  } else {
-    trackTitle.textContent = track ? track.title : "Selectează o melodie";
-    trackArtist.textContent = track ? track.artist : "Miorita Studio";
-  }
-}
-
-function togglePlayPause() {
-  if (!audioElement.src || audioElement.src === window.location.href) {
-    alert('Te rog adaugă fișiere audio în playlist!');
-    return;
-  }
-  
-  initAudio();
-  
-  if (isPlaying) {
-    audioElement.pause();
-    isPlaying = false;
-    playIcon.style.display = 'block';
-    pauseIcon.style.display = 'none';
-  } else {
-    audioElement.play();
-    isPlaying = true;
-    playIcon.style.display = 'none';
-    pauseIcon.style.display = 'block';
-    visualize();
-  }
-}
-
-function playNext() {
-  currentTrackIndex = (currentTrackIndex + 1) % playlists[currentCategory].length;
-  loadTrack(currentTrackIndex);
-  if (isPlaying) {
-    audioElement.play();
-  }
-}
-
-function playPrev() {
-  currentTrackIndex = (currentTrackIndex - 1 + playlists[currentCategory].length) % playlists[currentCategory].length;
-  loadTrack(currentTrackIndex);
-  if (isPlaying) {
-    audioElement.play();
-  }
-}
-
-function visualize() {
-  if (!isPlaying) return;
-  requestAnimationFrame(visualize);
-  analyser.getByteFrequencyData(dataArray);
-  visualizerCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-  visualizerCtx.fillRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-  const barWidth = (visualizerCanvas.width / bufferLength) * 2.5;
-  let x = 0;
-  for (let i = 0; i < bufferLength; i++) {
-    const barHeight = (dataArray[i] / 255) * visualizerCanvas.height * 0.8;
-    const gradient = visualizerCtx.createLinearGradient(0, visualizerCanvas.height - barHeight, 0, visualizerCanvas.height);
-    gradient.addColorStop(0, '#6b7bff');
-    gradient.addColorStop(0.5, '#8e5cff');
-    gradient.addColorStop(1, '#764ba2');
-    visualizerCtx.fillStyle = gradient;
-    visualizerCtx.fillRect(x, visualizerCanvas.height - barHeight, barWidth, barHeight);
-    x += barWidth + 1;
-  }
-}
-
-function formatTime(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-}
-
-function updateProgress() {
-  const progress = (audioElement.currentTime / audioElement.duration) * 100;
-  progressFill.style.width = `${progress}%`;
-  currentTimeEl.textContent = formatTime(audioElement.currentTime);
-  totalTimeEl.textContent = formatTime(audioElement.duration);
-}
-
-function updateTrackList() {
-  trackList.innerHTML = '';
-  playlists[currentCategory].forEach((track, index) => {
-    const trackItem = document.createElement('div');
-    trackItem.className = `track-item ${index === currentTrackIndex ? 'active' : ''}`;
-    trackItem.innerHTML = `
-      <div class="track-number">${index + 1}</div>
-      <div class="track-details">
-        <div class="track-name">${track.title}</div>
-        <div class="track-duration">${track.artist}</div>
-      </div>
-    `;
-    trackItem.addEventListener('click', () => {
-      currentTrackIndex = index;
-      loadTrack(index);
-      if (isPlaying) {
-        audioElement.play();
-      }
-      playlistModal.classList.remove('active');
-    });
-    trackList.appendChild(trackItem);
-  });
-}
-
-playPauseBtn.addEventListener('click', togglePlayPause);
-prevBtn.addEventListener('click', playPrev);
-nextBtn.addEventListener('click', playNext);
-audioElement.addEventListener('timeupdate', updateProgress);
-audioElement.addEventListener('ended', playNext);
-audioElement.addEventListener('loadedmetadata', () => {
-  totalTimeEl.textContent = formatTime(audioElement.duration);
-});
-
-progressBar.addEventListener('click', (e) => {
-  const rect = progressBar.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
-  audioElement.currentTime = percent * audioElement.duration;
-});
-
-volumeSlider.addEventListener('click', (e) => {
-  const rect = volumeSlider.getBoundingClientRect();
-  const percent = (e.clientX - rect.left) / rect.width;
-  audioElement.volume = percent;
-  volumeFill.style.width = `${percent * 100}%`;
-});
-
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentCategory = btn.dataset.category;
-    currentTrackIndex = 0;
-    loadTrack(0);
-    updateTrackList();
-  });
-});
-
-openPlaylistBtn.addEventListener('click', () => {
-  playlistModal.classList.add('active');
-  updateTrackList();
-});
-
-closeModalBtn.addEventListener('click', () => {
-  playlistModal.classList.remove('active');
-});
-
-playlistModal.addEventListener('click', (e) => {
-  if (e.target === playlistModal) {
-    playlistModal.classList.remove('active');
-  }
-});
-
-document.addEventListener('keydown', (e) => {
-  switch(e.key) {
-    case ' ':
-      e.preventDefault();
-      togglePlayPause();
-      break;
-    case 'ArrowRight':
-      e.preventDefault();
-      playNext();
-      break;
-    case 'ArrowLeft':
-      e.preventDefault();
-      playPrev();
-      break;
-    case 'ArrowUp':
-      e.preventDefault();
-      audioElement.volume = Math.min(1, audioElement.volume + 0.1);
-      volumeFill.style.width = `${audioElement.volume * 100}%`;
-      break;
-    case 'ArrowDown':
-      e.preventDefault();
-      audioElement.volume = Math.max(0, audioElement.volume - 0.1);
-      volumeFill.style.width = `${audioElement.volume * 100}%`;
-      break;
-    case 'p':
-    case 'P':
-      e.preventDefault();
-      playlistModal.classList.toggle('active');
-      if (playlistModal.classList.contains('active')) {
-        updateTrackList();
-      }
-      break;
-  }
-});
-
-loadTrack(0);
-window.addEventListener('resize', () => {
-  visualizerCanvas.width = visualizerCanvas.offsetWidth;
-  visualizerCanvas.height = visualizerCanvas.offsetHeight;
-});
-
-// ============================================
-// PRICING MODALS WITH MARKETING STORIES
-// ============================================
-
-const priceStories = {
-  standard: {
-    title: 'Pachet Standard',
-    story: `
-      <div class="price-story">
-        <h4>🚀 Începutul Perfect</h4>
-        <p>Pachetul Standard este ideal pentru antreprenori și afaceri mici care își doresc o prezență online profesională.</p>
-        <p><strong>Procesul de lucru:</strong></p>
-        <ul>
-          <li><strong>Consultație inițială:</strong> Discutăm viziunea ta și stabilim cerințele proiectului</li>
-          <li><strong>Design & Feedback:</strong> Creăm designul și ajustăm după preferințele tale</li>
-          <li><strong>Dezvoltare:</strong> Construim site-ul și testăm pe toate dispozitivele</li>
-          <li><strong>Lansare:</strong> Publicăm site-ul și oferim suport post-lansare</li>
-        </ul>
-      </div>
-    `
-  },
-  business: {
-    title: 'Pachet Business',
-    story: `
-      <div class="price-story">
-        <h4>💼 Pentru Afaceri în Creștere</h4>
-        <p>Pachetul Business este conceput pentru afaceri care au nevoie de funcționalități avansate și flexibilitate.</p>
-        <p><strong>Ce include pachetul:</strong></p>
-        <ul>
-          <li>Blog integrat - Perfect pentru conținut SEO și articole</li>
-          <li>Analytics - Monitorizează traficul și comportamentul vizitatorilor</li>
-          <li>Integrări social media - Conectează-te cu platformele tale sociale</li>
-          <li>Suport extins post-lansare - Asistență tehnică pentru orice problemă</li>
-        </ul>
-      </div>
-    `
-  },
-  premium: {
-    title: 'Pachet Premium',
-    story: `
-      <div class="price-story">
-        <h4>👑 Soluție Completă</h4>
-        <p>Pachetul Premium este pentru afaceri care au nevoie de o platformă web complexă și funcționalități enterprise.</p>
-        <p><strong>Funcționalități incluse:</strong></p>
-        <ul>
-          <li>E-commerce complet - Magazin online cu sistem de plăți integrat</li>
-          <li>CMS personalizat - Gestionează conținutul fără cunoștințe tehnice</li>
-          <li>Integrări API - Conectează-te cu sisteme externe (CRM, ERP, etc.)</li>
-          <li>Training - Învățăm echipa ta să folosească platforma</li>
-          <li>Suport extins prioritar - Asistență pentru orice nevoie</li>
-        </ul>
-      </div>
-    `
-  }
-};
-
-const priceModal = document.getElementById('priceModal');
-const closePriceModalBtn = document.getElementById('closePriceModalBtn');
-const priceModalTitle = document.getElementById('priceModalTitle');
-const priceModalBody = document.getElementById('priceModalBody');
-
-document.querySelectorAll('.learn-more-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const packageType = btn.closest('.price-card').dataset.package;
-    const story = priceStories[packageType];
-    priceModalTitle.textContent = story.title;
-    priceModalBody.innerHTML = story.story;
-    priceModal.classList.add('active');
-  });
-});
-
-closePriceModalBtn.addEventListener('click', () => {
-  priceModal.classList.remove('active');
-});
-
-priceModal.addEventListener('click', (e) => {
-  if (e.target === priceModal) {
-    priceModal.classList.remove('active');
-  }
-});
-
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-  });
-});
-
-// Interactive Hero Elements
-document.querySelectorAll('.float-card').forEach(card => {
-  card.addEventListener('click', () => {
-    card.style.animation = 'none';
-    setTimeout(() => {
-      card.style.animation = '';
-    }, 10);
-  });
-});
-
-document.querySelector('.hero h1').addEventListener('click', () => {
-  document.querySelector('.hero h1').style.transform = 'scale(1.05) rotate(2deg)';
-  setTimeout(() => {
-    document.querySelector('.hero h1').style.transform = '';
-  }, 300);
-});
-
-// ============================================
-// POLICIES, COOKIES & SHORTCUTS MODALS
-// ============================================
-
-const policiesModal = document.getElementById('policiesModal');
-const cookiesModal = document.getElementById('cookiesModal');
-const shortcutsModal = document.getElementById('shortcutsModal');
-
-const openPoliciesBtn = document.getElementById('openPoliciesBtn');
-const openCookiesBtn = document.getElementById('openCookiesBtn');
-const openShortcutsBtn = document.getElementById('openShortcutsBtn');
-
-const closePoliciesBtn = document.getElementById('closePoliciesBtn');
-const closeCookiesBtn = document.getElementById('closeCookiesBtn');
-const closeShortcutsBtn = document.getElementById('closeShortcutsBtn');
-
-openPoliciesBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  policiesModal.classList.add('active');
-});
-
-openCookiesBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  cookiesModal.classList.add('active');
-});
-
-openShortcutsBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  shortcutsModal.classList.add('active');
-});
-
-closePoliciesBtn.addEventListener('click', () => {
-  policiesModal.classList.remove('active');
-});
-
-closeCookiesBtn.addEventListener('click', () => {
-  cookiesModal.classList.remove('active');
-});
-
-closeShortcutsBtn.addEventListener('click', () => {
-  shortcutsModal.classList.remove('active');
-});
-
-policiesModal.addEventListener('click', (e) => {
-  if (e.target === policiesModal) {
-    policiesModal.classList.remove('active');
-  }
-});
-
-cookiesModal.addEventListener('click', (e) => {
-  if (e.target === cookiesModal) {
-    cookiesModal.classList.remove('active');
-  }
-});
-
-shortcutsModal.addEventListener('click', (e) => {
-  if (e.target === shortcutsModal) {
-    shortcutsModal.classList.remove('active');
-  }
-});
-
-// Close modals with Escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    policiesModal.classList.remove('active');
-    cookiesModal.classList.remove('active');
-    shortcutsModal.classList.remove('active');
-    priceModal.classList.remove('active');
-    playlistModal.classList.remove('active');
-  }
-});
-
-// Footer links hover effect
-document.querySelectorAll('footer a').forEach(link => {
-  link.addEventListener('mouseenter', (e) => {
-    e.target.style.color = 'var(--accent1)';
-  });
-  link.addEventListener('mouseleave', (e) => {
-    e.target.style.color = 'var(--muted)';
-  });
-});
-</script>
-
-<!-- Anime.js for advanced motion -->
-<script src="https://unpkg.com/animejs@3.2.1/lib/anime.min.js"></script>
-
-<!-- Scroll To Top logic with anime.js liftoff -->
-<script>
-  (function(){
-    const btn = document.getElementById('scrollTopBtn');
-    if (!btn) return;
-    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let isVisible = false;
-    let isAnimating = false;
-
-    const showBtn = () => {
-      if (isVisible) return;
-      isVisible = true;
-      btn.style.pointerEvents = 'auto';
-      if (window.anime && !prefersReduced){
-        anime({
-          targets: btn,
-          opacity: [0,1],
-          translateY: [20,0],
-          scale: [0.6,1],
-          easing: 'spring(1, 80, 12, 0)',
-          duration: 700
-        });
-      } else {
-        btn.style.opacity = '1';
-        btn.style.transform = 'translateY(0) scale(1)';
-      }
-    };
-    const hideBtn = () => {
-      if (!isVisible || isAnimating) return;
-      isVisible = false;
-      btn.style.pointerEvents = 'none';
-      if (window.anime && !prefersReduced){
-        anime({
-          targets: btn,
-          opacity: [1,0],
-          translateY: [0, 20],
-          scale: [1, 0.6],
-          easing: 'easeInOutQuad',
-          duration: 300
-        });
-      } else {
-        btn.style.opacity = '0';
-        btn.style.transform = 'translateY(20px) scale(0.6)';
-      }
-    };
-
-    const onScroll = () => {
-      const y = window.pageYOffset || document.documentElement.scrollTop;
-      if (y > 480){ showBtn(); } else { hideBtn(); }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    const burst = (x, y) => {
-      const count = 14 + Math.round(Math.random()*6);
-      for (let i=0;i<count;i++){
-        const star = document.createElement('div');
-        star.className = 'rocket-star';
-        star.style.left = x + 'px';
-        star.style.top = y + 'px';
-        document.body.appendChild(star);
-        if (window.anime && !prefersReduced){
-          anime({
-            targets: star,
-            translateX: (Math.random()*2-1) * 180,
-            translateY: -60 - Math.random()*200,
-            scale: [{value: 1, duration: 0}, {value: 0, duration: 800}],
-            opacity: [{value:1, duration:0}, {value:0, duration: 900}],
-            rotate: Math.random()*360,
-            easing: 'easeOutCubic',
-            duration: 700 + Math.random()*600,
-            complete: () => star.remove()
-          });
-        } else {
-          // Fallback: immediate remove
-          star.remove();
+        function hideIntroScreen() {
+            introScreen.style.opacity = '0';
+            introScreen.style.visibility = 'hidden';
+            mainContent.classList.remove('content-hidden');
+            mainContent.classList.add('cinematic-fade-in', 'animated-visible');
+            // FIX: Nu mai setăm document.body.style.overflow = ''; AICI. CSS-ul se ocupă de 'overflow-y: scroll;'
         }
-      }
-    };
 
-    btn.addEventListener('mouseenter', () => {
-      if (!window.anime || prefersReduced) return;
-      anime({ targets: btn.querySelector('.rocket-emoji'), translateY: [{value:-4, duration:180}, {value:-2, duration:180}], easing:'easeInOutSine' });
-    });
+        enterButton.addEventListener('click', () => {
+            enterButton.style.transform = 'scale(0.8)';
+            enterButton.style.opacity = '0';
+            setTimeout(hideIntroScreen, 500);
+        });
 
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (isAnimating) return;
-      const rect = btn.getBoundingClientRect();
-      const cx = rect.left + rect.width/2;
-      const cy = rect.top + rect.height/2;
-      if (!window.anime || prefersReduced){
-        window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
-        return;
-      }
-      isAnimating = true;
-      // Flame boost
-      const flame = btn.querySelector('.flame');
-      anime({ targets: flame, scaleY: [{value:1.6, duration:220, easing:'easeOutQuad'}, {value:1.0, duration:260, easing:'easeInQuad'}] });
-      // Wiggle + liftoff
-      anime({ targets: btn, rotate: [{value:-8, duration:120}, {value:8, duration:150}, {value:-4, duration:120}, {value:0, duration:120}], easing:'easeInOutSine' });
-      burst(cx, cy+10);
-      // Smooth scroll to top
-      const scroller = document.scrollingElement || document.documentElement;
-      anime({ targets: scroller, scrollTop: 0, duration: 1100, easing:'easeInOutCubic' });
-      // Rocket flies up
-      anime({
-        targets: btn,
-        translateY: [0, -window.innerHeight - 120],
-        scale: [{value:1.08, duration:200, easing:'easeOutSine'}, {value:1, duration:180}],
-        easing: 'easeInCubic',
-        duration: 800,
-        complete: () => {
-          // Reset below and hide
-          btn.style.transform = 'translateY(20px) scale(0.6)';
-          btn.style.opacity = '0';
-          btn.style.pointerEvents = 'none';
-          isVisible = false;
-          isAnimating = false;
+        // --- 2. HEADER STICKY & SCROLL TO TOP (JS) ---
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+            
+            const scrollTopButton = document.getElementById('scroll-to-top');
+            if (window.scrollY > 300) {
+                scrollTopButton.classList.add('show');
+            } else {
+                scrollTopButton.classList.remove('show');
+            }
+        });
+
+        // Functia globala de scroll to top
+        window.scrollToTop = function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
+
+        // --- 3. MOBILE MENU (JS) ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            // Când deschidem meniul mobil, blocăm scroll-ul pe body pentru a preveni interacțiunea cu fundalul
+            document.body.style.overflow = 'hidden'; 
+            setTimeout(() => {
+                 mobileMenu.classList.remove('translate-y-full');
+            }, 10);
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('translate-y-full');
+            // Când închidem meniul mobil, restabilim scroll-ul body-ului la valoarea fixată
+            document.body.style.overflow = 'scroll'; 
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300); 
         }
-      });
+
+        closeMenuButton.addEventListener('click', closeMobileMenu);
+        
+        menuItems.forEach(item => {
+            item.addEventListener('click', closeMobileMenu);
+        });
+
+
+        // --- 4. SCROLL ANIMATIONS (Intersection Observer) ---
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.cinematic-fade-in, .cinematic-scale-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // --- 5. MODAL LOGIC (PACHETE & GENERIC) ---
+
+        /**
+         * Deschide un modal și BLOCAZĂ scroll-ul paginii de fundal.
+         * @param {string} modalId - ID-ul modalului de deschis.
+         */
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const contentContainerId = modalId === 'pachet-modal' ? 'modal-content-container-pachet' : 
+                                       modalId === 'legal-modal' ? 'modal-content-container-legal' :
+                                       'modal-content-container-contact';
+            const contentContainer = document.getElementById(contentContainerId);
+            
+            // BLOCARE: Setăm scroll-ul la 'hidden' pentru a bloca fundalul modalului
+            document.body.style.overflow = 'hidden'; 
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex', 'modal-enter-active');
+            
+            // Forțează reflow-ul și aplică tranziția de conținut
+            setTimeout(() => {
+                contentContainer.classList.remove('scale-90', 'opacity-0');
+                contentContainer.classList.add('modal-content-enter-active');
+                
+                // Centrare vizuală cu scrollIntoView
+                contentContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 10);
+        }
+
+        /**
+         * Închide un modal și RESTABILEȘTE scroll-ul paginii de fundal.
+         * @param {string} modalId - ID-ul modalului de închis.
+         */
+        window.closeModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            const contentContainerId = modalId === 'pachet-modal' ? 'modal-content-container-pachet' : 
+                                       modalId === 'legal-modal' ? 'modal-content-container-legal' :
+                                       'modal-content-container-contact';
+            const contentContainer = document.getElementById(contentContainerId);
+
+            contentContainer.classList.add('scale-90', 'opacity-0');
+            contentContainer.classList.remove('modal-content-enter-active');
+            
+            modal.classList.remove('modal-enter-active');
+            modal.style.opacity = '0';
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                modal.style.opacity = '1';
+                
+                // RESTABILIRE: Setăm scroll-ul body-ului la 'scroll' (fix-ul CLS)
+                document.body.style.overflow = 'scroll';
+                
+            }, 300);
+        }
+        
+        // Deschide Modal Pachete
+        document.querySelectorAll('.open-modal-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                
+                const pachetType = e.currentTarget.closest('.pachet-card').dataset.pachet;
+                const data = pacheteData[pachetType];
+                
+                // Injectează datele
+                document.getElementById('modal-title').textContent = data.title;
+                document.getElementById('modal-description').textContent = data.description;
+                document.getElementById('modal-price').querySelector('span').textContent = `~${data.price}`;
+                
+                const modalFeatures = document.getElementById('modal-features');
+                modalFeatures.innerHTML = data.features.map(feature => 
+                    `<li class="flex items-center"><i class="fas fa-check-circle text-purple-400 mr-2"></i> ${feature}</li>`
+                ).join('');
+
+                openModal('pachet-modal');
+            });
+        });
+        
+        // Deschide Modal Contact Formular
+        window.openContactModal = function(e) {
+            e.preventDefault();
+            // Închide modalul de pachete dacă este deschis
+            if (document.getElementById('pachet-modal').classList.contains('flex')) {
+                closeModal('pachet-modal'); 
+            }
+            openModal('contact-form-modal');
+        }
+        
+        // Deschide Modal Legal & GDPR
+        window.openLegalModal = function(e) {
+            e.preventDefault();
+            openModal('legal-modal');
+        }
+
+        // Handle Form Submit (Simulare)
+        window.handleContactFormSubmit = function(e) {
+            e.preventDefault();
+            // În condiții reale, aici s-ar trimite o cerere AJAX la un backend/serviciu de email
+            const form = document.getElementById('project-contact-form');
+            const message = document.getElementById('form-message');
+            
+            // Simulare trimitere reușită
+            form.style.display = 'none';
+            message.classList.remove('hidden');
+
+            // Resetează după 3 secunde și închide modalul
+            setTimeout(() => {
+                closeModal('contact-form-modal'); 
+                form.style.display = 'block';
+                form.reset();
+                message.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Închide modalele la click in afara ferestrei sau pe tasta ESC
+        document.querySelectorAll('.modal-container').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                // Verifică dacă click-ul a fost direct pe containerul modal (nu pe conținut)
+                if (e.target === modal) {
+                    const modalId = modal.id;
+                    closeModal(modalId);
+                }
+            });
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                 if (document.getElementById('legal-modal').classList.contains('flex')) {
+                    closeModal('legal-modal');
+                } else if (document.getElementById('contact-form-modal').classList.contains('flex')) {
+                    closeModal('contact-form-modal');
+                } else if (document.getElementById('pachet-modal').classList.contains('flex')) {
+                    closeModal('pachet-modal');
+                }
+            }
+        });
+
+        // --- 6. CARUSEL LOGIC (JS) ---
+        const carousel = document.getElementById('projects-carousel');
+        const items = carousel.querySelectorAll('.carousel-item');
+        const prevButton = document.getElementById('carousel-prev');
+        const nextButton = document.getElementById('carousel-next');
+        const indicatorsContainer = document.getElementById('carousel-indicators');
+        let currentIndex = 0;
+        let autoPlayInterval;
+
+        // Creează indicatorii
+        items.forEach((_, index) => {
+            const indicator = document.createElement('button');
+            indicator.classList.add('w-3', 'h-3', 'rounded-full', 'bg-gray-600', 'transition', 'duration-300', 'hover:bg-purple-400');
+            indicator.dataset.index = index;
+            indicatorsContainer.appendChild(indicator);
+            indicator.addEventListener('click', () => goToSlide(index));
+        });
+
+        const indicators = document.querySelectorAll('#carousel-indicators button');
+
+        function updateCarousel(newIndex) {
+            if (newIndex >= items.length) {
+                newIndex = 0;
+            } else if (newIndex < 0) {
+                newIndex = items.length - 1;
+            }
+            
+            items[currentIndex].classList.remove('opacity-100', 'z-10');
+            items[currentIndex].classList.add('opacity-0', 'z-0');
+            
+            currentIndex = newIndex;
+
+            items[currentIndex].classList.remove('opacity-0', 'z-0');
+            items[currentIndex].classList.add('opacity-100', 'z-10');
+            
+            indicators.forEach(ind => ind.classList.remove('bg-purple-500'));
+            indicators[currentIndex].classList.add('bg-purple-500');
+        }
+
+        function goToSlide(index) {
+            clearInterval(autoPlayInterval);
+            updateCarousel(index);
+            startAutoPlay();
+        }
+
+        function nextSlide() {
+            updateCarousel(currentIndex + 1);
+        }
+
+        prevButton.addEventListener('click', () => goToSlide(currentIndex - 1));
+        nextButton.addEventListener('click', () => goToSlide(currentIndex + 1));
+        
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide, 5000);
+        }
+
+        updateCarousel(0); 
+        startAutoPlay();
+        
+        // --- 7. MOUSE TRACKING GLOW (WOW FACTOR) ---
+        const mouseGlow = document.getElementById('mouse-glow');
+        const container = document.body;
+
+        container.addEventListener('mousemove', (e) => {
+            mouseGlow.style.opacity = '0.1';
+            mouseGlow.style.transform = `translate(${e.clientX - 75}px, ${e.clientY - 75}px)`;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            mouseGlow.style.opacity = '0';
+        });
+
+        // Asigură tranziția smooth la click pe linkurile hash
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Nu intrerupe comportamentul linkurilor care deschid modale
+                if (this.getAttribute('href') !== '#') {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
     });
-  })();
 </script>
 
 </body>

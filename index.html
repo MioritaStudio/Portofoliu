@@ -40,25 +40,17 @@
 
 
         /* ----------------------------------- */
-        /* 1. FUNDAL LIVE FLUID (LIVE GRADIENT) */
+        /* 1. FUNDAL NEURAL NETWORK (CANVAS) */
         /* ----------------------------------- */
-        .live-bg {
+        #neural-net-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(-45deg, var(--color-dark-bg), #111827, #2563EB, #C026D3);
-            background-size: 400% 400%;
-            animation: gradient-flow 15s ease infinite;
-            opacity: 0.4;
+            display: block;
+            opacity: 0.4; /* Opacitate crescută pentru vizibilitate */
             z-index: -10;
-        }
-
-        @keyframes gradient-flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         /* ------------------------------- */
@@ -178,6 +170,20 @@
             /* Stil general dock */
             transition: transform 0.3s ease;
             box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.4);
+            /* Setare inițială pentru a fi ascuns sub ecran */
+            transform: translateY(100%); 
+        }
+        
+        #mobile-dock.show-dock {
+            /* Afișare dock */
+            transform: translateY(0);
+        }
+        
+        @media (min-width: 1024px) {
+            /* Ascunde dock-ul complet pe desktop, chiar dacă s-a aplicat "show-dock" */
+            #mobile-dock {
+                display: none !important;
+            }
         }
         
         /* Containerul flex pentru butoane */
@@ -217,11 +223,11 @@
             font-weight: 500;
         }
         
-        /* Scroll to Top (ajustat pe mobil să fie deasupra dock-ului) */
+        /* Scroll to Top (Vizibil doar pe desktop, ascuns pe mobil prin JS) */
         #scroll-to-top {
             position: fixed;
             right: 1rem;
-            bottom: 6rem; /* Deasupra dock-ului (h-20) */
+            bottom: 1rem; 
             z-index: 45;
             opacity: 0;
             visibility: hidden;
@@ -232,19 +238,11 @@
             opacity: 1;
             visibility: visible;
         }
-
-        @media (min-width: 1024px) {
-            /* Pe desktop, butonul scroll-to-top revine la poziția standard */
-            #scroll-to-top {
-                bottom: 1rem;
-            }
-        }
         
         /* ----------------------------------- */
         /* 7. ASCUNDERE INIȚIALĂ CONȚINUT PRINCIPAL */
         /* ----------------------------------- */
         .content-hidden {
-            /* Am schimbat opacity: 0; la display: none; pentru a preveni suprapunerea în timpul intro-ului */
             display: none; 
         }
 
@@ -252,8 +250,8 @@
 </head>
 <body>
 
-<!-- Fundal Live Fluid Animiat -->
-<div class="live-bg"></div>
+<!-- Fundal Neural Network Canvas (Noul Fundal Live) -->
+<canvas id="neural-net-canvas"></canvas>
 
 <!-- 1. ECRAN DE INTRO CINEMATIC -->
 <div id="intro-screen" class="fixed inset-0 flex items-center justify-center h-screen w-screen cinematic-fade-in animated-visible bg-black z-50">
@@ -827,7 +825,7 @@
 </div>
 
 
-<!-- Buton Scroll-to-Top -->
+<!-- Buton Scroll-to-Top (Ascuns pe mobil prin JS) -->
 <button id="scroll-to-top" onclick="scrollToTop()" class="p-3 rounded-full bg-purple-600 text-white shadow-xl hover:bg-purple-500 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-400/50">
     <i class="fas fa-arrow-up text-lg"></i>
 </button>
@@ -923,21 +921,47 @@
             setTimeout(hideIntroScreen, 500);
         });
 
-        // --- 2. HEADER STICKY & SCROLL TO TOP (JS) ---
+        // --- 2. HEADER STICKY & SCROLL TO TOP & MOBILE DOCK (JS) ---
         const header = document.getElementById('main-header');
+        const mobileDock = document.getElementById('mobile-dock');
+        const scrollTopButton = document.getElementById('scroll-to-top');
+        let lastScrollTop = 0;
+        const isMobile = window.innerWidth < 1024;
+        
+        // Ascunde Scroll-to-Top pe mobil la încărcare
+        if (isMobile) {
+            scrollTopButton.style.display = 'none';
+        }
+
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
+            const currentScrollTop = window.scrollY;
+
+            // Header Sticky
+            if (currentScrollTop > 50) {
                 header.classList.add('header-scrolled');
             } else {
                 header.classList.remove('header-scrolled');
             }
             
-            const scrollTopButton = document.getElementById('scroll-to-top');
-            if (window.scrollY > 300) {
-                scrollTopButton.classList.add('show');
-            } else {
-                scrollTopButton.classList.remove('show');
+            // Scroll To Top (doar pe desktop)
+            if (!isMobile) {
+                if (currentScrollTop > 300) {
+                    scrollTopButton.classList.add('show');
+                } else {
+                    scrollTopButton.classList.remove('show');
+                }
             }
+            
+            // Mobile Dock Show/Hide Logic (Pe mobil)
+            if (isMobile) {
+                if (currentScrollTop > 50) { // După ce treci de Hero
+                     mobileDock.classList.add('show-dock');
+                } else {
+                     mobileDock.classList.remove('show-dock');
+                }
+            }
+
+            lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; 
         });
 
         // Functia globala de scroll to top
@@ -1185,6 +1209,144 @@
                 mouseGlow.style.opacity = '0';
              }
         });
+        
+        // --- 7. BACKGROUND NEURAL NETWORK LOGIC (Canvas) ---
+        const canvas = document.getElementById('neural-net-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const PARTICLES_COUNT = 90; // Crescut numărul
+        const CONNECTION_DISTANCE = 180; // Mărită distanța de conexiune
+        const PARTICLE_COLOR = 'rgba(139, 92, 246, 0.9)'; // Purple mai vizibil
+        const LINE_COLOR = 'rgba(150, 150, 150, 0.6)'; // Subtle Gray mai vizibil
+
+        let particles = [];
+        let raf;
+        
+        // Clasa Particulei
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                // Viteză crescută pentru un efect mai dinamic
+                this.vx = (Math.random() - 0.5) * 0.7; 
+                this.vy = (Math.random() - 0.5) * 0.7;
+                this.radius = Math.random() * 0.8 + 0.8; // Raza puțin mai mare
+                this.impulseTime = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                // Simulare impuls electric
+                const size = this.radius * (1 + this.impulseTime * 2); // Efect de puls mai puternic
+                const color = this.impulseTime > 0 ? `rgba(6, 182, 212, ${0.8 - this.impulseTime * 0.5})` : PARTICLE_COLOR;
+                
+                ctx.fillStyle = color;
+                ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Diminuează impulsul în timp
+                if (this.impulseTime > 0) {
+                    this.impulseTime -= 0.03; // Diminuează mai repede
+                    if (this.impulseTime < 0) this.impulseTime = 0;
+                } else if (Math.random() < 0.005) { // Frecvență impuls crescută
+                    // Declanșează un impuls aleatoriu
+                    this.impulseTime = 1.0; 
+                }
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Margini: Rebound
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+        }
+        
+        // Inițializarea particulelor
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < PARTICLES_COUNT; i++) {
+                // Generare particule în interiorul canvasului
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        // Desenarea conexiunilor
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+
+                    // Calculează distanța
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < CONNECTION_DISTANCE) {
+                        const opacity = 1 - (distance / CONNECTION_DISTANCE);
+
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(100, 100, 100, ${opacity * 0.6})`; // Linii mai subtile, dar vizibile
+                        ctx.lineWidth = 0.8; 
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                        
+                        // Efect de strălucire pe linie (simulare impuls)
+                        if (p1.impulseTime > 0.6 || p2.impulseTime > 0.6) {
+                            ctx.strokeStyle = `rgba(6, 182, 212, ${opacity * 0.8})`; // Cyan for impulse, mai vizibil
+                            ctx.lineWidth = 1.5; // Linie de impuls mai groasă
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Bucle de animație
+        function animate() {
+            // Curăță canvasul (pentru a crea un efect de trail/fade-out, folosește alpha)
+            ctx.fillStyle = 'rgba(3, 7, 18, 0.4)'; // Culoarea de fundal cu o transparență crescută (pentru a crea un trail mai scurt)
+            ctx.fillRect(0, 0, width, height); 
+            
+            drawLines();
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            raf = requestAnimationFrame(animate);
+        }
+        
+        // Re-ajustare la redimensionare
+        function onResize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+            
+            // Re-evaluare isMobile la redimensionare
+            window.isMobile = window.innerWidth < 1024;
+            if (window.isMobile) {
+                scrollTopButton.style.display = 'none';
+            } else {
+                scrollTopButton.style.display = 'block';
+            }
+        }
+        
+        window.addEventListener('resize', onResize);
+        
+        // Start Canvas
+        initParticles();
+        animate();
+
 
         // Asigură tranziția smooth la click pe linkurile hash
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

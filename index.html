@@ -223,11 +223,11 @@
             font-weight: 500;
         }
         
-        /* Scroll to Top (Vizibil doar pe desktop, ascuns pe mobil prin JS) */
+        /* Scroll to Top (Vizibil doar pe desktop, se poate ascunde pe mobil prin JS - scoate // de la liniile 973,974,975,976) */
         #scroll-to-top {
             position: fixed;
             right: 1rem;
-            bottom: 3rem; 
+            bottom: 5.5rem; 
             z-index: 45;
             opacity: 1;
             visibility: visible;
@@ -598,10 +598,10 @@ body {
                     <!-- Proiect 1 -->
                     <a href="https://dr-lazuran.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="dr-lazuran">
                         <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
-                             style="background-image: url('https://placehold.co/1200x600/1E3A8A/ffffff?text=Proiect+Dr.+Lazuran');">
+                             style="background-image: url('https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/LogoDr.png');">
                             <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
                                 <h3 class="text-3xl font-bold text-white">Dr. Lazuran</h3>
-                                <p class="text-gray-300">Dezvoltare web complexă pentru un cabinet medical. Design curat și funcțional.</p>
+                                <p class="text-gray-300">Dezvoltare web personalizată pentru un cabinet stomatologic. Design curat și funcțional.</p>
                             </div>
                         </div>
                     </a>
@@ -618,10 +618,10 @@ body {
                     <!-- Proiect 3 -->
                     <a href="https://raropem.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="raropem">
                         <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
-                             style="background-image: url('https://placehold.co/1200x600/9D174D/ffffff?text=Proiect+Raropem');">
+                             style="background-image: url('https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoporto1.png');">
                             <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
                                 <h3 class="text-3xl font-bold text-white">Raropem</h3>
-                                <p class="text-gray-300">Site de prezentare pentru o agenție de turism. Imagini de impact și rezervare rapidă.</p>
+                                <p class="text-gray-300">Website de prezentare și vânzare piese pentru transmisii și diferențiale.</p>
                             </div>
                         </div>
                     </a>
@@ -971,9 +971,9 @@ body {
         const isMobile = window.innerWidth < 1024;
         
         // Ascunde Scroll-to-Top pe mobil la încărcare
-        if (isMobile) {
-            scrollTopButton.style.display = 'none';
-        }
+        // if (isMobile) {
+       //    scrollTopButton.style.display = 'none';
+       // }
 
         window.addEventListener('scroll', () => {
             const currentScrollTop = window.scrollY;

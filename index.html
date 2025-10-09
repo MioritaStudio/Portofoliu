@@ -316,43 +316,60 @@
         </nav>
     </header>
     
-    <!-- NOU: Dock de Navigare Mobil cu Logo Central (Vizibil DOAR pe ecrane mici) -->
-    <nav id="mobile-dock" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-purple-700/50 shadow-[0_-5px_20px_rgba(139,92,246,0.3)]">
-        <div class="dock-container max-w-lg mx-auto">
-            
-            <!-- Servicii -->
-            <a href="#servicii" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 w-1/5">
-                <i class="fas fa-tools text-xl"></i>
-                <span>Servicii</span>
-            </a>
-            
-            <!-- Pachete -->
-            <a href="#pachete" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 w-1/5">
-                <i class="fas fa-box-open text-xl"></i>
-                <span>Pachete</span>
-            </a>
-            
-            <!-- Butonul de Logo Central (Acasă) -->
-            <a href="#acasa" class="flex items-center justify-center rounded-full transition duration-300 ease-in-out" id="dock-logo-button">
-                <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
-                     alt="Miorița Logo Home" 
-                     onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/8B5CF6?text=MS';" 
-                     class="transition duration-300 transform" />
-            </a>
+    <!-- NOU: Dock de Navigare Mobil (vizibil permanent în partea de jos a ecranului, doar pe mobile) -->
+<nav id="mobile-dock" 
+     class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-lg border-t border-purple-700/50 shadow-[0_-5px_20px_rgba(139,92,246,0.3)]">
+    
+    <div class="dock-container max-w-lg mx-auto flex justify-between items-center px-2 py-1">
+        
+        <!-- Servicii -->
+        <a href="#servicii" 
+           class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 w-1/5">
+            <i class="fas fa-tools text-xl"></i>
+            <span class="text-xs">Servicii</span>
+        </a>
+        
+        <!-- Pachete -->
+        <a href="#pachete" 
+           class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 w-1/5">
+            <i class="fas fa-box-open text-xl"></i>
+            <span class="text-xs">Pachete</span>
+        </a>
+        
+        <!-- Buton Logo (Acasă) -->
+        <a href="#acasa" 
+           class="flex items-center justify-center rounded-full p-1 transition duration-300 ease-in-out w-1/5" 
+           id="dock-logo-button">
+            <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
+                 alt="Miorița Logo Home" 
+                 onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/8B5CF6?text=MS';" 
+                 class="w-10 h-10 object-contain transition duration-300 transform" />
+        </a>
 
-            <!-- Proiecte -->
-            <a href="#proiecte" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 w-1/5">
-                <i class="fas fa-rocket text-xl"></i>
-                <span>Proiecte</span>
-            </a>
-            
-            <!-- Contact (deschide modal) -->
-            <a href="#" onclick="openContactModal(event)" class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-purple-400 transition duration-200 w-1/5">
-                <i class="fas fa-handshake text-xl"></i>
-                <span>Contact</span>
-            </a>
-        </div>
-    </nav>
+        <!-- Proiecte -->
+        <a href="#proiecte" 
+           class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-cyan-400 transition duration-200 w-1/5">
+            <i class="fas fa-rocket text-xl"></i>
+            <span class="text-xs">Proiecte</span>
+        </a>
+        
+        <!-- Contact -->
+        <a href="#" 
+           onclick="openContactModal(event)" 
+           class="mobile-dock-item flex flex-col items-center justify-center p-2 text-gray-300 hover:text-purple-400 transition duration-200 w-1/5">
+            <i class="fas fa-handshake text-xl"></i>
+            <span class="text-xs">Contact</span>
+        </a>
+
+    </div>
+</nav>
+
+<!-- IMPORTANT: Adaugă padding jos la conținut ca să nu fie acoperit de dock -->
+<style>
+  body {
+    padding-bottom: 80px; /* Ajustează înălțimea în funcție de dimensiunea dock-ului */
+  }
+</style>
     
     <!-- 3. HERO SECTION (Acasă) -->
     <section id="acasa" class="relative pt-40 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">

@@ -1607,5 +1607,78 @@ async function handleContactFormSubmit(event) {
 }
 </script>
     
+<!-- Buton plutitor Messenger -->
+<div id="messenger-overlay">
+  <div id="messenger-frame">
+    <div class="flex justify-between items-center bg-blue-600 text-white px-4 py-2">
+      <span class="font-semibold">Chat Miorita Studio</span>
+      <button id="closeChat" class="text-white hover:text-gray-200 text-2xl leading-none">&times;</button>
+    </div>
+    <iframe 
+      src="https://m.me/1527729664889976?is_ai=1"
+      width="100%" 
+      height="100%" 
+      style="border:none; overflow:hidden;"
+      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+    </iframe>
+  </div>
+</div>
+
+<!-- Butonul plutitor -->
+<button id="openChat"
+  class="fixed bottom-5 left-5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-2xl transition-all duration-300 z-50">
+  💬
+</button>
+
+<style>
+  /* Overlay semi-transparent */
+  #messenger-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  /* Fereastra Messenger */
+  #messenger-frame {
+    width: 400px;
+    max-width: 95%;
+    height: 600px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    animation: slideUp 0.4s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+</style>
+
+<script>
+  const openChat = document.getElementById('openChat');
+  const closeChat = document.getElementById('closeChat');
+  const overlay = document.getElementById('messenger-overlay');
+
+  openChat.addEventListener('click', () => {
+    overlay.style.display = 'flex';
+  });
+
+  closeChat.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+
+  // clic în afara ferestrei închide chatul
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.style.display = 'none';
+  });
+</script>
+    
 </body>
 </html>

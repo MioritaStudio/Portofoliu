@@ -1616,7 +1616,7 @@ async function handleContactFormSubmit(event) {
 <script>
   const openChat = document.getElementById('openChat');
 
-  // Deschide Messenger într-o fereastră popup
+  // deschidere Messenger într-o fereastră popup (evită iframe)
   openChat.addEventListener('click', () => {
     const width = 500;
     const height = 600;
@@ -1629,17 +1629,15 @@ async function handleContactFormSubmit(event) {
     );
   });
 
-  // Arată butonul DOAR după ce utilizatorul apasă „Intră pe site”
-  // presupunem că butonul tău de intro are id="introBtn"
-  const introBtn = document.getElementById('introBtn');
-
-  if (introBtn) {
-    introBtn.addEventListener('click', () => {
-      // După ce apasă "Intră", apare butonul Messenger
+  // verificăm dacă butonul de intrare există
+  const enterButton = document.getElementById('enter-button');
+  if(enterButton){
+    enterButton.addEventListener('click', () => {
+      // când userul apasă Intră, arătăm butonul Messenger
       openChat.classList.remove('hidden');
     });
   } else {
-    // dacă nu există pagină de intro, arătăm direct butonul
+    // dacă pagina nu are intro, arătăm direct butonul
     openChat.classList.remove('hidden');
   }
 </script>

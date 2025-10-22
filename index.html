@@ -3,15 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Miorița Studio - Dezvoltare web modernă și design digital de excepție. Soluții personalizate pentru afacerea ta.">
     <title>Miorița Studio | Viitorul Digital, Creat Astăzi</title>
+    
+    <!-- Preconnect pentru resurse externe -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://raw.githubusercontent.com">
+    
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
     <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
     <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Anime.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
     <style>
         /* Definirea culorilor și fontului */
         :root {
@@ -27,7 +36,7 @@
             color: #E5E7EB; /* Gray-200 */
             scroll-behavior: smooth;
             overflow-x: hidden;
-            min-height: 200vh;
+            min-height: 100vh;
         }
 
 
@@ -371,6 +380,181 @@
             display: none; 
         }
 
+        /* Floating Controls Wrapper */
+        .floating-controls {
+            position: fixed;
+            right: 1rem;
+            bottom: 1.5rem;
+            z-index: 45;
+            display: flex;
+            flex-direction: row;
+            gap: 0.7rem;
+            align-items: center;
+            width: auto;
+            padding: 0;
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            .floating-controls {
+                position: static;
+                width: 100vw;
+                left: 0;
+                right: 0;
+                bottom: 1rem;
+                display: block;
+                padding: 0;
+                margin: 0;
+            }
+            #ai-bot-btn {
+                position: fixed;
+                left: 0.5rem;
+                bottom: 1rem;
+                width: 44px;
+                height: 44px;
+                z-index: 46;
+            }
+            #scroll-to-top {
+                position: fixed;
+                right: 0.5rem;
+                bottom: 1rem;
+                width: 44px;
+                height: 44px;
+                z-index: 46;
+            }
+        }
+        @media (min-width: 769px) {
+            .floating-controls button, .floating-controls a { width: 56px; height: 56px; padding: 0; }
+        }
+
+        /* Hamburger Menu Button - Mereu vizibil */
+        .hamburger-menu-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.95), rgba(6, 182, 212, 0.95));
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+        .hamburger-menu-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.6);
+        }
+        .hamburger-lines {
+            width: 20px;
+            height: 14px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .line {
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            left: 0;
+        }
+        .line1 { top: 0; }
+        .line2 { top: 50%; transform: translateY(-50%); }
+        .line3 { bottom: 0; }
+        .hamburger-menu-button.active .line1 {
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        .hamburger-menu-button.active .line2 {
+            opacity: 0;
+        }
+        .hamburger-menu-button.active .line3 {
+            bottom: 50%;
+            transform: translateY(50%) rotate(-45deg);
+        }
+        
+        /* Menu Overlay Full Screen */
+        .menu-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            background: linear-gradient(135deg, rgba(3, 7, 18, 0.98), rgba(15, 23, 42, 0.98));
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .menu-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.3s ease;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+        }
+        .menu-overlay.active .menu-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .menu-overlay.active .menu-item:nth-child(1) { transition-delay: 0.1s; }
+        .menu-overlay.active .menu-item:nth-child(2) { transition-delay: 0.15s; }
+        .menu-overlay.active .menu-item:nth-child(3) { transition-delay: 0.2s; }
+        .menu-overlay.active .menu-item:nth-child(4) { transition-delay: 0.25s; }
+        .menu-overlay.active .menu-item:nth-child(5) { transition-delay: 0.3s; }
+        .menu-overlay.active .menu-item:nth-child(6) { transition-delay: 0.35s; }
+        .menu-item:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(10px);
+            color: #8B5CF6;
+        }
+        .menu-item i {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        @media (max-width: 768px) {
+            .menu-item {
+                font-size: 1.8rem;
+                gap: 1rem;
+            }
+            .menu-item i {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -386,7 +570,11 @@
             <!-- LOGO ACTUALIZAT AICI (Imagine) -->
             <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" 
                  alt="Miorița Studio Logo" 
-                 class="h-28 md:h-32 mx-auto mb-6 drop-shadow-lg" 
+                 class="h-28 md:h-32 mx-auto mb-6 drop-shadow-lg"
+                 width="120"
+                 height="120"
+                 loading="eager"
+                 fetchpriority="high"
                  onerror="this.onerror=null; this.src='https://placehold.co/120x120/8B5CF6/ffffff?text=Logo';" />
             
             <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400">
@@ -409,30 +597,24 @@
 <!-- Conținutul Principal (Ascuns inițial) -->
 <main id="main-content" class="content-hidden">
     
-    <!-- 2. HEADER STICKY (Transformabil în dock pe mobile) -->
+    <!-- 2. HEADER STICKY -->
     <header id="main-header" class="header-sticky fixed w-full top-0 z-40">
-        <!-- Header normal pentru mobile -->
         <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex items-center justify-center">
-                <!-- Logo și Nume Studio -->
-                <a href="#acasa" class="flex flex-col items-center space-y-2 cinematic-fade-in" style="transition-delay: 0.5s;">
-                    <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
-                         alt="Miorița Studio Logo" 
-                         class="h-16 w-auto logo-animate" 
-                         onerror="this.onerror=null; this.src='https://placehold.co/64x64/8B5CF6/ffffff?text=MS';" />
-                    <div class="text-wrapper overflow-hidden">
-                        <span class="text-2xl md:text-3xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 inline-block" id="animated-text">
-                            <span class="letter-wrapper">M</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span><span class="letter-wrapper">r</span><span class="letter-wrapper">i</span><span class="letter-wrapper">ț</span><span class="letter-wrapper">a</span>
-                            <span class="letter-wrapper ml-2">S</span><span class="letter-wrapper">t</span><span class="letter-wrapper">u</span><span class="letter-wrapper">d</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span>
-                        </span>
-                    </div>
-                </a>
-            </div>
-            
-            <!-- Meniu Mobile eliminat în favoarea meniului hamburger -->
+          <!-- Desktop Header: Logo | Meniu Centrat | Contact -->
+          <div class="hidden lg:flex items-center justify-between w-full">
+            <!-- Logo pe stânga -->
+            <a href="#acasa" class="flex flex-col items-center space-y-2 cinematic-fade-in" style="transition-delay: 0.5s;">
+              <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" alt="Miorița Studio Logo" class="h-16 w-auto logo-animate" width="64" height="64" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/64x64/8B5CF6/ffffff?text=MS';" />
+              <div class="text-wrapper overflow-hidden">
+                <span class="text-2xl md:text-3xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 inline-block" id="animated-text">
+                  <span class="letter-wrapper">M</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span><span class="letter-wrapper">r</span><span class="letter-wrapper">i</span><span class="letter-wrapper">ț</span><span class="letter-wrapper">a</span>
+                  <span class="letter-wrapper ml-2">S</span><span class="letter-wrapper">t</span><span class="letter-wrapper">u</span><span class="letter-wrapper">d</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span>
+                </span>
+              </div>
+            </a>
 
-            <!-- Meniu Desktop (Vizibil DOAR pe Desktop) -->
-            <div class="hidden lg:flex space-x-8 text-gray-300">
+            <!-- Meniu în mijloc -->
+            <div class="flex space-x-8 text-gray-300 absolute left-1/2 transform -translate-x-1/2">
                 <a href="#acasa" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Acasă</a>
                 <a href="#servicii" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Servicii</a>
                 <a href="#pachete" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Pachete</a>
@@ -440,15 +622,71 @@
                 <a href="#despre" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Despre</a>
             </div>
 
-            <!-- Buton Contact pe Desktop -->
-            <a href="#" onclick="openContactModal(event)" class="hidden lg:block cinematic-fade-in" style="transition-delay: 0.9s;">
-                <button class="py-2 px-6 rounded-full font-semibold text-sm text-white transition duration-300 hover:scale-105"
-                        style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+            <!-- Buton Contact pe dreapta -->
+            <div class="flex items-center">
+              <a href="#" onclick="openContactModal(event)" class="cinematic-fade-in" style="transition-delay: 0.9s;">
+                <button class="py-2 px-6 rounded-full font-semibold text-sm text-white transition duration-300 hover:scale-105" style="background: linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%);">
                     <i class="fas fa-handshake mr-1"></i> Contact
                 </button>
+              </a>
+            </div>
+          </div>
+
+          <!-- Mobile Header: Doar Logo centrat -->
+          <div class="lg:hidden flex items-center justify-center w-full">
+            <a href="#acasa" class="flex flex-col items-center space-y-2 cinematic-fade-in" style="transition-delay: 0.5s;">
+              <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" alt="Miorița Studio Logo" class="h-16 w-auto logo-animate" width="64" height="64" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/64x64/8B5CF6/ffffff?text=MS';" />
+              <div class="text-wrapper overflow-hidden">
+                <span class="text-2xl md:text-3xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 inline-block" id="animated-text">
+                  <span class="letter-wrapper">M</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span><span class="letter-wrapper">r</span><span class="letter-wrapper">i</span><span class="letter-wrapper">ț</span><span class="letter-wrapper">a</span>
+                  <span class="letter-wrapper ml-2">S</span><span class="letter-wrapper">t</span><span class="letter-wrapper">u</span><span class="letter-wrapper">d</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span>
+                </span>
+              </div>
             </a>
+          </div>
         </nav>
     </header>
+
+    <!-- Buton Hamburger Fix (Mereu vizibil) -->
+    <button id="hamburger-menu-btn" class="hamburger-menu-button">
+        <div class="hamburger-lines">
+            <span class="line line1"></span>
+            <span class="line line2"></span>
+            <span class="line line3"></span>
+        </div>
+    </button>
+
+    <!-- Menu Overlay Full Screen -->
+    <div id="menu-overlay" class="menu-overlay">
+        <div class="menu-content">
+            <nav class="menu-items">
+                <a href="#acasa" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>Acasă</span>
+                </a>
+                <a href="#servicii" class="menu-item">
+                    <i class="fas fa-cogs"></i>
+                    <span>Servicii</span>
+                </a>
+                <a href="#pachete" class="menu-item">
+                    <i class="fas fa-box"></i>
+                    <span>Pachete</span>
+                </a>
+                <a href="#proiecte" class="menu-item">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Proiecte</span>
+                </a>
+                <a href="#despre" class="menu-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Despre</span>
+                </a>
+                <a href="#" onclick="openContactModal(event)" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+            </nav>
+        </div>
+    </div>
     
 
 
@@ -834,41 +1072,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <!-- 7. DESPRE & CONTACT -->
     <section id="despre" class="py-20 lg:py-32 px-4">
-        <div class="container mx-auto max-w-4xl">
+        <div class="container mx-auto max-w-6xl">
              <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 cinematic-fade-in">
                 <i class="fas fa-building text-purple-400 mr-3"></i> Despre <span class="text-cyan-400">Miorița Studio</span>
             </h2>
 
-            <div class="grid md:grid-cols-2 gap-12">
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
                 <div class="cinematic-fade-in">
-                    <h3 class="text-2xl font-bold mb-4 text-white">Viziunea Noastră</h3>
-                    <p class="text-gray-400 leading-relaxed mb-4">
+                    <h3 class="text-2xl font-bold mb-4 text-white text-center">Viziunea Noastră</h3>
+                    <p class="text-gray-400 leading-relaxed mb-4 text-center">
                         Miorița Studio s-a născut din pasiunea pentru designul digital de excepție. Credem că fiecare afacere merită o prezență online care nu doar funcționează, ci și inspiră. Ne concentrăm pe soluții personalizate, ușor de administrat și scalabile, eliminând barierele tehnice pentru clienții noștri.
                     </p>
-                    <p class="text-gray-400 leading-relaxed">
+                    <p class="text-gray-400 leading-relaxed text-center">
                         Procesul nostru creativ este transparent și colaborativ. Începem cu o cafea (virtuală) și o discuție despre obiectivele tale, transformând apoi ideile în concepte vizuale și, în final, în aplicații web rapide și sigure.
                     </p>
                     <div class="mt-6 p-4 bg-purple-900/30 rounded-lg border border-purple-700/50">
-                        <p class="text-lg font-semibold text-purple-300">
+                        <p class="text-lg font-semibold text-purple-300 text-center">
                             🏢 Despre Miorița Studio
                         </p>
-                        <p class="text-sm text-gray-300 mt-2">
-                            Miorița Studio este un freelancer independent, nu o firmă înregistrată. Toate serviciile sunt oferite de o persoană fizică autorizată (PFA).
+                        <p class="text-sm text-gray-300 mt-2 text-center">
+                            Miorița Studio este un freelancer independent, nu o firmă înregistrată.
                         </p>
                     </div>
                 </div>
                 
                 <div id="contact" class="cinematic-fade-in" style="transition-delay: 0.2s;">
-                    <h3 class="text-2xl font-bold mb-4 text-white">Contact Direct</h3>
+                    <h3 class="text-2xl font-bold mb-4 text-white text-center">Contact Direct</h3>
                     <div class="space-y-4">
-                        <div class="flex items-center p-3 bg-slate-800/60 rounded-lg shadow-md transition duration-300 hover:shadow-cyan-500/20">
+                        <div class="flex flex-col items-center p-3 bg-slate-800/60 rounded-lg shadow-md transition duration-300 hover:shadow-cyan-500/20">
                             <i class="fas fa-envelope text-cyan-400 text-2xl mr-4"></i>
                             <div>
                                 <p class="text-gray-400 text-sm">Email:</p>
                                 <a href="mailto:ScontactM1@gmail.com" class="text-white font-medium hover:text-cyan-300 transition">ScontactM1@gmail.com</a>
                             </div>
                         </div>
-                        <div class="flex items-center p-3 bg-slate-800/60 rounded-lg shadow-md transition duration-300 hover:shadow-purple-500/20">
+                        <div class="flex flex-col items-center p-3 bg-slate-800/60 rounded-lg shadow-md transition duration-300 hover:shadow-purple-500/20">
                             <i class="fab fa-whatsapp text-green-400 text-2xl mr-4"></i>
                             <div>
                                 <p class="text-gray-400 text-sm">WhatsApp (Răspuns Rapid):</p>
@@ -909,7 +1147,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="#acasa" class="inline-block ml-1 transition transform hover:scale-105">
                     <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" 
                          alt="Miorița Studio Logo" 
-                         class="footer-logo-img" 
+                         class="footer-logo-img"
+                         width="20"
+                         height="20"
+                         loading="lazy"
+                         decoding="async"
                          onerror="this.onerror=null; this.src='https://placehold.co/20x20/8B5CF6/ffffff?text=MS';" />
                 </a>
             </p>
@@ -963,29 +1205,33 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="text-3xl font-bold mb-4 text-purple-400 text-center">Trimite-ne Viziunea Ta</div>
         <p class="text-gray-300 text-center mb-6">Completează formularul și te vom contacta în cel mai scurt timp.</p>
         
-        <form id="project-contact-form" onsubmit="handleContactFormSubmit(event)">
-            <div class="space-y-4">
-                <div>
-                    <label for="form-name" class="block text-sm font-medium text-gray-400 mb-1">Numele Tău / Companie</label>
-                    <input type="text" id="form-name" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500">
-                </div>
-                <div>
-                    <label for="form-email" class="block text-sm font-medium text-gray-400 mb-1">Adresă Email</label>
-                    <input type="email" id="form-email" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500">
-                </div>
-                <div>
-                    <label for="form-project" class="block text-sm font-medium text-gray-400 mb-1">Despre ce proiect este vorba?</label>
-                    <textarea id="form-project" rows="4" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500"></textarea>
-                </div>
+        <form id="project-contact-form" action="https://formspree.io/f/xldpkene" method="POST">
+          <div class="space-y-4">
+            <div>
+              <label for="form-name" class="block text-sm font-medium text-gray-400 mb-1">Numele Tău / Companie</label>
+              <input type="text" id="form-name" name="name" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500">
             </div>
-
-            <div class="mt-6 text-center">
-                <button type="submit" class="font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg w-full"
-                        style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
-                    Trimite Solicitarea <i class="fas fa-envelope-open-text ml-2"></i>
-                </button>
+            <div>
+              <label for="form-email" class="block text-sm font-medium text-gray-400 mb-1">Adresă Email</label>
+              <input type="email" id="form-email" name="email" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500">
             </div>
-            <p id="form-message" class="text-center mt-3 text-sm text-green-400 hidden">Mesaj trimis! Te vom contacta în curând.</p>
+            <div>
+              <label for="form-project" class="block text-sm font-medium text-gray-400 mb-1">Despre ce proiect este vorba?</label>
+              <textarea id="form-project" name="message" rows="4" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500"></textarea>
+            </div>
+          </div>
+                    <div class="mt-6 text-center">
+                        <button type="submit" class="font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg w-full" style="background: linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%);">
+                            Trimite Solicitarea <i class="fas fa-envelope-open-text ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="form-confirm-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
+                        <div style="background:#1e293b;padding:2rem 2.5rem;border-radius:1rem;box-shadow:0 4px 32px #000;text-align:center;max-width:90vw;">
+                            <h3 style="color:#8B5CF6;font-size:1.5rem;margin-bottom:1rem;">Mesaj trimis cu succes!</h3>
+                            <p style="color:#fff;margin-bottom:2rem;">Îți mulțumim pentru solicitare.<br>Te vom contacta în curând.</p>
+                            <button id="confirm-ok-btn" style="background:linear-gradient(90deg,#8B5CF6,#06B6D4);color:#fff;padding:0.75rem 2rem;border:none;border-radius:0.5rem;font-weight:bold;cursor:pointer;">OK</button>
+                        </div>
+                    </div>
         </form>
     </div>
 </div>
@@ -1027,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="mt-8">
                 <h4 class="text-xl font-bold text-cyan-400 mb-3">🛡️ GDPR, Confidențialitate & Cookies</h4>
                 <p class="text-sm">
-                    Ne angajăm să respectăm regulamentul GDPR. Datele colectate (doar prin formularele de contact) sunt utilizate exclusiv pentru comunicarea directă și nu sunt partajate cu terți. Prin navigarea pe acest site, sunteți de acord cu utilizarea de cookie-uri strict necesare pentru funcționarea optimă și analiză (Google Analytics, dacă este cazul). Pentru detalii complete, vă rugăm să ne contactați direct.
+                    Protejăm confidențialitatea datelor tale personale. Informațiile colectate sunt folosite exclusiv în scopul furnizării serviciilor noastre și nu sunt partajate cu terți fără consimțământul tău. Folosim măsuri de securitate adecvate pentru a proteja datele împotriva accesului neautorizat.
                 </p>
             </div>
              
@@ -1043,10 +1289,17 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 
-<!-- Buton Scroll-to-Top (Ascuns pe mobil prin JS) -->
-<button id="scroll-to-top" onclick="scrollToTop()" class="p-3 rounded-full bg-purple-600 text-white shadow-xl hover:bg-purple-500 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-400/50">
-    <i class="fas fa-arrow-up text-lg"></i>
-</button>
+<!-- Floating Controls: Scroll to Top & AI Bot -->
+<div class="floating-controls">
+        <a href="https://m.me/1527729664889976?is_ai=1" target="_blank" id="ai-bot-btn" class="rounded-full bg-blue-600 text-white shadow-xl hover:bg-cyan-500 transition duration-300 focus:outline-none focus:ring-4 focus:ring-cyan-400/50 flex items-center justify-center" title="Bot AI" style="width:44px;height:44px;">
+            <img src="https://img.icons8.com/fluency/48/bot.png" alt="Bot AI" style="width:24px;height:24px;display:block;" />
+        </a>
+        <button id="scroll-to-top" onclick="scrollToTop()" class="rounded-full bg-purple-600 text-white shadow-xl hover:bg-purple-500 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-400/50 flex items-center justify-center p-0" title="Sus" style="width:44px;height:44px;">
+            <span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+                <img src="https://img.icons8.com/fluency/48/up--v1.png" alt="Sus" style="width:24px;height:24px;" />
+            </span>
+        </button>
+</div>
 
 <!-- Element pentru Mouse Tracking Glow (Wow Factor) -->
 <div id="mouse-glow" class="mouse-glow"></div>
@@ -1139,15 +1392,55 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(hideIntroScreen, 500);
         });
 
-        // --- 2. HEADER STICKY & SCROLL TO TOP & MOBILE DOCK (JS) ---
+        // --- 2. HEADER STICKY & SCROLL TO TOP & HAMBURGER MENU (JS) ---
         const header = document.getElementById('main-header');
-        const mobileDock = document.getElementById('mobile-dock');
+        const hamburgerBtn = document.getElementById('hamburger-menu-btn');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const menuItems = document.querySelectorAll('.menu-item');
         const scrollTopButton = document.getElementById('scroll-to-top');
         let lastScrollTop = 0;
-        let isMobile = window.innerWidth < 1024;
-        
-// Asigură-te că scroll-to-top este mereu vizibil
-            scrollTopButton.style.display = 'block';        window.addEventListener('scroll', () => {
+        let menuOpen = false;
+
+        // Toggle hamburger menu
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            hamburgerBtn.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = menuOpen ? 'hidden' : '';
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+
+        // Close menu on item click
+        menuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#') && !this.hasAttribute('onclick')) {
+                    e.preventDefault();
+                    toggleMenu();
+                    setTimeout(() => {
+                        const targetId = href.substring(1);
+                        const targetSection = document.getElementById(targetId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 300);
+                } else if (this.hasAttribute('onclick')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Close menu on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && menuOpen) {
+                toggleMenu();
+            }
+        });
+
+        // Asigură-te că scroll-to-top este mereu vizibil
+        scrollTopButton.style.display = 'block';
+        window.addEventListener('scroll', () => {
             const currentScrollTop = window.scrollY;
 
             // Header Sticky
@@ -1162,15 +1455,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollTopButton.classList.add('show');
             } else {
                 scrollTopButton.classList.remove('show');
-            }
-            
-            // Mobile Dock Show/Hide Logic (Pe mobil)
-            if (isMobile) {
-                if (currentScrollTop > 50) { // După ce treci de Hero
-                     mobileDock.classList.add('show-dock');
-                } else {
-                     mobileDock.classList.remove('show-dock');
-                }
             }
 
             lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; 
@@ -1310,21 +1594,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle Form Submit (Simulare)
         window.handleContactFormSubmit = function(e) {
             e.preventDefault();
-            // În condiții reale, aici s-ar trimite o cerere AJAX la un backend/serviciu de email
             const form = document.getElementById('project-contact-form');
-            const message = document.getElementById('form-message');
-            
-            // Simulare trimitere reușită
+            const confirmModal = document.getElementById('form-confirm-modal');
             form.style.display = 'none';
-            message.classList.remove('hidden');
-
-            // Resetează după 3 secunde și închide modalul
-            setTimeout(() => {
-                closeModal('contact-form-modal'); 
+            confirmModal.style.display = 'flex';
+            // Resetăm formularul după trimitere
+            form.reset();
+            // Buton OK: ascunde modalul și redirecționează
+            document.getElementById('confirm-ok-btn').onclick = function() {
+                confirmModal.style.display = 'none';
+                closeModal('contact-form-modal');
                 form.style.display = 'block';
-                form.reset();
-                message.classList.add('hidden');
-            }, 3000);
+                window.location.hash = '#acasa';
+                window.scrollTo({top:0,behavior:'smooth'});
+            };
         }
 
         // Închide modalele la click in afara ferestrei sau pe tasta ESC
@@ -1428,43 +1711,43 @@ document.addEventListener('DOMContentLoaded', () => {
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
-        const PARTICLES_COUNT = 90; // Crescut numărul
-        const CONNECTION_DISTANCE = 180; // Mărită distanța de conexiune
-        const PARTICLE_COLOR = 'rgba(139, 92, 246, 0.9)'; // Purple mai vizibil
-        const LINE_COLOR = 'rgba(150, 150, 150, 0.6)'; // Subtle Gray mai vizibil
+        const PARTICLES_COUNT = 60; // Optimizat pentru performanță
+        const CONNECTION_DISTANCE = 150; // Optimizat
+        const PARTICLE_COLOR = 'rgba(139, 92, 246, 0.8)';
+        const LINE_COLOR = 'rgba(150, 150, 150, 0.5)';
 
         let particles = [];
         let raf;
+        let lastFrameTime = 0;
+        const FPS_LIMIT = 60;
+        const FRAME_INTERVAL = 1000 / FPS_LIMIT;
         
         // Clasa Particulei
         class Particle {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                // Viteză crescută pentru un efect mai dinamic
-                this.vx = (Math.random() - 0.5) * 0.7; 
-                this.vy = (Math.random() - 0.5) * 0.7;
-                this.radius = Math.random() * 0.8 + 0.8; // Raza puțin mai mare
+                // Viteză optimizată
+                this.vx = (Math.random() - 0.5) * 0.5; 
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 0.6 + 0.6;
                 this.impulseTime = 0;
             }
 
             draw() {
                 ctx.beginPath();
-                // Simulare impuls electric
-                const size = this.radius * (1 + this.impulseTime * 2); // Efect de puls mai puternic
-                const color = this.impulseTime > 0 ? `rgba(6, 182, 212, ${0.8 - this.impulseTime * 0.5})` : PARTICLE_COLOR;
+                const size = this.radius * (1 + this.impulseTime * 1.5);
+                const color = this.impulseTime > 0 ? `rgba(6, 182, 212, ${0.7 - this.impulseTime * 0.4})` : PARTICLE_COLOR;
                 
                 ctx.fillStyle = color;
                 ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Diminuează impulsul în timp
                 if (this.impulseTime > 0) {
-                    this.impulseTime -= 0.03; // Diminuează mai repede
+                    this.impulseTime -= 0.04;
                     if (this.impulseTime < 0) this.impulseTime = 0;
-                } else if (Math.random() < 0.005) { // Frecvență impuls crescută
-                    // Declanșează un impuls aleatoriu
-                    this.impulseTime = 1.0; 
+                } else if (Math.random() < 0.003) {
+                    this.impulseTime = 1.0;
                 }
             }
 
@@ -1522,10 +1805,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Bucle de animație
-        function animate() {
-            // Curăță canvasul (pentru a crea un efect de trail/fade-out, folosește alpha)
-            ctx.fillStyle = 'rgba(3, 7, 18, 0.4)'; // Culoarea de fundal cu o transparență crescută (pentru a crea un trail mai scurt)
+        // Bucle de animație cu FPS limiter
+        function animate(timestamp) {
+            if (!lastFrameTime) lastFrameTime = timestamp;
+            const elapsed = timestamp - lastFrameTime;
+            
+            if (elapsed < FRAME_INTERVAL) {
+                raf = requestAnimationFrame(animate);
+                return;
+            }
+            
+            lastFrameTime = timestamp - (elapsed % FRAME_INTERVAL);
+            
+            ctx.fillStyle = 'rgba(3, 7, 18, 0.3)';
             ctx.fillRect(0, 0, width, height); 
             
             drawLines();
@@ -1605,41 +1897,6 @@ async function handleContactFormSubmit(event) {
     console.error(err);
   }
 }
-</script>
-
-<!-- Buton plutitor Messenger -->
-<button id="openChat"
-  class="fixed bottom-5 right-5 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center text-2xl transition-all duration-300 z-50 hidden">
-  💬
-</button>
-
-<script>
-  const openChat = document.getElementById('openChat');
-
-  // deschidere Messenger într-o fereastră popup (evită iframe)
-  openChat.addEventListener('click', () => {
-    const width = 500;
-    const height = 600;
-    const left = (window.innerWidth - width) / 2;
-    const top = (window.innerHeight - height) / 2;
-    window.open(
-      'https://m.me/1527729664889976?is_ai=1',
-      'MessengerChat',
-      `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes,status=no`
-    );
-  });
-
-  // verificăm dacă butonul de intrare există
-  const enterButton = document.getElementById('enter-button');
-  if(enterButton){
-    enterButton.addEventListener('click', () => {
-      // când userul apasă Intră, arătăm butonul Messenger
-      openChat.classList.remove('hidden');
-    });
-  } else {
-    // dacă pagina nu are intro, arătăm direct butonul
-    openChat.classList.remove('hidden');
-  }
 </script>
     
 </body>

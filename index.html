@@ -39,6 +39,22 @@
             min-height: 100vh;
         }
 
+        #logo-container img {
+            animation: introLogoPulse 9s ease-in-out infinite;
+            filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.45));
+        }
+
+        @keyframes introLogoPulse {
+            0%, 100% {
+                transform: scale(0.96) rotate(-1deg);
+                filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.45));
+            }
+            50% {
+                transform: scale(1.04) rotate(1deg);
+                filter: drop-shadow(0 0 28px rgba(6, 182, 212, 0.55));
+            }
+        }
+
 
         /* ----------------------------------- */
         /* 1. FUNDAL NEURAL NETWORK (CANVAS) */
@@ -104,6 +120,53 @@
             to {
                 transform: translateY(0);
             }
+        }
+
+        .header-logo {
+            height: 48px;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 0 18px rgba(139, 92, 246, 0.45);
+            animation: headerLogoGlow 10s ease-in-out infinite;
+        }
+
+        @keyframes headerLogoGlow {
+            0%, 100% {
+                transform: scale(0.98);
+                box-shadow: 0 0 18px rgba(139, 92, 246, 0.45);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 0 26px rgba(6, 182, 212, 0.55);
+            }
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.8), rgba(6, 182, 212, 0.8));
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.25s ease;
+        }
+
+        .nav-link:hover {
+            color: #bae6fd;
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
         }
 
         /* Header transformare în dock */
@@ -481,6 +544,12 @@
             bottom: 50%;
             transform: translateY(50%) rotate(-45deg);
         }
+
+        @media (min-width: 1024px) {
+            .hamburger-menu-button {
+                display: none;
+            }
+        }
         
         /* Menu Overlay Full Screen */
         .menu-overlay {
@@ -555,6 +624,588 @@
                 font-size: 1.5rem;
             }
         }
+
+        /* ----------------------------------- */
+        /* 8. PORTAL HERO INTERACTIV            */
+        /* ----------------------------------- */
+        .portal-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.15);
+        }
+
+        .portal-option {
+            position: relative;
+            border-radius: 9999px;
+            padding: 0.6rem 1.5rem;
+            background: transparent;
+            color: #e2e8f0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .portal-option.active {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.85), rgba(6, 182, 212, 0.85));
+            color: white;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.45);
+        }
+
+        .portal-description {
+            max-width: 38rem;
+            margin: 0 auto;
+            transition: opacity 0.4s ease;
+        }
+
+        .portal-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .portal-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 9999px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+        }
+
+        /* ----------------------------------- */
+        /* 9. PORTAL CONFIGURATOR */
+        /* ----------------------------------- */
+        #configurator-section {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+            border-radius: 2rem;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.4);
+        }
+
+        .configurator-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        .configurator-panel {
+            grid-column: span 7 / span 7;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+
+        .configurator-summary {
+            grid-column: span 5 / span 5;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .configurator-summary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(139, 92, 246, 0.25), transparent 60%);
+            pointer-events: none;
+        }
+
+        .configurator-step {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.05);
+        }
+
+        .choice-grid {
+            display: grid;
+            gap: 0.85rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+
+        .choice-tile {
+            position: relative;
+            border-radius: 1rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .choice-tile:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.35);
+            box-shadow: 0 15px 30px rgba(15, 23, 42, 0.4);
+        }
+
+        .choice-tile.active {
+            border-color: rgba(6, 182, 212, 0.6);
+            box-shadow: 0 12px 40px rgba(6, 182, 212, 0.25);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(8, 145, 178, 0.2));
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            border-radius: 9999px;
+            background: rgba(148, 163, 184, 0.2);
+            overflow: hidden;
+        }
+
+        .progress-value {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.8), rgba(6, 182, 212, 0.85));
+            width: 0;
+            transition: width 0.4s ease;
+        }
+
+        .summary-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .summary-badge {
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            background: rgba(148, 163, 184, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .achievement-feed {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+        }
+
+        .achievement-item i {
+            color: #22d3ee;
+            margin-top: 0.15rem;
+        }
+
+        @media (max-width: 1024px) {
+            .configurator-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .configurator-panel,
+            .configurator-summary {
+                grid-column: span 12 / span 12;
+            }
+        }
+
+        /* ----------------------------------- */
+        /* 10. TIMELINE DE COLABORARE          */
+        /* ----------------------------------- */
+        .prep-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (min-width: 1024px) {
+            .prep-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .prep-card {
+            background: rgba(15, 23, 42, 0.78);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prep-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.22), transparent 60%);
+            pointer-events: none;
+        }
+
+        .prep-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .prep-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+
+        .prep-card p {
+            color: #cbd5f5;
+        }
+
+        .prep-checklist {
+            display: grid;
+            gap: 0.85rem;
+            margin-top: 1.5rem;
+        }
+
+        .prep-check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem 1.1rem;
+            border-radius: 1rem;
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .prep-check-item input[type="checkbox"] {
+            margin-top: 0.25rem;
+            accent-color: #8B5CF6;
+        }
+
+        .prep-check-item strong {
+            color: #f8fafc;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .prep-check-item span {
+            font-size: 0.9rem;
+            color: #cbd5f5;
+            line-height: 1.5;
+        }
+
+        .prep-check-item.completed {
+            border-color: rgba(16, 185, 129, 0.6);
+            box-shadow: 0 14px 32px rgba(16, 185, 129, 0.16);
+        }
+
+        .prep-progress {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #a5b4fc;
+        }
+
+        .prep-deliverables {
+            display: grid;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .prep-deliverables li {
+            list-style: none;
+            padding: 1.1rem 1.2rem;
+            border-radius: 1rem;
+            background: rgba(30, 41, 59, 0.78);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        .prep-deliverables li h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.4rem;
+            color: #f8fafc;
+        }
+
+        .prep-callout {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            border-radius: 1rem;
+            background: rgba(22, 163, 74, 0.15);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+            color: #bbf7d0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .prep-callout i {
+            color: #4ade80;
+        }
+
+        .timeline-wrapper {
+            max-width: 58rem;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-card {
+            background: rgba(30, 41, 59, 0.78);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 1.75rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.45);
+            box-shadow: 0 16px 40px rgba(139, 92, 246, 0.18);
+        }
+
+        .timeline-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #f8fafc;
+        }
+
+        .timeline-card p {
+            color: #cbd5f5;
+        }
+
+        .timeline-checklist {
+            list-style: none;
+            margin: 1rem 0;
+            padding: 0;
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .timeline-checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+        }
+
+        .timeline-checklist li i {
+            color: #5eead4;
+            margin-top: 0.2rem;
+        }
+
+        .timeline-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1.5rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #cbd5f5;
+        }
+
+        .timeline-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .timeline-meta span i {
+            color: #facc15;
+        }
+
+        .mission-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            border-radius: 9999px;
+            padding: 0.25rem 0.8rem;
+            background: rgba(15, 118, 110, 0.25);
+            color: #5eead4;
+        }
+
+        .mission-status.locked {
+            background: rgba(148, 163, 184, 0.16);
+            color: #94a3b8;
+        }
+
+        /* ----------------------------------- */
+        /* 11. CARUSEL STORY MODE               */
+        /* ----------------------------------- */
+        .story-layout {
+            display: grid;
+            grid-template-columns: 3fr 1.2fr;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        .achievement-panel {
+            background: rgba(15, 23, 42, 0.75);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            padding: 2rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tracker-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .tracker-card {
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .tracker-card h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        .tracker-card p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 0.35rem;
+        }
+
+        .story-chapter {
+            font-size: 0.9rem;
+            color: #cbd5f5;
+            line-height: 1.6;
+            background: rgba(30, 41, 59, 0.6);
+            padding: 1rem 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(139, 92, 246, 0.18);
+        }
+
+        .story-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .story-badge {
+            font-size: 0.75rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            background: rgba(139, 92, 246, 0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+        }
+
+        @media (max-width: 1024px) {
+            .story-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .achievement-panel {
+                order: -1;
+            }
+        }
+
+        /* ----------------------------------- */
+        /* 12. CONTACT CHATBOT & MOOD SELECTOR  */
+        /* ----------------------------------- */
+        .mood-selector {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .mood-chip {
+            border-radius: 9999px;
+            padding: 0.45rem 1.1rem;
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .mood-chip.active {
+            border-color: rgba(6, 182, 212, 0.65);
+            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
+            color: #5eead4;
+        }
+
+        .chatbot-window {
+            background: rgba(15, 23, 42, 0.65);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 1.25rem;
+            display: grid;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+        }
+
+        .chatbot-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+        }
+
+        .chatbot-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .chatbot-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .chatbot-action-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            transition: all 0.25s ease;
+        }
+
+        .chatbot-action-btn:hover {
+            border-color: rgba(139, 92, 246, 0.45);
+            color: #c4b5fd;
+        }
+
+        .chatbot-summary {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            border-top: 1px dashed rgba(148, 163, 184, 0.2);
+            padding-top: 0.75rem;
+        }
     </style>
 </head>
 <body>
@@ -568,7 +1219,7 @@
         <!-- Logo animat (simulat cu CSS și JS) -->
         <div id="logo-container" class="transition duration-1000 ease-in-out transform scale-75 opacity-0">
             <!-- LOGO ACTUALIZAT AICI (Imagine) -->
-            <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" 
+            <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoanim2.gif" 
                  alt="Miorița Studio Logo" 
                  class="h-28 md:h-32 mx-auto mb-6 drop-shadow-lg"
                  width="120"
@@ -598,57 +1249,44 @@
 <main id="main-content" class="content-hidden">
     
     <!-- 2. HEADER STICKY -->
-    <header id="main-header" class="header-sticky fixed w-full top-0 z-40">
-        <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <!-- Desktop Header: Logo | Meniu Centrat | Contact -->
-          <div class="hidden lg:flex items-center justify-between w-full">
-            <!-- Logo pe stânga -->
-            <a href="#acasa" class="flex flex-col items-center space-y-2 cinematic-fade-in" style="transition-delay: 0.5s;">
-              <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" alt="Miorița Studio Logo" class="h-16 w-auto logo-animate" width="64" height="64" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/64x64/8B5CF6/ffffff?text=MS';" />
-              <div class="text-wrapper overflow-hidden">
-                <span class="text-2xl md:text-3xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 inline-block" id="animated-text">
-                  <span class="letter-wrapper">M</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span><span class="letter-wrapper">r</span><span class="letter-wrapper">i</span><span class="letter-wrapper">ț</span><span class="letter-wrapper">a</span>
-                  <span class="letter-wrapper ml-2">S</span><span class="letter-wrapper">t</span><span class="letter-wrapper">u</span><span class="letter-wrapper">d</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span>
-                </span>
-              </div>
-            </a>
+    <header id="main-header" class="header-sticky fixed w-full top-0 z-40 bg-slate-950/70 backdrop-blur-xl border-b border-slate-800/60">
+        <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Navigație principală">
+            <div class="flex items-center justify-between w-full gap-6">
+                <a href="#acasa" class="flex items-center gap-3 cinematic-fade-in" style="transition-delay: 0.5s;">
+                    <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoanim2.gif" alt="Miorița Studio Logo" class="header-logo" width="56" height="56" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/56x56/8B5CF6/ffffff?text=MS';" />
+                    <span class="hidden sm:flex flex-col leading-tight">
+                        <span class="text-lg font-semibold tracking-wide text-white">Miorița Studio</span>
+                        <span class="text-xs text-gray-400 uppercase tracking-[0.3em]">Web & Design</span>
+                    </span>
+                </a>
 
-            <!-- Meniu în mijloc -->
-            <div class="flex space-x-8 text-gray-300 absolute left-1/2 transform -translate-x-1/2">
-                <a href="#acasa" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Acasă</a>
-                <a href="#servicii" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Servicii</a>
-                <a href="#pachete" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Pachete</a>
-                <a href="#proiecte" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Proiecte</a>
-                <a href="#despre" class="hover:text-cyan-400 transition duration-300 hover:scale-105">Despre</a>
+                <div class="hidden lg:flex items-center justify-center flex-1">
+                    <ul class="flex items-center justify-center gap-8 text-gray-200 text-sm font-medium">
+                        <li><a href="#acasa" class="nav-link">Acasă</a></li>
+                        <li><a href="#servicii" class="nav-link">Proces</a></li>
+                        <li><a href="#pachete" class="nav-link">Pachete</a></li>
+                        <li><a href="#configurator" class="nav-link">Configurator</a></li>
+                        <li><a href="#proiecte" class="nav-link">Proiecte</a></li>
+                        <li><a href="#despre" class="nav-link">Despre</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="hidden lg:flex items-center gap-3">
+                    <a href="#pachete" class="text-sm font-medium text-gray-200 hover:text-cyan-200 transition">Vezi pachetele</a>
+                    <a href="#" onclick="openContactModal(event)" class="cinematic-fade-in" style="transition-delay: 0.9s;">
+                        <button class="py-2 px-6 rounded-full font-semibold text-sm text-white transition duration-300 hover:scale-105"
+                                style="background: linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%);">
+                            <i class="fas fa-handshake mr-1"></i> Planifică o discuție
+                        </button>
+                    </a>
+                </div>
             </div>
-
-            <!-- Buton Contact pe dreapta -->
-            <div class="flex items-center">
-              <a href="#" onclick="openContactModal(event)" class="cinematic-fade-in" style="transition-delay: 0.9s;">
-                <button class="py-2 px-6 rounded-full font-semibold text-sm text-white transition duration-300 hover:scale-105" style="background: linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%);">
-                    <i class="fas fa-handshake mr-1"></i> Contact
-                </button>
-              </a>
-            </div>
-          </div>
-
-          <!-- Mobile Header: Doar Logo centrat -->
-          <div class="lg:hidden flex items-center justify-center w-full">
-            <a href="#acasa" class="flex flex-col items-center space-y-2 cinematic-fade-in" style="transition-delay: 0.5s;">
-              <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logo.png" alt="Miorița Studio Logo" class="h-16 w-auto logo-animate" width="64" height="64" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/64x64/8B5CF6/ffffff?text=MS';" />
-              <div class="text-wrapper overflow-hidden">
-                <span class="text-2xl md:text-3xl font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 inline-block" id="animated-text">
-                  <span class="letter-wrapper">M</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span><span class="letter-wrapper">r</span><span class="letter-wrapper">i</span><span class="letter-wrapper">ț</span><span class="letter-wrapper">a</span>
-                  <span class="letter-wrapper ml-2">S</span><span class="letter-wrapper">t</span><span class="letter-wrapper">u</span><span class="letter-wrapper">d</span><span class="letter-wrapper">i</span><span class="letter-wrapper">o</span>
-                </span>
-              </div>
-            </a>
-          </div>
         </nav>
     </header>
 
-    <!-- Buton Hamburger Fix (Mereu vizibil) -->
-    <button id="hamburger-menu-btn" class="hamburger-menu-button">
+    <!-- Buton Hamburger Fix (vizibil doar pe mobil) -->
+    <button id="hamburger-menu-btn" class="hamburger-menu-button lg:hidden" aria-label="Deschide meniul">
         <div class="hamburger-lines">
             <span class="line line1"></span>
             <span class="line line2"></span>
@@ -666,23 +1304,31 @@
                 </a>
                 <a href="#servicii" class="menu-item">
                     <i class="fas fa-cogs"></i>
-                    <span>Servicii</span>
+                    <span>Proces</span>
                 </a>
                 <a href="#pachete" class="menu-item">
                     <i class="fas fa-box"></i>
                     <span>Pachete</span>
+                </a>
+                <a href="#configurator" class="menu-item">
+                    <i class="fas fa-sliders"></i>
+                    <span>Configurator</span>
                 </a>
                 <a href="#proiecte" class="menu-item">
                     <i class="fas fa-briefcase"></i>
                     <span>Proiecte</span>
                 </a>
                 <a href="#despre" class="menu-item">
-                    <i class="fas fa-info-circle"></i>
+                    <i class="fas fa-circle-info"></i>
                     <span>Despre</span>
                 </a>
-                <a href="#" onclick="openContactModal(event)" class="menu-item">
-                    <i class="fas fa-envelope"></i>
+                <a href="#contact" class="menu-item">
+                    <i class="fas fa-user-circle"></i>
                     <span>Contact</span>
+                </a>
+                <a href="#" onclick="openContactModal(event)" class="menu-item">
+                    <i class="fas fa-envelope-open-text"></i>
+                    <span>Trimite mesaj</span>
                 </a>
             </nav>
         </div>
@@ -690,133 +1336,30 @@
     
 
 
-<!-- Script pentru animații -->
-<script>
-// Animație text și logo
-document.addEventListener('DOMContentLoaded', () => {
-    // Animație pentru logo
-    anime({
-        targets: '.logo-animate',
-        scale: [0.5, 1],
-        opacity: [0, 1],
-        rotateY: [-90, 0],
-        duration: 2000,
-        easing: 'easeOutElastic(1, .5)',
-        delay: 300
-    });
-
-    // Animație pentru litere
-    anime.timeline({loop: false})
-        .add({
-            targets: '.letter-wrapper',
-            translateY: ["1.2em", 0],
-            translateZ: 0,
-            duration: 750,
-            delay: (el, i) => 100 + 50 * i,
-            opacity: [0, 1],
-            easing: "easeOutExpo",
-        }).add({
-            targets: '.letter-wrapper',
-            translateY: [0, -2],
-            duration: 1500,
-            delay: (el, i) => 100 + 30 * i,
-            easing: "easeOutElastic(1, .3)",
-        }).add({
-            targets: '#animated-text',
-            duration: 1000,
-            backgroundImage: [
-                'linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%)',
-                'linear-gradient(90deg, #06B6D4 0%, #8B5CF6 100%)',
-                'linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%)'
-            ],
-            easing: 'easeInOutSine',
-            direction: 'alternate',
-            loop: true
-        });
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const header = document.getElementById('main-header');
-    const hamburger = document.querySelector('.hamburger-icon');
-    const menuOverlay = document.getElementById('menu-overlay');
-    const menuItems = document.querySelectorAll('.menu-item');
-    let isMenuOpen = false;
-
-    // Funcție pentru toggle menu
-    function toggleMenu() {
-        isMenuOpen = !isMenuOpen;
-        hamburger.classList.toggle('hamburger-active');
-        menuOverlay.classList.toggle('active');
-        
-        // Previne scroll-ul când meniul este deschis
-        document.body.style.overflow = isMenuOpen ? 'hidden' : '';
-    }
-
-    // Event listener pentru hamburger
-    hamburger.addEventListener('click', toggleMenu);
-
-    // Închide meniul când se face click pe un item
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            if (isMenuOpen) {
-                toggleMenu();
-            }
-        });
-    });
-
-    // Efecte la scroll pentru header
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    function updateHeaderState() {
-        const currentScroll = window.scrollY;
-        const headerHeight = header.offsetHeight;
-        
-        if (currentScroll > headerHeight) {
-            header.classList.add('header-scrolled');
-            hamburger.style.transform = 'scale(0.8)';
-        } else {
-            header.classList.remove('header-scrolled');
-            hamburger.style.transform = 'scale(1)';
-        }
-        
-        lastScrollY = currentScroll;
-        ticking = false;
-    }
-
-    // Actualizează la scroll cu throttling
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            requestAnimationFrame(() => {
-                updateHeaderState();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-
-    // Actualizează la redimensionare
-    window.addEventListener('resize', () => {
-        if (!ticking) {
-            requestAnimationFrame(updateHeaderState);
-            ticking = true;
-        }
-    });
-    
-    // Actualizare inițială
-    updateHeaderState();
-});
-</script>
-
-    
     <!-- 3. HERO SECTION (Acasă) -->
     <section id="acasa" class="relative pt-48 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">
-        <div class="max-w-4xl mx-auto cinematic-fade-in">
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight mb-6 tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
-                Design Modern, <br class="sm:hidden"> Rezultate Extraordinare
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-400 mb-10 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.4s;">
-                Dezvoltăm identități digitale personalizate, accesibile și optimizate, transformând viziunea ta în realitate web.
-            </p>
+        <div class="max-w-4xl mx-auto cinematic-fade-in space-y-10" id="hero-portal">
+            <div class="space-y-6">
+                <div class="portal-toggle mx-auto">
+                    <button class="portal-option active" data-portal-mode="creative">
+                        <i class="fas fa-wand-magic-sparkles"></i> Experiență Creativă
+                    </button>
+                    <button class="portal-option" data-portal-mode="business">
+                        <i class="fas fa-briefcase"></i> Perspectivă Business
+                    </button>
+                </div>
+                <h1 id="portal-title" class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
+                    Design Modern, <br class="sm:hidden"> Rezultate Extraordinare
+                </h1>
+                <div id="portal-description" class="portal-description text-xl md:text-2xl text-gray-300 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.35s;">
+                    Dezvoltăm identități digitale personalizate, accesibile și optimizate, transformând viziunea ta în realitate web.
+                </div>
+                <div id="portal-badges" class="portal-badges text-sm text-gray-300 animated-visible" style="transition-delay: 0.45s;">
+                    <span class="portal-badge"><i class="fas fa-wand-magic-sparkles text-purple-300"></i> Microinteracțiuni dinamice</span>
+                    <span class="portal-badge"><i class="fas fa-seedling text-green-300"></i> Experiențe personalizate</span>
+                    <span class="portal-badge"><i class="fas fa-heart text-rose-300"></i> Design memorabil</span>
+                </div>
+            </div>
             <a href="#pachete" class="inline-block cinematic-scale-in animated-visible" style="transition-delay: 0.6s;">
                 <button class="font-bold py-4 px-12 rounded-lg text-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg shadow-purple-500/50"
                         style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
@@ -842,9 +1385,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 class="text-2xl font-bold mb-2 text-white">Starter</h3>
                         <p class="text-gray-400 mb-4 flex-grow">Lansarea rapidă. Ideal pentru prezența online minimală.</p>
                         <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> 1 Pagină Principală</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Design Responsive</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Formular de Contact</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> 1 Pagină Principală</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Design Responsive</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Formular de Contact</li>
                         </ul>
                         <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
                                 data-modal-target="pachet-modal" style="background: var(--color-primary);">
@@ -860,9 +1403,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 class="text-2xl font-bold mb-2 text-white">Pro <span class="text-xs ml-2 px-2 py-0.5 bg-purple-600 rounded-full">Recomandat</span></h3>
                         <p class="text-gray-400 mb-4 flex-grow">Soluția completă pentru afacerile în creștere.</p>
                         <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Până la 5 Pagini</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Optimizare SEO de Bază</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Integrare Social Media</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Până la 5 Pagini</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Optimizare SEO de Bază</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Integrare Social Media</li>
                         </ul>
                         <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
                                 data-modal-target="pachet-modal" style="background: var(--color-primary);">
@@ -878,9 +1421,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 class="text-2xl font-bold mb-2 text-white">Studio</h3>
                         <p class="text-gray-400 mb-4 flex-grow">Pachetul fără limite. Soluții personalizate la cheie.</p>
                         <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Proiect Complex Personalizat</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Suport Premium 24/7</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Funcționalități Avansate</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Proiect Complex Personalizat</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Suport Premium 24/7</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Funcționalități Avansate</li>
                         </ul>
                         <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
                                 data-modal-target="pachet-modal" style="background: var(--color-primary);">
@@ -892,14 +1435,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <!-- CARD 4: SERVICII EXTRA (Actualizat cu Branding Vizual/Audio) -->
                 <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="extra" style="transition-delay: 0.3s;">
                     <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl">
-                        <i class="fas fa-tools text-4xl text-gray-400 mb-4"></i>
+                        <i class="fas fa-screwdriver-wrench text-4xl text-gray-400 mb-4"></i>
                         <h3 class="text-2xl font-bold mb-2 text-white">Servicii Extra</h3>
                         <p class="text-gray-400 mb-4 flex-grow">Adaugă un plus de valoare proiectului tău existent.</p>
                         <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
                             <!-- Servicii noi adăugate: Branding Vizual și Branding Audio -->
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Branding Vizual</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Branding Audio</li>
-                            <li class="flex items-center"><i class="fas fa-check-circle text-green-400 mr-2"></i> Mentenanță și Actualizări</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Branding Vizual</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Branding Audio</li>
+                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Mentenanță și Actualizări</li>
                         </ul>
                         <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
                                 data-modal-target="pachet-modal" style="background: var(--color-primary);">
@@ -916,6 +1459,153 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </section>
 
+    <!-- 4.b CONFIGURATOR INTERACTIV -->
+    <section id="configurator" class="py-20 px-4">
+        <div class="container mx-auto">
+            <div id="configurator-section" class="p-8 md:p-12 lg:p-16">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 mb-12">
+                    <div>
+                        <p class="uppercase tracking-[0.35em] text-xs text-cyan-300 mb-4">Portal de configurare</p>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight">Configurează soluția potrivită</h2>
+                        <p class="text-gray-300 mt-4 max-w-2xl">Alege obiectivul, nivelul de complexitate și beneficiile suplimentare pentru a primi recomandarea potrivită din portofoliul nostru de pachete.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-400 mb-2">Progres configurare</p>
+                        <div class="progress-track">
+                            <div class="progress-value" id="configurator-progress"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2"><span id="configurator-progress-label">0</span>% completat</p>
+                    </div>
+                </div>
+
+                <div class="configurator-grid">
+                    <div class="configurator-panel">
+                        <div class="configurator-step" data-step="1">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-semibold text-white">1. Ce obiectiv urmărești?</h3>
+                                <span class="mission-status locked" id="status-step-1"><i class="fas fa-lock"></i> selectează</span>
+                            </div>
+                            <div class="choice-grid" id="goal-choices">
+                                <button class="choice-tile" data-goal="starter">
+                                    <span class="text-purple-300 text-sm">Starter</span>
+                                    <p class="text-lg font-semibold text-white">Lansare rapidă</p>
+                                    <p class="text-sm text-gray-400">Website de prezentare cu o pagină</p>
+                                </button>
+                                <button class="choice-tile" data-goal="pro">
+                                    <span class="text-cyan-300 text-sm">Pro</span>
+                                    <p class="text-lg font-semibold text-white">Extindere conținut</p>
+                                    <p class="text-sm text-gray-400">Mai multe pagini și integrare avansată</p>
+                                </button>
+                                <button class="choice-tile" data-goal="studio">
+                                    <span class="text-amber-300 text-sm">Studio</span>
+                                    <p class="text-lg font-semibold text-white">Proiect personalizat</p>
+                                    <p class="text-sm text-gray-400">Funcționalități custom și integrări</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="configurator-step" data-step="2">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-semibold text-white">2. Ce nivel de complexitate vizezi?</h3>
+                                <span class="mission-status locked" id="status-step-2"><i class="fas fa-lock"></i> setează</span>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-3">Alege pachetul de bază ca punct de plecare pentru calculul estimativ.</p>
+                            <input type="range" id="budget-range" min="0" max="2" step="1" value="1" class="w-full">
+                            <div class="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>Starter</span>
+                                <span>Pro</span>
+                                <span>Studio</span>
+                            </div>
+                        </div>
+
+                        <div class="configurator-step" data-step="3">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-semibold text-white">3. Ce ton dorești pentru prezentare?</h3>
+                                <span class="mission-status locked" id="status-step-3"><i class="fas fa-lock"></i> alege</span>
+                            </div>
+                            <div class="mood-selector" id="vibe-choices">
+                                <button class="mood-chip" data-vibe="playful">Îndrăzneț & prietenos</button>
+                                <button class="mood-chip" data-vibe="minimal">Minimal & clar</button>
+                                <button class="mood-chip" data-vibe="premium">Premium & elegant</button>
+                                <button class="mood-chip" data-vibe="tech">Tehnic & modern</button>
+                            </div>
+                        </div>
+
+                        <div class="configurator-step" data-step="4">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-semibold text-white">4. Selectează opțiuni suplimentare</h3>
+                                <span class="mission-status locked" id="status-step-4"><i class="fas fa-lock"></i> selectiv</span>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-3">Completează pachetul de bază cu servicii adiționale.</p>
+                            <div class="choice-grid" id="extra-choices">
+                                <button class="choice-tile" data-extra="brand-kit">
+                                    <p class="text-lg font-semibold text-white">Brand Kit</p>
+                                    <p class="text-sm text-gray-400">Logo set, paletă, ghid de utilizare</p>
+                                </button>
+                                <button class="choice-tile" data-extra="content-sprint">
+                                    <p class="text-lg font-semibold text-white">Atelier de conținut</p>
+                                    <p class="text-sm text-gray-400">Texte și structură de pagină</p>
+                                </button>
+                                <button class="choice-tile" data-extra="automation">
+                                    <p class="text-lg font-semibold text-white">Integrare automatizări</p>
+                                    <p class="text-sm text-gray-400">Conectori și fluxuri personalizate</p>
+                                </button>
+                                <button class="choice-tile" data-extra="audio-id">
+                                    <p class="text-lg font-semibold text-white">Identitate audio</p>
+                                    <p class="text-sm text-gray-400">Sound logo și elemente sonore</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="configurator-summary" aria-live="polite">
+                        <div>
+                            <p class="text-sm uppercase tracking-[0.35em] text-purple-300">Recomandarea portalului</p>
+                            <h3 class="text-2xl font-bold text-white mt-2" id="summary-title">Alege un obiectiv pentru a începe</h3>
+                            <p class="text-gray-300 mt-3" id="summary-description">Completează pașii portalului pentru a primi o recomandare de pachet și o estimare de buget.</p>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-400">Pachet recomandat</span>
+                                <span class="font-semibold text-cyan-300" id="summary-package">--</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-sm text-gray-400">Investiție orientativă</span>
+                                <span class="font-semibold text-emerald-300" id="summary-budget">--</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-sm text-gray-400">Complexitate estimată</span>
+                                <span class="font-semibold text-amber-200" id="summary-difficulty">--</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Elemente recomandate</p>
+                            <div class="summary-badges" id="summary-badges"></div>
+                        </div>
+
+                        <div>
+                            <p class="text-sm text-gray-400 mb-2">Notițe generate</p>
+                            <div class="achievement-feed" id="summary-feed">
+                                <div class="achievement-item">
+                                    <i class="fas fa-satellite-dish"></i>
+                                    <div>
+                                        <p class="text-sm text-gray-200">Selectează opțiunile pentru a primi o recomandare personalizată.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#contact" onclick="openContactModal(event)" class="inline-flex items-center justify-center gap-2 font-semibold text-white py-3 px-6 rounded-xl transition transform hover:scale-[1.02] shadow-lg" style="background: linear-gradient(90deg, rgba(139,92,246,0.95), rgba(6,182,212,0.95));">
+                            Programează o discuție <i class="fas fa-calendar-check"></i>
+                        </a>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 5. PROCESUL DE COLABORARE -->
     <section id="servicii" class="py-20 lg:py-32 px-4">
         <div class="container mx-auto">
@@ -923,17 +1613,90 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="text-cyan-400">Procesul</span> Nostru de Colaborare
             </h2>
 
+            <div class="prep-grid" id="mission-control">
+                <div class="prep-card">
+                    <h3>Checklist esențial înainte de start</h3>
+                    <p class="text-sm text-gray-300">Bifează elementele pregătitoare. Progresul rămâne salvat în browser pentru a reveni oricând.</p>
+                    <form id="collaboration-checklist" class="prep-checklist">
+                        <label class="prep-check-item">
+                            <input type="checkbox" data-key="brief">
+                            <span>
+                                <strong>Brief și obiective clare</strong>
+                                Include contextul de business, publicul țintă și rezultatele așteptate.
+                            </span>
+                        </label>
+                        <label class="prep-check-item">
+                            <input type="checkbox" data-key="resurse">
+                            <span>
+                                <strong>Materiale existente</strong>
+                                Logo, paletă cromatică, exemple de conținut și imagini reprezentative.
+                            </span>
+                        </label>
+                        <label class="prep-check-item">
+                            <input type="checkbox" data-key="acces">
+                            <span>
+                                <strong>Acces la platforme</strong>
+                                Date de autentificare pentru domeniu, hosting, instrumente analitice sau CMS actual.
+                            </span>
+                        </label>
+                        <label class="prep-check-item">
+                            <input type="checkbox" data-key="calendar">
+                            <span>
+                                <strong>Calendar și stakeholderi</strong>
+                                Termene limită, persoane de contact și disponibilitatea pentru feedback.
+                            </span>
+                        </label>
+                    </form>
+                    <p class="prep-progress" id="checklist-progress">Ai bifat 0 din 4 elemente esențiale.</p>
+                </div>
+                <div class="prep-card">
+                    <h3>Livrabile pe parcursul colaborării</h3>
+                    <p class="text-sm text-gray-300">Fiecare etapă vine cu livrabile concrete, integrate în rezumatul trimis la finalul formularului.</p>
+                    <ul class="prep-deliverables">
+                        <li>
+                            <h4>Descoperire</h4>
+                            <p>Brief final, roadmap de implementare și arhitectura informațională.</p>
+                        </li>
+                        <li>
+                            <h4>Design</h4>
+                            <p>Wireframe-uri interactive, sistem vizual complet și prototip revizuit împreună.</p>
+                        </li>
+                        <li>
+                            <h4>Dezvoltare</h4>
+                            <p>Versiune beta testată, integrare formulare și optimizări de performanță.</p>
+                        </li>
+                        <li>
+                            <h4>Lansare</h4>
+                            <p>Site live, checklist post-lansare și ghid de utilizare pentru echipa ta.</p>
+                        </li>
+                    </ul>
+                    <div class="prep-callout">
+                        <i class="fas fa-envelope-open-text"></i>
+                        <span>Rezumatul configuratorului și etapele selectate sunt atașate automat mesajului trimis din formular.</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Timeline Vertical Responsive -->
             <div class="max-w-3xl mx-auto relative">
                 <!-- Linia verticală centrală (Ascunsă pe mobil pentru a preveni suprapunerea) -->
                 <div class="absolute hidden md:block w-0.5 bg-gray-700 h-full left-1/2 transform -translate-x-1/2"></div>
-                
+
                 <!-- PAS 1: Descoperire & Planificare -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
                     <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
-                        <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
-                            <h3 class="text-2xl font-bold text-white mb-2">1. Descoperire & Planificare</h3>
-                            <p class="text-gray-400">Înțelegem viziunea, publicul țintă și obiectivele. Stabilim împreună structura și tehnologiile necesare.</p>
+                        <div class="timeline-card">
+                            <h3>1. Descoperire &amp; Planificare</h3>
+                            <p>Înțelegem contextul de business, publicul țintă și stabilim clar obiectivele digitale.</p>
+                            <ul class="timeline-checklist">
+                                <li><i class="fas fa-clipboard-check"></i> Atelier de kickoff &amp; analiză obiective</li>
+                                <li><i class="fas fa-folder-open"></i> Inventariem conținutul disponibil și materialele de brand</li>
+                                <li><i class="fas fa-route"></i> Trasăm roadmap-ul proiectului cu etape, livrabile și responsabili</li>
+                            </ul>
+                            <div class="timeline-meta">
+                                <span><i class="fas fa-clock"></i> Durată estimată: 2-3 zile</span>
+                                <span><i class="fas fa-file-lines"></i> Livrabile: brief complet &amp; structură informațională</span>
+                            </div>
                         </div>
                     </div>
                     <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0 order-1 md:order-none">
@@ -953,19 +1716,37 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
-                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-cyan-500/30">
-                            <h3 class="text-2xl font-bold text-white mb-2">2. Design Cinematic</h3>
-                            <p class="text-gray-400">Creăm prototipuri vizuale moderne, axate pe experiența utilizatorului (UX) și estetică de înaltă clasă.</p>
+                        <div class="timeline-card">
+                            <h3>2. Design &amp; Prototipare</h3>
+                            <p>Construim experiența vizuală și fluxurile UX pe baza direcției aprobate.</p>
+                            <ul class="timeline-checklist">
+                                <li><i class="fas fa-drafting-compass"></i> Wireframe-uri pentru paginile principale</li>
+                                <li><i class="fas fa-swatchbook"></i> Sistem de culori, tipografie și componente UI reutilizabile</li>
+                                <li><i class="fas fa-people-arrows"></i> Revizuire colaborativă pe prototipul interactiv</li>
+                            </ul>
+                            <div class="timeline-meta">
+                                <span><i class="fas fa-clock"></i> Durată estimată: 4-6 zile</span>
+                                <span><i class="fas fa-file-lines"></i> Livrabile: prototip Figma &amp; ghid stil vizual</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- PAS 3: Dezvoltare Avansată -->
                 <div class="mb-12 flex flex-col md:flex-row justify-between items-center w-full right-timeline">
                     <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
-                        <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-purple-500/30">
-                            <h3 class="text-2xl font-bold text-white mb-2">3. Dezvoltare Avansată</h3>
-                            <p class="text-gray-400">Transformăm designul în cod curat, optimizat, folosind tehnologii de ultimă oră pentru viteză și stabilitate.</p>
+                        <div class="timeline-card">
+                            <h3>3. Dezvoltare &amp; Testare</h3>
+                            <p>Implementăm funcționalitățile, integrăm conținutul și verificăm calitatea pe dispozitive reale.</p>
+                            <ul class="timeline-checklist">
+                                <li><i class="fas fa-code"></i> Implementare front-end responsive și optimizare performanță</li>
+                                <li><i class="fas fa-plug"></i> Integrare CMS, formulare și automatizări agreate</li>
+                                <li><i class="fas fa-vial"></i> Testare QA &amp; accesibilitate pe browsere și device-uri principale</li>
+                            </ul>
+                            <div class="timeline-meta">
+                                <span><i class="fas fa-clock"></i> Durată estimată: 1-2 săptămâni (în funcție de complexitate)</span>
+                                <span><i class="fas fa-file-lines"></i> Livrabile: versiune beta &amp; raport de testare</span>
+                            </div>
                         </div>
                     </div>
                     <div class="md:w-2/12 flex justify-center cinematic-scale-in my-4 md:my-0 order-1 md:order-none">
@@ -985,9 +1766,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div class="md:w-5/12 cinematic-fade-in order-2 md:order-none">
-                         <div class="p-6 bg-slate-800/60 rounded-xl shadow-xl transition duration-300 hover:shadow-cyan-500/30">
-                            <h3 class="text-2xl font-bold text-white mb-2">4. Lansare & Suport</h3>
-                            <p class="text-gray-400">Publicăm proiectul, asigurăm mentenanța și oferim instruire pentru a prelua controlul complet.</p>
+                        <div class="timeline-card">
+                            <h3>4. Lansare &amp; Suport Continuat</h3>
+                            <p>Publicăm site-ul, monitorizăm performanța și oferim ghidaj pentru operare.</p>
+                            <ul class="timeline-checklist">
+                                <li><i class="fas fa-rocket"></i> Migrare pe hosting &amp; configurare domenii/SSL</li>
+                                <li><i class="fas fa-chart-line"></i> Optimizare SEO tehnică și setare instrumente de monitorizare</li>
+                                <li><i class="fas fa-chalkboard-teacher"></i> Training pentru echipa ta + plan de mentenanță</li>
+                            </ul>
+                            <div class="timeline-meta">
+                                <span><i class="fas fa-clock"></i> Durată estimată: 3-5 zile</span>
+                                <span><i class="fas fa-file-lines"></i> Livrabile: site live, checklist post-lansare &amp; documentație</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1003,69 +1793,101 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="text-purple-400">Portofoliu</span> de Proiecte
             </h2>
             
-            <!-- Am restrâns lățimea caruselului la max-w-3xl -->
-            <div class="relative max-w-3xl mx-auto">
-                
-                <!-- Carusel Principal -->
-                <div id="projects-carousel" class="relative overflow-hidden rounded-2xl shadow-2xl h-80 md:h-96">
-                    <!-- Elementele Caruselului (Slides) -->
-                    <!-- Proiect 1 -->
-                    <a href="https://dr-lazuran.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="dr-lazuran">
-                        <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
-                             style="background-image: url('https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/LogoDr.png');">
-                            <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
-                                <h3 class="text-3xl font-bold text-white">Dr. Lazuran</h3>
-                                <p class="text-gray-300">Dezvoltare web personalizată pentru un cabinet stomatologic. Design curat și funcțional.</p>
+            <div class="story-layout">
+                <div class="space-y-6">
+                    <div class="relative">
+                        <div id="projects-carousel" class="relative overflow-hidden rounded-2xl shadow-2xl h-80 md:h-96">
+                            <!-- Proiect 1 -->
+                            <a href="https://dr-lazuran.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="dr-lazuran">
+                                <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect"
+                                     style="background-image: url('https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/LogoDr.png');">
+                                    <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
+                                        <h3 class="text-3xl font-bold text-white">Dr. Lazuran</h3>
+                                        <p class="text-gray-300">Dezvoltare web personalizată pentru un cabinet stomatologic. Design curat și funcțional.</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Proiect 2 -->
+                            <a href="https://workmatch.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="workmatch">
+                                <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect"
+                                     style="background-image: url('https://placehold.co/1200x600/059669/ffffff?text=Proiect+WorkMatch');">
+                                    <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
+                                        <h3 class="text-3xl font-bold text-white">WorkMatch</h3>
+                                        <p class="text-gray-300">Platformă de recrutare specializată cu interfață utilizator intuitivă și rapidă.</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Proiect 3 -->
+                            <a href="https://raropem.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="raropem">
+                                <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect"
+                                     style="background-image: url('https://placehold.co/1200x600/3b82f6/ffffff?text=Proiect+Raropem');">
+                                    <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
+                                        <h3 class="text-3xl font-bold text-white">Raropem</h3>
+                                        <p class="text-gray-300">Website de prezentare și vânzare piese pentru transmisii și diferențiale.</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Proiect Special: Proiectul Tău -->
+                            <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" data-project="your-project">
+                                 <div class="h-full w-full bg-gradient-to-br from-purple-800 to-cyan-800 flex flex-col items-center justify-center text-center p-8">
+                                    <div class="cinematic-scale-in animated-visible">
+                                        <i class="fas fa-handshake-angle text-6xl text-white mb-4"></i>
+                                        <h3 class="text-4xl font-extrabold text-white mb-4">Proiectul Tău</h3>
+                                        <p class="text-xl text-gray-200 mb-6">Explorează posibilitățile și transformă-ți ideea în următorul nostru studiu de caz de succes.</p>
+                                        <button onclick="openContactModal(event)" class="inline-block cinematic-fade-in animated-visible font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-105 shadow-xl bg-white/20 hover:bg-white/30">
+                                            Începe Colaborarea <i class="fas fa-right-long ml-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </a>
-                    <!-- Proiect 2 -->
-                    <a href="https://workmatch.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="workmatch">
-                        <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
-                             style="background-image: url('https://placehold.co/1200x600/059669/ffffff?text=Proiect+WorkMatch');">
-                            <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
-                                <h3 class="text-3xl font-bold text-white">WorkMatch</h3>
-                                <p class="text-gray-300">Platformă de recrutare specializată cu interfață utilizator intuitivă și rapidă.</p>
-                            </div>
+                        <button id="carousel-prev" class="absolute top-1/2 left-4 transform -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full z-10 transition duration-300">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button id="carousel-next" class="absolute top-1/2 right-4 transform -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full z-10 transition duration-300">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div id="carousel-indicators" class="mt-4 flex justify-center space-x-2"></div>
+                    <div class="story-chapter" id="story-chapter">
+                        Selectează un proiect pentru a descoperi povestea din culise, tehnologiile cheie și impactul măsurabil.
+                    </div>
+                    <div class="story-badges" id="story-badges"></div>
+                </div>
+
+                <aside class="achievement-panel" aria-live="polite">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.35em] text-purple-300">Indicatori de proiect</p>
+                        <h3 class="text-2xl font-bold text-white mt-2" id="tracker-title">Alege un proiect</h3>
+                        <p class="text-sm text-gray-400 mt-2" id="tracker-subtitle">Caruselul deblochează detalii despre industrie, tehnologie și rezultate la fiecare slide.</p>
+                    </div>
+                    <div class="tracker-grid">
+                        <div class="tracker-card">
+                            <h4>Industrie</h4>
+                            <p class="text-purple-200" id="tracker-industry">—</p>
                         </div>
-                    </a>
-                    <!-- Proiect 3 -->
-                    <a href="https://raropem.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="raropem">
-    <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect" 
-         style="background-image: url('https://placehold.co/1200x600/3b82f6/ffffff?text=Proiect+Raropem');">
-        <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
-            <h3 class="text-3xl font-bold text-white">Raropem</h3>
-            <p class="text-gray-300">Website de prezentare și vânzare piese pentru transmisii și diferențiale.</p>
-        </div>
-    </div>
-</a>
-                    <!-- Proiect Special: Proiectul Tău -->
-                    <div class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" data-project="your-project">
-                         <div class="h-full w-full bg-gradient-to-br from-purple-800 to-cyan-800 flex flex-col items-center justify-center text-center p-8">
-                            <div class="cinematic-scale-in animated-visible">
-                                <i class="fas fa-hands-helping text-6xl text-white mb-4"></i>
-                                <h3 class="text-4xl font-extrabold text-white mb-4">Proiectul Tău</h3>
-                                <p class="text-xl text-gray-200 mb-6">Explorează posibilitățile și transformă-ți ideea în următorul nostru studiu de caz de succes.</p>
-                                <button onclick="openContactModal(event)" class="inline-block cinematic-fade-in animated-visible font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-105 shadow-xl bg-white/20 hover:bg-white/30">
-                                    Începe Colaborarea <i class="fas fa-long-arrow-alt-right ml-2"></i>
-                                </button>
+                        <div class="tracker-card">
+                            <h4>Tehnologie</h4>
+                            <p class="text-cyan-200" id="tracker-tech">—</p>
+                        </div>
+                        <div class="tracker-card">
+                            <h4>Impact</h4>
+                            <p class="text-emerald-200" id="tracker-impact">—</p>
+                        </div>
+                        <div class="tracker-card">
+                            <h4>Element cheie</h4>
+                            <p class="text-amber-200" id="tracker-badge">—</p>
+                        </div>
+                    </div>
+                    <div class="achievement-feed" id="tracker-feed">
+                        <div class="achievement-item">
+                            <i class="fas fa-compass"></i>
+                            <div>
+                                <p class="text-sm text-gray-200">Glisează pentru a vedea cum arată rezultatele în industrii diferite.</p>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Navigare Carusel (Săgeți) -->
-                <button id="carousel-prev" class="absolute top-1/2 left-4 transform -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full z-10 transition duration-300">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button id="carousel-next" class="absolute top-1/2 right-4 transform -translate-y-1/2 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full z-10 transition duration-300">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-
-                <!-- Indicatori/Thumbnails (Mini) -->
-                <div id="carousel-indicators" class="mt-4 flex justify-center space-x-2">
-                    <!-- Indicatorii vor fi generați de JS -->
-                </div>
+                </aside>
             </div>
         </div>
     </section>
@@ -1206,6 +2028,31 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="text-gray-300 text-center mb-6">Completează formularul și te vom contacta în cel mai scurt timp.</p>
         
         <form id="project-contact-form" action="https://formspree.io/f/xldpkene" method="POST">
+          <div class="bg-slate-700/40 border border-slate-600/60 rounded-xl p-4 sm:p-5 mb-6 space-y-3" id="portal-summary-box">
+            <div class="flex items-center justify-between gap-3">
+              <h4 class="text-white font-semibold text-lg">Rezumat configurator</h4>
+              <span class="text-xs uppercase tracking-wide text-gray-400" id="portal-summary-status">Completează portalul pentru a genera un rezumat aici.</span>
+            </div>
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt class="text-gray-400 uppercase tracking-wide text-xs">Obiectiv</dt>
+                <dd class="text-gray-100 font-medium" id="portal-summary-goal">—</dd>
+              </div>
+              <div>
+                <dt class="text-gray-400 uppercase tracking-wide text-xs">Pachet</dt>
+                <dd class="text-gray-100 font-medium" id="portal-summary-package">—</dd>
+              </div>
+              <div>
+                <dt class="text-gray-400 uppercase tracking-wide text-xs">Investiție</dt>
+                <dd class="text-emerald-300 font-semibold" id="portal-summary-investment">—</dd>
+              </div>
+              <div>
+                <dt class="text-gray-400 uppercase tracking-wide text-xs">Servicii extra</dt>
+                <dd class="text-gray-100" id="portal-summary-extras">—</dd>
+              </div>
+            </dl>
+            <p class="text-sm text-gray-300" id="portal-summary-text">Configurează portalul pentru a avea un rezumat gata de trimis.</p>
+          </div>
           <div class="space-y-4">
             <div>
               <label for="form-name" class="block text-sm font-medium text-gray-400 mb-1">Numele Tău / Companie</label>
@@ -1219,7 +2066,39 @@ document.addEventListener('DOMContentLoaded', () => {
               <label for="form-project" class="block text-sm font-medium text-gray-400 mb-1">Despre ce proiect este vorba?</label>
               <textarea id="form-project" name="message" rows="4" required class="w-full px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:ring-cyan-500 focus:border-cyan-500"></textarea>
             </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-400 mb-2">Ce vibe simți pentru colaborare?</label>
+              <div class="mood-selector" id="contact-mood-selector">
+                <button type="button" class="mood-chip" data-mood="îndrăzneț">Îndrăzneț</button>
+                <button type="button" class="mood-chip" data-mood="calm">Calm & strategic</button>
+                <button type="button" class="mood-chip" data-mood="premium">Premium & rafinat</button>
+                <button type="button" class="mood-chip" data-mood="misterios">Experimental & misterios</button>
+              </div>
+              <input type="hidden" name="project_mood" id="contact-mood-input">
+            </div>
           </div>
+
+          <div class="chatbot-window" id="contact-chatbot" role="status" aria-live="polite">
+              <div class="chatbot-message">
+                  <div class="chatbot-avatar">🐺</div>
+                  <div>
+                      <p class="text-sm text-gray-200" id="chatbot-message-text">Salut! Sunt Miorița. Spune-mi în ce stadiu este ideea ta și îți pregătesc un scurt rezumat pentru echipă.</p>
+                      <div class="chatbot-actions" id="chatbot-actions">
+                          <button type="button" class="chatbot-action-btn" data-response="start">Abia schițată</button>
+                          <button type="button" class="chatbot-action-btn" data-response="in-progress">În lucru</button>
+                          <button type="button" class="chatbot-action-btn" data-response="live">Deja live, vreau upgrade</button>
+                      </div>
+                      <div class="chatbot-summary hidden" id="chatbot-summary"></div>
+                  </div>
+              </div>
+          </div>
+          <input type="hidden" name="chatbot_story" id="chatbot-input">
+          <input type="hidden" name="portal_package" id="portal-package-input">
+          <input type="hidden" name="portal_investment" id="portal-investment-input">
+          <input type="hidden" name="portal_goal" id="portal-goal-input">
+          <input type="hidden" name="portal_vibe" id="portal-vibe-input">
+          <input type="hidden" name="portal_extras" id="portal-extras-input">
+          <input type="hidden" name="portal_notes" id="portal-notes-input">
                     <div class="mt-6 text-center">
                         <button type="submit" class="font-bold py-3 px-8 rounded-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg w-full" style="background: linear-gradient(90deg, #8B5CF6 0%, #06B6D4 100%);">
                             Trimite Solicitarea <i class="fas fa-envelope-open-text ml-2"></i>
@@ -1322,7 +2201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             pro: {
                 title: "Pachet PRO: Afacere în Creștere",
-                description: "Proiectul de bază pentru afacerile care au nevoie de mai multe secțiuni și instrumente de marketing. Conținut complex, optimizare SEO și integrare socială.",
+                description: "Proiectul de bază pentru afacerile care au nevoie de mai multe secțiuni și integrare avansată. Structură clară, conținut extins și conectivitate cu platformele existente.",
                 price: "1499 €",
                 features: [
                     "Design & Dezvoltare (până la 5 pagini)",
@@ -1351,16 +2230,423 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: "Acoperă toate nevoile de după lansare: îmbunătățiri, actualizări de securitate, adăugare de funcționalități noi sau optimizare continuă a performanței.",
                 price: "Preț Personalizat (pe oră/proiect)",
                 features: [
-                    "Branding Vizual (Logo, Identitate Cromatică)", 
-                    "Branding Audio (Jingle, Sound Design)",    
+                    "Branding Vizual (Logo, Identitate Cromatică)",
+                    "Branding Audio (Jingle, Sound Design)",
                     "Mentenanță Tehnică lunară",
                     "Dezvoltare funcționalități noi",
-                    "Audit SEO/UX și Rapoarte",
-                    "Consultanță în Strategie Digitală",
+                    "Audit UX & performanță",
+                    "Consultanță tehnică dedicată",
                     "Integrări AI"
                 ]
             }
         };
+
+        // --- PORTAL HERO INTERACTIV ---
+        const portalModes = {
+            creative: {
+                title: 'Design Modern, <br class="sm:hidden"> Rezultate Extraordinare',
+                description: 'Integrează microinteracțiuni și storytelling digital pentru o experiență memorabilă și coerentă.',
+                badges: [
+                    { icon: 'fas fa-wand-magic-sparkles', color: 'text-purple-300', label: 'Experiențe imersive' },
+                    { icon: 'fas fa-star', color: 'text-amber-300', label: 'Momente memorabile' },
+                    { icon: 'fas fa-headset', color: 'text-cyan-300', label: 'Consultanță creativă' }
+                ],
+                subtitle: 'Mod creativ: îmbinăm curajul vizual cu UX intuitiv.'
+            },
+            business: {
+                title: 'Strategie Digitală, <br class="sm:hidden"> Orientată pe Impact',
+                description: 'Optimizăm operațiunile și conversiile tale cu soluții scalabile, ancorate în date și obiective concrete.',
+                badges: [
+                    { icon: 'fas fa-rocket', color: 'text-emerald-300', label: 'Creștere sustenabilă' },
+                    { icon: 'fas fa-chart-line', color: 'text-sky-300', label: 'Analiză & KPI-uri' },
+                    { icon: 'fas fa-shield-halved', color: 'text-rose-300', label: 'Stabilitate & securitate' }
+                ],
+                subtitle: 'Mod business: eficiență, claritate și rezultate măsurabile.'
+            }
+        };
+
+        const heroPortal = document.getElementById('hero-portal');
+        const portalTitle = document.getElementById('portal-title');
+        const portalDescription = document.getElementById('portal-description');
+        const portalBadges = document.getElementById('portal-badges');
+        const portalButtons = document.querySelectorAll('.portal-option');
+
+        function renderPortal(mode) {
+            const data = portalModes[mode];
+            if (!data || !portalTitle) return;
+            portalButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.portalMode === mode);
+            });
+            portalTitle.innerHTML = data.title;
+            portalDescription.textContent = '';
+            portalDescription.innerHTML = `<span class="text-white/90 font-semibold">${data.subtitle}</span> ${data.description}`;
+            portalBadges.innerHTML = data.badges.map(badge => `
+                <span class="portal-badge">
+                    <i class="${badge.icon} ${badge.color}"></i>
+                    ${badge.label}
+                </span>
+            `).join('');
+            if (heroPortal) {
+                heroPortal.setAttribute('data-mode', mode);
+            }
+        }
+
+        portalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const mode = button.dataset.portalMode;
+                renderPortal(mode);
+            });
+        });
+
+        renderPortal('creative');
+
+        // --- PORTAL CONFIGURATOR ---
+        const budgetRange = document.getElementById('budget-range');
+
+        const configuratorState = {
+            goal: null,
+            budget: budgetRange ? Number(budgetRange.value) : 1,
+            budgetTouched: false,
+            vibe: null,
+            extras: new Set()
+        };
+
+        const goalButtons = document.querySelectorAll('#goal-choices .choice-tile');
+        const vibeButtons = document.querySelectorAll('#vibe-choices .mood-chip');
+        const extraButtons = document.querySelectorAll('#extra-choices .choice-tile');
+
+        const summaryTitle = document.getElementById('summary-title');
+        const summaryDescription = document.getElementById('summary-description');
+        const summaryPackage = document.getElementById('summary-package');
+        const summaryBudget = document.getElementById('summary-budget');
+        const summaryDifficulty = document.getElementById('summary-difficulty');
+        const summaryBadges = document.getElementById('summary-badges');
+        const summaryFeed = document.getElementById('summary-feed');
+        const progressBar = document.getElementById('configurator-progress');
+        const progressLabel = document.getElementById('configurator-progress-label');
+
+        const portalSummaryStatus = document.getElementById('portal-summary-status');
+        const portalSummaryGoal = document.getElementById('portal-summary-goal');
+        const portalSummaryPackage = document.getElementById('portal-summary-package');
+        const portalSummaryInvestment = document.getElementById('portal-summary-investment');
+        const portalSummaryExtras = document.getElementById('portal-summary-extras');
+        const portalSummaryText = document.getElementById('portal-summary-text');
+
+        const portalPackageInput = document.getElementById('portal-package-input');
+        const portalInvestmentInput = document.getElementById('portal-investment-input');
+        const portalGoalInput = document.getElementById('portal-goal-input');
+        const portalVibeInput = document.getElementById('portal-vibe-input');
+        const portalExtrasInput = document.getElementById('portal-extras-input');
+        const portalNotesInput = document.getElementById('portal-notes-input');
+
+        const projectMessageInput = document.getElementById('form-project');
+        let lastPortalTemplate = '';
+
+        if (projectMessageInput) {
+            projectMessageInput.dataset.userEdited = 'false';
+            projectMessageInput.addEventListener('input', () => {
+                projectMessageInput.dataset.userEdited = 'true';
+            });
+        }
+
+        const stepStatuses = {
+            1: document.getElementById('status-step-1'),
+            2: document.getElementById('status-step-2'),
+            3: document.getElementById('status-step-3'),
+            4: document.getElementById('status-step-4')
+        };
+
+        const goalLabels = {
+            starter: 'Lansare rapidă',
+            pro: 'Extindere de conținut',
+            studio: 'Proiect complet personalizat'
+        };
+
+        const packageLabels = {
+            starter: 'Starter',
+            pro: 'Pro',
+            studio: 'Studio'
+        };
+
+        const sliderPackages = ['starter', 'pro', 'studio'];
+        const complexityLabels = ['Implementare esențială', 'Implementare avansată', 'Implementare complet personalizată'];
+
+        const basePrices = {
+            starter: 599,
+            pro: 1499,
+            studio: 2499
+        };
+
+        const extraPricing = {
+            'brand-kit': 420,
+            'content-sprint': 320,
+            automation: 450,
+            'audio-id': 280
+        };
+
+        const vibeBadges = {
+            playful: { icon: 'fas fa-comments', label: 'Ton prietenos' },
+            minimal: { icon: 'fas fa-clone', label: 'Ton clar' },
+            premium: { icon: 'fas fa-gem', label: 'Ton elegant' },
+            tech: { icon: 'fas fa-robot', label: 'Ton tehnic' }
+        };
+
+        const extraBadges = {
+            'brand-kit': { icon: 'fas fa-swatchbook', label: 'Brand Kit extins' },
+            'content-sprint': { icon: 'fas fa-pen-nib', label: 'Atelier de conținut' },
+            automation: { icon: 'fas fa-bolt', label: 'Integrare automatizări' },
+            'audio-id': { icon: 'fas fa-music', label: 'Identitate audio' }
+        };
+
+        function formatPrice(value) {
+            return `${value.toLocaleString('ro-RO')} €`;
+        }
+
+        function buildConfiguratorSnapshot() {
+            const packageKey = sliderPackages[configuratorState.budget];
+            if (!configuratorState.goal || !packageKey) {
+                return { ready: false };
+            }
+
+            const goalLabel = goalLabels[configuratorState.goal];
+            const packageLabel = packageLabels[packageKey];
+            const vibeKey = configuratorState.vibe;
+            const vibeLabel = vibeKey ? vibeBadges[vibeKey].label : null;
+            const extrasKeys = Array.from(configuratorState.extras);
+            const extrasLabels = extrasKeys
+                .map(extra => (extraBadges[extra] ? extraBadges[extra].label : ''))
+                .filter(label => label.length > 0);
+
+            let totalPrice = basePrices[packageKey] || 0;
+            extrasKeys.forEach(extra => {
+                totalPrice += extraPricing[extra] || 0;
+            });
+
+            const description = `Propunem o ${goalLabel.toLowerCase()} cu ${vibeLabel ? `ton ${vibeLabel.toLowerCase()}` : 'un ton adaptabil'} și ${extrasLabels.length ? 'servicii suplimentare selectate' : 'fără extra opționale'}.`;
+
+            const summaryLines = [
+                `Obiectiv selectat: ${goalLabel}.`,
+                `Pachet de bază: ${packageLabel} (${formatPrice(basePrices[packageKey])}).`,
+                vibeLabel ? `Ton preferat: ${vibeLabel}.` : 'Ton preferat: în definire.',
+                extrasLabels.length ? `Servicii suplimentare: ${extrasLabels.join(', ')}.` : 'Servicii suplimentare: neselectate momentan.'
+            ];
+
+            return {
+                ready: true,
+                goalKey: configuratorState.goal,
+                goalLabel,
+                packageKey,
+                packageLabel,
+                budgetIndex: configuratorState.budget,
+                totalPrice,
+                vibeKey,
+                vibeLabel,
+                extrasKeys,
+                extrasLabels,
+                description,
+                summaryLines
+            };
+        }
+
+        function buildSummaryMessage(snapshot) {
+            if (!snapshot.ready) {
+                return '';
+            }
+            const extrasText = snapshot.extrasLabels.length ? snapshot.extrasLabels.join(', ') : 'Fără servicii suplimentare';
+            const vibeText = snapshot.vibeLabel || 'În definire';
+            const lines = [
+                `Pachet recomandat: ${snapshot.packageLabel}`,
+                `Obiectiv selectat: ${snapshot.goalLabel}`,
+                `Investiție estimată: de la ${formatPrice(snapshot.totalPrice)}`,
+                `Ton preferat: ${vibeText}`,
+                `Servicii suplimentare: ${extrasText}`
+            ];
+            return `Rezumat configurator:\n${lines.map(line => `- ${line}`).join('\n')}\n\nDetalii proiect:`;
+        }
+
+        function updateFormSummary(snapshot) {
+            if (!portalSummaryStatus || !portalSummaryPackage) {
+                return;
+            }
+
+            if (!snapshot.ready) {
+                portalSummaryStatus.textContent = 'Completează portalul pentru a genera un rezumat aici.';
+                portalSummaryGoal.textContent = '—';
+                portalSummaryPackage.textContent = '—';
+                portalSummaryInvestment.textContent = '—';
+                portalSummaryExtras.textContent = '—';
+                portalSummaryText.textContent = 'Configurează portalul pentru a avea un rezumat gata de trimis.';
+
+                [portalPackageInput, portalInvestmentInput, portalGoalInput, portalVibeInput, portalExtrasInput, portalNotesInput]
+                    .forEach(input => { if (input) input.value = ''; });
+
+                lastPortalTemplate = '';
+                if (projectMessageInput && projectMessageInput.dataset.userEdited !== 'true') {
+                    projectMessageInput.value = '';
+                    projectMessageInput.dataset.userEdited = 'false';
+                }
+                return;
+            }
+
+            portalSummaryStatus.textContent = 'Rezumat sincronizat automat din configurator.';
+            portalSummaryGoal.textContent = snapshot.goalLabel;
+            portalSummaryPackage.textContent = snapshot.packageLabel;
+            portalSummaryInvestment.textContent = `de la ${formatPrice(snapshot.totalPrice)}`;
+            portalSummaryExtras.textContent = snapshot.extrasLabels.length ? snapshot.extrasLabels.join(', ') : 'Fără servicii suplimentare';
+            portalSummaryText.textContent = snapshot.description;
+
+            if (portalPackageInput) portalPackageInput.value = snapshot.packageLabel;
+            if (portalInvestmentInput) portalInvestmentInput.value = `de la ${formatPrice(snapshot.totalPrice)}`;
+            if (portalGoalInput) portalGoalInput.value = snapshot.goalLabel;
+            if (portalVibeInput) portalVibeInput.value = snapshot.vibeLabel || '';
+            if (portalExtrasInput) portalExtrasInput.value = snapshot.extrasLabels.length ? snapshot.extrasLabels.join(', ') : 'Fără servicii suplimentare';
+            if (portalNotesInput) portalNotesInput.value = snapshot.summaryLines.join(' | ');
+
+            const template = buildSummaryMessage(snapshot);
+            lastPortalTemplate = template;
+            if (projectMessageInput && projectMessageInput.dataset.userEdited !== 'true') {
+                projectMessageInput.value = template;
+                projectMessageInput.dataset.userEdited = 'false';
+            }
+        }
+
+        function refreshContactSummary() {
+            updateFormSummary(buildConfiguratorSnapshot());
+        }
+
+        function updateStepStatus(step, completed, text) {
+            const element = stepStatuses[step];
+            if (!element) return;
+            element.textContent = text;
+            element.classList.toggle('locked', !completed);
+        }
+
+        function renderSummary() {
+            const snapshot = buildConfiguratorSnapshot();
+
+            if (!snapshot.ready) {
+                summaryTitle.textContent = 'Alege un obiectiv pentru a începe';
+                summaryDescription.textContent = 'Completează pașii portalului pentru a primi o recomandare de pachet și o estimare de buget.';
+                summaryPackage.textContent = '--';
+                summaryBudget.textContent = '--';
+                summaryDifficulty.textContent = '--';
+                summaryBadges.innerHTML = '';
+                summaryFeed.innerHTML = `
+                    <div class="achievement-item">
+                        <i class="fas fa-circle-notch"></i>
+                        <div>
+                            <p class="text-sm text-gray-200">Selectează opțiunile pentru a primi o recomandare personalizată.</p>
+                        </div>
+                    </div>`;
+                updateFormSummary(snapshot);
+                return;
+            }
+
+            summaryTitle.textContent = `Pachet ${snapshot.packageLabel} recomandat`;
+            summaryDescription.textContent = snapshot.description;
+            summaryPackage.textContent = snapshot.packageLabel;
+            summaryBudget.textContent = `de la ${formatPrice(snapshot.totalPrice)}`;
+            summaryDifficulty.textContent = complexityLabels[snapshot.budgetIndex];
+
+            const badges = [
+                { icon: 'fas fa-layer-group', label: `Pachet ${snapshot.packageLabel}` },
+                { icon: 'fas fa-bullseye', label: snapshot.goalLabel },
+                snapshot.vibeKey ? vibeBadges[snapshot.vibeKey] : null,
+                ...snapshot.extrasKeys.map(extra => extraBadges[extra]).filter(Boolean)
+            ].filter(Boolean);
+
+            summaryBadges.innerHTML = badges.map(badge => `
+                <span class="summary-badge">
+                    <i class="${badge.icon} text-cyan-300"></i>
+                    ${badge.label}
+                </span>
+            `).join('');
+
+            summaryFeed.innerHTML = snapshot.summaryLines.map(item => `
+                <div class="achievement-item">
+                    <i class="fas fa-circle-dot"></i>
+                    <div><p class="text-sm text-gray-200">${item}</p></div>
+                </div>
+            `).join('');
+
+            updateFormSummary(snapshot);
+        }
+
+        function updateProgress() {
+            let completed = 0;
+            if (configuratorState.goal) completed++;
+            if (configuratorState.budgetTouched) completed++;
+            if (configuratorState.vibe) completed++;
+            if (configuratorState.extras.size > 0) completed++;
+
+            const percent = Math.round((completed / 4) * 100);
+            progressBar.style.width = `${percent}%`;
+            progressLabel.textContent = percent;
+        }
+
+        function selectGoal(goal) {
+            configuratorState.goal = goal;
+            goalButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.goal === goal));
+            updateStepStatus(1, true, `Selectat · ${goalLabels[goal]}`);
+            const targetIndex = sliderPackages.indexOf(goal);
+            if (budgetRange && targetIndex >= 0) {
+                budgetRange.value = targetIndex;
+                handleBudgetChange(targetIndex);
+            } else {
+                renderSummary();
+                updateProgress();
+            }
+        }
+
+        function handleBudgetChange(value) {
+            configuratorState.budget = Number(value);
+            configuratorState.budgetTouched = true;
+            const sliderPackageKey = sliderPackages[configuratorState.budget];
+            updateStepStatus(2, true, `Calibrat · ${packageLabels[sliderPackageKey]}`);
+            renderSummary();
+            updateProgress();
+        }
+
+        function selectVibe(vibe) {
+            configuratorState.vibe = vibe;
+            vibeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.vibe === vibe));
+            updateStepStatus(3, true, `Activ · ${vibeBadges[vibe].label}`);
+            renderSummary();
+            updateProgress();
+        }
+
+        function toggleExtra(extra) {
+            if (configuratorState.extras.has(extra)) {
+                configuratorState.extras.delete(extra);
+            } else {
+                configuratorState.extras.add(extra);
+            }
+            extraButtons.forEach(btn => btn.classList.toggle('active', configuratorState.extras.has(btn.dataset.extra)));
+            const hasExtras = configuratorState.extras.size > 0;
+            updateStepStatus(4, hasExtras, hasExtras ? `Servicii alese: ${configuratorState.extras.size}` : 'Opțional · fără servicii');
+            renderSummary();
+            updateProgress();
+        }
+
+        goalButtons.forEach(btn => {
+            btn.addEventListener('click', () => selectGoal(btn.dataset.goal));
+        });
+
+        if (budgetRange) {
+            budgetRange.addEventListener('input', (event) => handleBudgetChange(event.target.value));
+            handleBudgetChange(budgetRange.value);
+        }
+
+        vibeButtons.forEach(btn => {
+            btn.addEventListener('click', () => selectVibe(btn.dataset.vibe));
+        });
+
+        extraButtons.forEach(btn => {
+            btn.addEventListener('click', () => toggleExtra(btn.dataset.extra));
+        });
+
+        renderSummary();
+        updateProgress();
 
         // --- 1. ECRAN DE INTRO CINEMATIC (JS) ---
         const introScreen = document.getElementById('intro-screen');
@@ -1560,7 +2846,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const modalFeatures = document.getElementById('modal-features');
                 modalFeatures.innerHTML = data.features.map(feature => 
-                    `<li class="flex items-center"><i class="fas fa-check-circle text-purple-400 mr-2"></i> ${feature}</li>`
+                    `<li class="flex items-center"><i class="fas fa-circle-check text-purple-400 mr-2"></i> ${feature}</li>`
                 ).join('');
 
                 openModal('pachet-modal');
@@ -1576,6 +2862,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     closeModal(m.id);
                 }
             });
+            refreshContactSummary();
+            if (typeof resetChatbot === 'function') {
+                resetChatbot();
+            }
             openModal('contact-form-modal');
         }
         
@@ -1589,25 +2879,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             openModal('legal-modal');
-        }
-
-        // Handle Form Submit (Simulare)
-        window.handleContactFormSubmit = function(e) {
-            e.preventDefault();
-            const form = document.getElementById('project-contact-form');
-            const confirmModal = document.getElementById('form-confirm-modal');
-            form.style.display = 'none';
-            confirmModal.style.display = 'flex';
-            // Resetăm formularul după trimitere
-            form.reset();
-            // Buton OK: ascunde modalul și redirecționează
-            document.getElementById('confirm-ok-btn').onclick = function() {
-                confirmModal.style.display = 'none';
-                closeModal('contact-form-modal');
-                form.style.display = 'block';
-                window.location.hash = '#acasa';
-                window.scrollTo({top:0,behavior:'smooth'});
-            };
         }
 
         // Închide modalele la click in afara ferestrei sau pe tasta ESC
@@ -1629,6 +2900,73 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // --- 4.b TIMELINE GAMIFICAT ---
+        const checklistForm = document.getElementById('collaboration-checklist');
+        const checklistProgress = document.getElementById('checklist-progress');
+        const checklistInputs = checklistForm ? Array.from(checklistForm.querySelectorAll('input[type="checkbox"][data-key]')) : [];
+        const checklistStorageKey = 'mioritaChecklist';
+        let checklistState = {};
+
+        try {
+            const storedChecklist = localStorage.getItem(checklistStorageKey);
+            if (storedChecklist) {
+                const parsedState = JSON.parse(storedChecklist);
+                if (parsedState && typeof parsedState === 'object') {
+                    checklistState = parsedState;
+                }
+            }
+        } catch (error) {
+            checklistState = {};
+        }
+
+        function persistChecklist() {
+            try {
+                localStorage.setItem(checklistStorageKey, JSON.stringify(checklistState));
+            } catch (error) {
+                /* Ignorăm stocarea dacă nu este disponibilă */
+            }
+        }
+
+        function refreshChecklistUI() {
+            if (!checklistInputs.length) {
+                return;
+            }
+
+            let completed = 0;
+            checklistInputs.forEach(input => {
+                const key = input.dataset.key;
+                const isChecked = Boolean(checklistState[key]);
+                input.checked = isChecked;
+                if (input.parentElement) {
+                    input.parentElement.classList.toggle('completed', isChecked);
+                }
+                if (isChecked) {
+                    completed += 1;
+                }
+            });
+
+            if (checklistProgress) {
+                const total = checklistInputs.length;
+                checklistProgress.textContent = `Ai bifat ${completed} din ${total} elemente esențiale.`;
+            }
+        }
+
+        if (checklistInputs.length) {
+            checklistInputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    const key = input.dataset.key;
+                    if (!key) {
+                        return;
+                    }
+                    checklistState[key] = input.checked;
+                    persistChecklist();
+                    refreshChecklistUI();
+                });
+            });
+
+            refreshChecklistUI();
+        }
+
         // --- 5. CARUSEL LOGIC (JS) ---
         const carousel = document.getElementById('projects-carousel');
         const items = carousel.querySelectorAll('.carousel-item');
@@ -1648,6 +2986,131 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const indicators = document.querySelectorAll('#carousel-indicators button');
+        const storyChapterEl = document.getElementById('story-chapter');
+        const storyBadgesContainer = document.getElementById('story-badges');
+        const trackerTitle = document.getElementById('tracker-title');
+        const trackerSubtitle = document.getElementById('tracker-subtitle');
+        const trackerIndustry = document.getElementById('tracker-industry');
+        const trackerTech = document.getElementById('tracker-tech');
+        const trackerImpact = document.getElementById('tracker-impact');
+        const trackerBadge = document.getElementById('tracker-badge');
+        const trackerFeed = document.getElementById('tracker-feed');
+
+        const projectStories = {
+            'dr-lazuran': {
+                title: 'Dr. Lazuran',
+                subtitle: 'Identitate digitală caldă pentru o clinică care pune accent pe încredere.',
+                chapter: 'Am transformat vizitele la dentist într-o experiență prietenoasă cu o interfață luminoasă, programări rapide și microinteracțiuni care atenuează anxietatea pacienților.',
+                badges: [
+                    { icon: 'fas fa-tooth', label: 'Brand medical uman' },
+                    { icon: 'fas fa-hourglass-half', label: 'Programări instant' },
+                    { icon: 'fas fa-language', label: 'Mesaje bilingve' }
+                ],
+                industry: 'Sănătate',
+                tech: 'Next.js · Tailwind · Formspree',
+                impact: '+45% programări online',
+                badge: 'Experiență pacienți',
+                feed: [
+                    'Workflow de programare cu confirmări automate.',
+                    'Material educațional integrat în layout pentru a crește încrederea.'
+                ]
+            },
+            workmatch: {
+                title: 'WorkMatch',
+                subtitle: 'Platformă de recrutare cu accent pe potrivire inteligentă.',
+                chapter: 'Am construit un funnel clar pentru candidați și companii, cu filtre dinamice și dashboard-uri care reduc timpul de recrutare cu săptămâni.',
+                badges: [
+                    { icon: 'fas fa-briefcase', label: 'Marketplace B2B' },
+                    { icon: 'fas fa-filter', label: 'Filtre inteligente' },
+                    { icon: 'fas fa-chart-pie', label: 'Analitice în timp real' }
+                ],
+                industry: 'HR & Recrutare',
+                tech: 'React · Node · Elastic Search',
+                impact: '-30% timp până la shortlist',
+                badge: 'Eficiență recrutare',
+                feed: [
+                    'Integrare cu ATS-uri și export de rapoarte la un click.',
+                    'Microcopy orientat spre acțiune pentru candidați și recrutori.'
+                ]
+            },
+            raropem: {
+                title: 'Raropem',
+                subtitle: 'Catalog digital pentru componente industriale rare.',
+                chapter: 'Am creat un catalog ușor de parcurs, cu căutare semantică și prezentări 3D care scad numărul de emailuri repetitive și cresc vânzările inbound.',
+                badges: [
+                    { icon: 'fas fa-gears', label: 'Catalog tehnic' },
+                    { icon: 'fas fa-search', label: 'Căutare semantică' },
+                    { icon: 'fas fa-cubes', label: 'Vizualizare 3D' }
+                ],
+                industry: 'Industrial & Automotive',
+                tech: 'Nuxt · Strapi · Algolia',
+                impact: '+60% solicitări calificate',
+                badge: 'Expertiză tehnică',
+                feed: [
+                    'Segmentare după industrie pentru a personaliza ofertarea.',
+                    'Automatizări pentru disponibilitate și stoc.'
+                ]
+            },
+            'your-project': {
+                title: 'Proiectul tău',
+                subtitle: 'Scriem împreună următoarea poveste de succes.',
+                chapter: 'Ai o idee care merită să fie evidențiată? Portalul nostru te ajută să alegi direcția potrivită, iar noi o transformăm într-un studiu de caz solid.',
+                badges: [
+                    { icon: 'fas fa-lightbulb', label: 'Idee în incubare' },
+                    { icon: 'fas fa-users', label: 'Echipă dedicată' },
+                    { icon: 'fas fa-fire', label: 'Impact la lansare' }
+                ],
+                industry: 'Custom',
+                tech: 'Pe măsura obiectivelor tale',
+                impact: '∞ posibilități',
+                badge: 'Viziune în construcție',
+                feed: [
+                    'Definește tonul în configurator, iar noi conturăm arhitectura.',
+                    'Sesiuni de co-creație și prototipare rapidă.'
+                ]
+            }
+        };
+
+        function renderProjectStory(projectKey) {
+            const story = projectStories[projectKey];
+            if (!story) {
+                storyChapterEl.textContent = 'Selectează un proiect pentru a vedea insight-urile și rezultatele.';
+                storyBadgesContainer.innerHTML = '';
+                trackerTitle.textContent = 'Alege un proiect';
+                trackerSubtitle.textContent = 'Caruselul deblochează detalii despre industrie, tehnologie și rezultate la fiecare slide.';
+                trackerIndustry.textContent = '—';
+                trackerTech.textContent = '—';
+                trackerImpact.textContent = '—';
+                trackerBadge.textContent = '—';
+                trackerFeed.innerHTML = `
+                    <div class="achievement-item">
+                        <i class="fas fa-compass"></i>
+                        <div>
+                            <p class="text-sm text-gray-200">Glisează pentru a vedea cum arată rezultatele în industrii diferite.</p>
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            trackerTitle.textContent = story.title;
+            trackerSubtitle.textContent = story.subtitle;
+            storyChapterEl.textContent = story.chapter;
+            storyBadgesContainer.innerHTML = story.badges.map(badge => `
+                <span class="story-badge">
+                    <i class="${badge.icon} mr-1"></i>${badge.label}
+                </span>
+            `).join('');
+            trackerIndustry.textContent = story.industry;
+            trackerTech.textContent = story.tech;
+            trackerImpact.textContent = story.impact;
+            trackerBadge.textContent = story.badge;
+            trackerFeed.innerHTML = story.feed.map(item => `
+                <div class="achievement-item">
+                    <i class="fas fa-star"></i>
+                    <div><p class="text-sm text-gray-200">${item}</p></div>
+                </div>
+            `).join('');
+        }
 
         function updateCarousel(newIndex) {
             if (newIndex >= items.length) {
@@ -1663,9 +3126,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             items[currentIndex].classList.remove('opacity-0', 'z-0');
             items[currentIndex].classList.add('opacity-100', 'z-10');
-            
+
             indicators.forEach(ind => ind.classList.remove('bg-purple-500'));
             indicators[currentIndex].classList.add('bg-purple-500');
+            renderProjectStory(items[currentIndex].dataset.project);
         }
 
         function goToSlide(index) {
@@ -1685,9 +3149,209 @@ document.addEventListener('DOMContentLoaded', () => {
             autoPlayInterval = setInterval(nextSlide, 5000);
         }
 
-        updateCarousel(0); 
+        updateCarousel(0);
         startAutoPlay();
-        
+
+        // --- 5.b CONTACT MOOD & CHATBOT ---
+        const contactMoodSelector = document.getElementById('contact-mood-selector');
+        const contactMoodInput = document.getElementById('contact-mood-input');
+        const contactMoodButtons = contactMoodSelector ? contactMoodSelector.querySelectorAll('.mood-chip') : [];
+
+        contactMoodButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                contactMoodButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                if (contactMoodInput) {
+                    contactMoodInput.value = button.dataset.mood;
+                }
+                updateChatbotSummary();
+            });
+        });
+
+        const chatbotWindow = document.getElementById('contact-chatbot');
+        const chatbotActions = document.getElementById('chatbot-actions');
+        const chatbotMessageText = document.getElementById('chatbot-message-text');
+        const chatbotSummary = document.getElementById('chatbot-summary');
+        const chatbotInput = document.getElementById('chatbot-input');
+
+        const stage0Actions = [
+            { label: 'Abia schițată', value: 'start' },
+            { label: 'În lucru', value: 'in-progress' },
+            { label: 'Deja live, vreau upgrade', value: 'live' }
+        ];
+
+        const stage1Actions = [
+            { label: 'Mai multe lead-uri', value: 'leads' },
+            { label: 'Brand awareness memorabil', value: 'awareness' },
+            { label: 'Automatizare & eficiență', value: 'automation' }
+        ];
+
+        const ideaCopy = {
+            start: 'abia schițată și gata de validare rapidă',
+            'in-progress': 'în lucru și pregătită de rafinare',
+            live: 'deja live, cu dorință de upgrade major'
+        };
+
+        const outcomeCopy = {
+            leads: 'un flux constant de lead-uri calificate',
+            awareness: 'o poveste de brand memorabilă',
+            automation: 'automatizări care eliberează timp din echipă'
+        };
+
+        let chatbotStage = 0;
+        let chatbotIdea = null;
+        let chatbotOutcome = null;
+
+        function renderChatbotActions(actions) {
+            if (!chatbotActions) return;
+            chatbotActions.innerHTML = actions.map(action => `
+                <button type="button" class="chatbot-action-btn" data-response="${action.value}">${action.label}</button>
+            `).join('');
+            chatbotActions.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => handleChatbotResponse(btn.dataset.response));
+            });
+        }
+
+        function resetChatbot() {
+            chatbotStage = 0;
+            chatbotIdea = null;
+            chatbotOutcome = null;
+            if (chatbotMessageText) {
+                chatbotMessageText.textContent = 'Salut! Sunt Miorița. Spune-mi în ce stadiu este ideea ta și îți pregătesc un scurt rezumat pentru echipă.';
+            }
+            if (chatbotSummary) {
+                chatbotSummary.classList.add('hidden');
+            }
+            if (chatbotInput) {
+                chatbotInput.value = '';
+            }
+            renderChatbotActions(stage0Actions);
+        }
+
+        function updateChatbotSummary() {
+            if (chatbotStage < 2 || !chatbotSummary) return;
+            const ideaText = ideaCopy[chatbotIdea] || 'în explorare';
+            const outcomeText = outcomeCopy[chatbotOutcome] || 'impact personalizat';
+            const moodValue = contactMoodInput ? contactMoodInput.value : '';
+            const moodText = moodValue ? `Vibe preferat: ${moodValue}.` : 'Vibe în definire – spune-ne ce preferi.';
+            const summaryText = `Rezumat Miorița: idee ${ideaText}, obiectiv ${outcomeText}. ${moodText}`;
+            chatbotSummary.textContent = summaryText;
+            chatbotSummary.classList.remove('hidden');
+            if (chatbotInput) {
+                chatbotInput.value = summaryText.replace('Rezumat Miorița: ', '');
+            }
+        }
+
+        function finalizeChatbot() {
+            chatbotStage = 2;
+            if (chatbotMessageText) {
+                chatbotMessageText.textContent = 'Excelent! Am pregătit un rezumat pentru echipă. Dacă vrei, poți reîncepe dialogul.';
+            }
+            updateChatbotSummary();
+            if (chatbotActions) {
+                chatbotActions.innerHTML = '<button type="button" class="chatbot-action-btn" data-response="reset">Reia dialogul</button>';
+                const resetButton = chatbotActions.querySelector('button');
+                if (resetButton) {
+                    resetButton.addEventListener('click', () => resetChatbot());
+                }
+            }
+        }
+
+        function handleChatbotResponse(response) {
+            if (response === 'reset') {
+                resetChatbot();
+                return;
+            }
+
+            if (chatbotStage === 0) {
+                chatbotIdea = response;
+                chatbotStage = 1;
+                if (chatbotMessageText) {
+                    chatbotMessageText.textContent = 'Super! Ce rezultat te entuziasmează cel mai tare?';
+                }
+                renderChatbotActions(stage1Actions);
+                if (chatbotSummary) {
+                    chatbotSummary.classList.add('hidden');
+                }
+            } else if (chatbotStage === 1) {
+                chatbotOutcome = response;
+                finalizeChatbot();
+            }
+        }
+
+        if (chatbotWindow) {
+            resetChatbot();
+        }
+
+        const contactForm = document.getElementById('project-contact-form');
+        const confirmModal = document.getElementById('form-confirm-modal');
+        const confirmButton = document.getElementById('confirm-ok-btn');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const formData = new FormData(contactForm);
+
+                try {
+                    const response = await fetch(contactForm.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Form submission failed');
+                    }
+
+                    if (confirmModal) {
+                        confirmModal.style.display = 'flex';
+                    }
+
+                    contactForm.reset();
+                    contactMoodButtons.forEach(btn => btn.classList.remove('active'));
+                    if (contactMoodInput) {
+                        contactMoodInput.value = '';
+                    }
+                    if (projectMessageInput) {
+                        projectMessageInput.dataset.userEdited = 'false';
+                    }
+                    refreshContactSummary();
+                    if (typeof resetChatbot === 'function') {
+                        resetChatbot();
+                    }
+
+                    const closeConfirmation = () => {
+                        if (confirmModal) {
+                            confirmModal.style.display = 'none';
+                        }
+                        closeModal('contact-form-modal');
+                        window.location.hash = '#acasa';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        if (confirmButton) {
+                            confirmButton.onclick = null;
+                        }
+                    };
+
+                    let autoCloseTimer = null;
+                    if (confirmModal) {
+                        autoCloseTimer = setTimeout(closeConfirmation, 2500);
+                    }
+
+                    if (confirmButton) {
+                        confirmButton.onclick = () => {
+                            if (autoCloseTimer) {
+                                clearTimeout(autoCloseTimer);
+                            }
+                            closeConfirmation();
+                        };
+                    }
+                } catch (error) {
+                    console.error('Eroare la trimiterea formularului:', error);
+                    alert('A apărut o eroare la trimiterea formularului. Te rugăm să încerci din nou.');
+                }
+            });
+        }
+
         // --- 6. MOUSE TRACKING GLOW (WOW FACTOR) ---
         const mouseGlow = document.getElementById('mouse-glow');
         const container = document.body;
@@ -1865,38 +3529,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     });
-</script>
-
-<script>
-async function handleContactFormSubmit(event) {
-  event.preventDefault();
-
-  const name = encodeURIComponent(document.getElementById("form-name").value.trim());
-  const email = encodeURIComponent(document.getElementById("form-email").value.trim());
-  const message = encodeURIComponent(document.getElementById("form-project").value.trim());
-
-  const msgBox = document.getElementById("form-message");
-  msgBox.classList.add("hidden");
-
-  try {
-    const url = `https://script.google.com/macros/s/AKfycbyI1DGEnkOYsRyA9eHaFE9sjH4xm7LMgZOkZgaiNkCFfQsoIkgs1Wfx1pvj48jBVuuU/exec?name=${name}&email=${email}&message=${message}`;
-
-    const response = await fetch(url);
-    const result = await response.text();
-    console.log("Răspuns:", result);
-
-    msgBox.innerText = "✅ Mesaj trimis! Te vom contacta în curând.";
-    msgBox.classList.remove("hidden");
-    msgBox.classList.remove("text-red-400");
-    msgBox.classList.add("text-green-400");
-    event.target.reset();
-  } catch (err) {
-    msgBox.innerText = "❌ Eroare la trimiterea mesajului.";
-    msgBox.classList.remove("hidden");
-    msgBox.classList.add("text-red-400");
-    console.error(err);
-  }
-}
 </script>
     
 </body>

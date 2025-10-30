@@ -2906,55 +2906,20 @@
         </nav>
     </header>
 
-    <!-- Buton Hamburger Fix (vizibil doar pe mobil) -->
-    <button id="hamburger-menu-btn" class="hamburger-menu-button lg:hidden" aria-label="Deschide meniul">
-        <div class="hamburger-lines">
-            <span class="line line1"></span>
-            <span class="line line2"></span>
-            <span class="line line3"></span>
-        </div>
-    </button>
+        /* ----------------------------------- */
+        /* 8. PORTAL HERO INTERACTIV            */
+        /* ----------------------------------- */
+        .portal-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.15);
+        }
 
-    <!-- Menu Overlay Full Screen -->
-    <div id="menu-overlay" class="menu-overlay">
-        <div class="menu-content">
-            <nav class="menu-items">
-                <a href="#acasa" class="menu-item">
-                    <i class="fas fa-home"></i>
-                    <span>Acasă</span>
-                </a>
-                <a href="#servicii" class="menu-item">
-                    <i class="fas fa-cogs"></i>
-                    <span>Proces</span>
-                </a>
-                <a href="#pachete" class="menu-item">
-                    <i class="fas fa-box"></i>
-                    <span>Pachete</span>
-                </a>
-                <a href="#configurator" class="menu-item">
-                    <i class="fas fa-sliders"></i>
-                    <span>Configurator</span>
-                </a>
-                <a href="#proiecte" class="menu-item">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Proiecte</span>
-                </a>
-                <a href="#despre" class="menu-item">
-                    <i class="fas fa-circle-info"></i>
-                    <span>Despre</span>
-                </a>
-                <a href="#contact" class="menu-item">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Contact</span>
-                </a>
-                <a href="#" onclick="openContactModal(event)" class="menu-item">
-                    <i class="fas fa-envelope-open-text"></i>
-                    <span>Trimite mesaj</span>
-                </a>
-            </nav>
-        </div>
-    </div>
-    
         .portal-option {
             position: relative;
             border-radius: 9999px;
@@ -3020,102 +2985,6 @@
             flex-direction: column;
             gap: 1.75rem;
         }
-
-    <!-- 3. HERO SECTION (Acasă) -->
-    <section id="acasa" class="relative pt-48 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">
-        <div class="max-w-4xl mx-auto cinematic-fade-in space-y-10" id="hero-portal">
-            <div class="space-y-6">
-                <div class="portal-toggle mx-auto">
-                    <button class="portal-option active" data-portal-mode="creative">
-                        <i class="fas fa-wand-magic-sparkles"></i> Experiență Creativă
-                    </button>
-                    <button class="portal-option" data-portal-mode="business">
-                        <i class="fas fa-briefcase"></i> Perspectivă Business
-                    </button>
-                </div>
-                <h1 id="portal-title" class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
-                    Design Modern, <br class="sm:hidden"> Rezultate Extraordinare
-                </h1>
-                <div id="portal-description" class="portal-description text-xl md:text-2xl text-gray-300 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.35s;">
-                    Dezvoltăm identități digitale personalizate, accesibile și optimizate, transformând viziunea ta în realitate web.
-                </div>
-                <div id="portal-badges" class="portal-badges text-sm text-gray-300 animated-visible" style="transition-delay: 0.45s;">
-                    <span class="portal-badge"><i class="fas fa-wand-magic-sparkles text-purple-300"></i> Microinteracțiuni dinamice</span>
-                    <span class="portal-badge"><i class="fas fa-seedling text-green-300"></i> Experiențe personalizate</span>
-                    <span class="portal-badge"><i class="fas fa-heart text-rose-300"></i> Design memorabil</span>
-                </div>
-            </div>
-            <a href="#pachete" class="inline-block cinematic-scale-in animated-visible" style="transition-delay: 0.6s;">
-                <button class="font-bold py-4 px-12 rounded-lg text-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg shadow-purple-500/50"
-                        style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
-                    Explorează Pachetele <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-            </a>
-        </div>
-    </section>
-
-    <!-- 4. SECȚIUNEA SERVICII / PACHETE -->
-    <section id="pachete" class="py-20 lg:py-32 px-4">
-        <div class="container mx-auto">
-            <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 cinematic-fade-in">
-                <span class="text-purple-400">Pachete</span> de Servicii Premium
-            </h2>
-            
-            <div id="pachete-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
-                <!-- CARD 1: STARTER -->
-                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="starter">
-                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl">
-                        <i class="fas fa-rocket text-4xl text-cyan-400 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2 text-white">Starter</h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Lansarea rapidă. Ideal pentru prezența online minimală.</p>
-                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> 1 Pagină Principală</li>
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Design Responsive</li>
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Formular de Contact</li>
-                        </ul>
-                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
-                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
-                            Vezi Detalii
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CARD 2: PRO -->
-                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="pro" style="transition-delay: 0.1s;">
-                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl border-2 border-purple-500">
-                        <i class="fas fa-chart-line text-4xl text-purple-400 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2 text-white">Pro <span class="text-xs ml-2 px-2 py-0.5 bg-purple-600 rounded-full">Recomandat</span></h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Soluția completă pentru afacerile în creștere.</p>
-                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Până la 5 Pagini</li>
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Optimizare SEO de Bază</li>
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Integrare Social Media</li>
-                        </ul>
-                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
-                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
-                            Vezi Detalii
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CARD 3: STUDIO -->
-                <div class="pachet-card cinematic-scale-in card-glow-effect rounded-xl shadow-2xl backdrop-blur-sm cursor-pointer" data-pachet="studio" style="transition-delay: 0.2s;">
-                    <div class="card-content p-6 flex flex-col h-full bg-slate-800/60 hover:bg-slate-700/70 transition duration-300 rounded-xl">
-                        <i class="fas fa-crown text-4xl text-amber-400 mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2 text-white">Studio</h3>
-                        <p class="text-gray-400 mb-4 flex-grow">Pachetul fără limite. Soluții personalizate la cheie.</p>
-                        <ul class="list-none space-y-2 text-sm text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Proiect Complex Personalizat</li>
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Suport Premium 24/7</li>
-                            <li class="flex items-center"><i class="fas fa-circle-check text-green-400 mr-2"></i> Funcționalități Avansate</li>
-                        </ul>
-                        <button class="open-modal-btn w-full mt-auto py-2 rounded-lg font-semibold transition duration-300 transform hover:scale-[1.02] shadow-md"
-                                data-modal-target="pachet-modal" style="background: var(--color-primary);">
-                            Vezi Detalii
-                        </button>
-                    </div>
-                </div>
 
         .configurator-summary {
             grid-column: span 5 / span 5;
@@ -3258,17 +3127,6 @@
             border-radius: 1.5rem;
             border: 1px solid rgba(139, 92, 246, 0.35);
             padding: 1.75rem;
-        /* 10. TIMELINE GAMIFICAT               */
-        /* ----------------------------------- */
-        .mission-control {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            background: rgba(15, 23, 42, 0.75);
-            border-radius: 1.5rem;
-            border: 1px solid rgba(139, 92, 246, 0.35);
-            padding: 1.75rem;
-            margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
         }
@@ -3446,105 +3304,6 @@
 
         .timeline-meta span i {
             color: #facc15;
-        .mission-control::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at top right, rgba(6, 182, 212, 0.25), transparent 55%);
-            pointer-events: none;
-        }
-
-        .mission-progress {
-            height: 14px;
-            border-radius: 9999px;
-            background: rgba(148, 163, 184, 0.2);
-            overflow: hidden;
-        }
-
-        .mission-progress-value {
-            height: 100%;
-            border-radius: inherit;
-            background: linear-gradient(90deg, rgba(139, 92, 246, 0.85), rgba(236, 72, 153, 0.85));
-            width: 0;
-            transition: width 0.4s ease;
-        }
-
-        .mission-status-card {
-            background: rgba(30, 41, 59, 0.75);
-            border-radius: 1.1rem;
-            border: 1px solid rgba(148, 163, 184, 0.22);
-            padding: 1.1rem 1.25rem;
-            box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.35);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .mission-status-card.completed {
-            border-color: rgba(16, 185, 129, 0.65);
-            box-shadow: 0 16px 40px rgba(16, 185, 129, 0.18);
-            transform: translateY(-6px);
-        }
-
-        .mission-step {
-            margin-top: 1.25rem;
-            background: rgba(30, 41, 59, 0.75);
-            border-radius: 1.25rem;
-            padding: 1.25rem;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-        }
-
-        .mission-toggle {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: #e2e8f0;
-            cursor: pointer;
-            gap: 1rem;
-        }
-
-        .mission-toggle span {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .mission-content {
-            display: none;
-            margin-top: 1rem;
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 1rem;
-            padding: 1rem 1.25rem;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-        }
-
-        .mission-content.active {
-            display: block;
-        }
-
-        .mission-answer {
-            display: grid;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .mission-answer button {
-            background: rgba(45, 55, 72, 0.8);
-            border-radius: 0.75rem;
-            border: 1px solid transparent;
-            padding: 0.65rem 0.9rem;
-            text-align: left;
-            transition: all 0.25s ease;
-        }
-
-        .mission-answer button:hover {
-            border-color: rgba(236, 72, 153, 0.45);
-            transform: translateX(4px);
-        }
-
-        .mission-answer button.correct {
-            border-color: rgba(16, 185, 129, 0.8);
-            background: rgba(6, 182, 212, 0.18);
         }
 
         .mission-status {
@@ -3730,6 +3489,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <!-- Fundal Neural Network Canvas (Noul Fundal Live) -->
@@ -3868,10 +3628,6 @@
                     </button>
                     <button class="portal-option" data-portal-mode="business">
                         <i class="fas fa-briefcase"></i> Perspectivă Business
-                        <i class="fas fa-wand-magic-sparkles"></i> Explorare Creativă
-                    </button>
-                    <button class="portal-option" data-portal-mode="business">
-                        <i class="fas fa-briefcase"></i> Rută Business
                     </button>
                 </div>
                 <h1 id="portal-title" class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
@@ -3883,7 +3639,6 @@
                 <div id="portal-badges" class="portal-badges text-sm text-gray-300 animated-visible" style="transition-delay: 0.45s;">
                     <span class="portal-badge"><i class="fas fa-wand-magic-sparkles text-purple-300"></i> Microinteracțiuni dinamice</span>
                     <span class="portal-badge"><i class="fas fa-seedling text-green-300"></i> Experiențe personalizate</span>
-                    <span class="portal-badge"><i class="fas fa-seedling text-green-300"></i> Experiențe custom</span>
                     <span class="portal-badge"><i class="fas fa-heart text-rose-300"></i> Design memorabil</span>
                 </div>
             </div>
@@ -6402,7 +6157,6 @@
                 tech: 'Next.js · Tailwind · Formspree',
                 impact: '+45% programări online',
                 badge: 'Experiență pacienți',
-                badge: 'Smile Maker',
                 feed: [
                     'Workflow de programare cu confirmări automate.',
                     'Material educațional integrat în layout pentru a crește încrederea.'
@@ -6421,7 +6175,6 @@
                 tech: 'React · Node · Elastic Search',
                 impact: '-30% timp până la shortlist',
                 badge: 'Eficiență recrutare',
-                badge: 'Talent Navigator',
                 feed: [
                     'Integrare cu ATS-uri și export de rapoarte la un click.',
                     'Microcopy orientat spre acțiune pentru candidați și recrutori.'
@@ -6440,7 +6193,6 @@
                 tech: 'Nuxt · Strapi · Algolia',
                 impact: '+60% solicitări calificate',
                 badge: 'Expertiză tehnică',
-                badge: 'Engine Whisperer',
                 feed: [
                     'Segmentare după industrie pentru a personaliza ofertarea.',
                     'Automatizări pentru disponibilitate și stoc.'
@@ -6448,8 +6200,6 @@
             },
             'your-project': {
                 title: 'Proiectul tău',
-                subtitle: 'Scriem împreună următoarea poveste de succes.',
-                chapter: 'Ai o idee care merită să fie evidențiată? Portalul nostru te ajută să alegi direcția potrivită, iar noi o transformăm într-un studiu de caz solid.',
                 subtitle: 'Scriem împreună următoarea poveste memorabilă.',
                 chapter: 'Ai o idee care merită spotlight? Portalul nostru te ajută să alegi drumul, iar noi îl transformăm în studiu de caz demn de prezentări.',
                 badges: [
@@ -6461,9 +6211,6 @@
                 tech: 'Pe măsura obiectivelor tale',
                 impact: '∞ posibilități',
                 badge: 'Viziune în construcție',
-                feed: [
-                    'Definește tonul în configurator, iar noi conturăm arhitectura.',
-                badge: 'Vision Starter',
                 feed: [
                     'Definește vibe-ul în configurator, iar noi conturăm arhitectura.',
                     'Sesiuni de co-creație și prototipare rapidă.'

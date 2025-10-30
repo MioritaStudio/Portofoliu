@@ -18,7 +18,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
     <!-- Google Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/gif" href="logo.png" data-asset-src="logonew.gif" data-asset-fallback="logo.png">
+    <link rel="shortcut icon" type="image/gif" href="logo.png" data-asset-src="logonew.gif" data-asset-fallback="logo.png">
+    <link rel="apple-touch-icon" href="logo.png" data-asset-src="logonew.gif" data-asset-fallback="logo.png">
     <!-- Anime.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
     <style>
@@ -2199,6 +2201,20 @@
             const resolvedPath = `${basePath}${filename}`.replace(/\/{2,}/g, '/');
             return resolvedPath.startsWith('/') ? resolvedPath : `/${resolvedPath}`;
         }
+
+        document.querySelectorAll('[data-asset-src]').forEach(element => {
+            const attr = element.dataset.assetAttr || (element.tagName === 'LINK' ? 'href' : 'src');
+            const fallback = element.dataset.assetFallback ? resolveAssetPath(element.dataset.assetFallback) : null;
+
+            if (fallback && !element.getAttribute(attr)) {
+                element.setAttribute(attr, fallback);
+            }
+
+            const targetAsset = resolveAssetPath(element.dataset.assetSrc);
+            if (targetAsset) {
+                element.setAttribute(attr, targetAsset);
+            }
+        });
 
         document.querySelectorAll('[data-logo-src]').forEach(img => {
             const fallback = img.dataset.logoFallback ? resolveAssetPath(img.dataset.logoFallback) : null;

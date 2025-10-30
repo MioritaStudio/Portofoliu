@@ -5278,6 +5278,50 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const repoBaseSegment = 'Portofoliu';
+
+        function resolveAssetPath(filename) {
+            if (!filename) return '';
+            const { pathname } = window.location;
+            const normalizedPath = pathname.replace(/index\.html$/i, '');
+            const matchesRepo = normalizedPath === `/${repoBaseSegment}` || normalizedPath.startsWith(`/${repoBaseSegment}/`);
+            const basePath = matchesRepo ? `/${repoBaseSegment}/` : '/';
+            const resolvedPath = `${basePath}${filename}`.replace(/\/{2,}/g, '/');
+            return resolvedPath.startsWith('/') ? resolvedPath : `/${resolvedPath}`;
+        }
+
+        document.querySelectorAll('[data-asset-src]').forEach(element => {
+            const attr = element.dataset.assetAttr || (element.tagName === 'LINK' ? 'href' : 'src');
+            const fallback = element.dataset.assetFallback ? resolveAssetPath(element.dataset.assetFallback) : null;
+
+            if (fallback && !element.getAttribute(attr)) {
+                element.setAttribute(attr, fallback);
+            }
+
+            const targetAsset = resolveAssetPath(element.dataset.assetSrc);
+            if (targetAsset) {
+                element.setAttribute(attr, targetAsset);
+            }
+        });
+
+        document.querySelectorAll('[data-logo-src]').forEach(img => {
+            const fallback = img.dataset.logoFallback ? resolveAssetPath(img.dataset.logoFallback) : null;
+            if (fallback) {
+                const fallbackHandler = () => {
+                    img.removeEventListener('error', fallbackHandler);
+                    if (img.src !== fallback) {
+                        img.src = fallback;
+                    }
+                };
+                img.addEventListener('error', fallbackHandler);
+            }
+
+            const targetSrc = resolveAssetPath(img.dataset.logoSrc);
+            if (targetSrc && img.getAttribute('src') !== targetSrc) {
+                img.src = targetSrc;
+            }
+        });
+
         // Obiect de date pentru Pachet Modal (ACTUALIZAT - textul suplimentar a fost șters)
         const pacheteData = {
             starter: {

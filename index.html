@@ -42,7 +42,7 @@
 
         #logo-container .logo-media {
             animation: introLogoPulse 9s ease-in-out infinite;
-            border-radius: 16px;
+            border-radius: 0;
             display: block;
         }
 
@@ -109,10 +109,8 @@
             top: 0;
             left: 0;
             right: 0;
-            background: #000000;
-            background-image: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18), transparent 55%),
-                              radial-gradient(circle at 85% 10%, rgba(6, 182, 212, 0.16), transparent 60%);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+            background: linear-gradient(90deg, #000000 0%, #000000 240px, #020617 58%, #030712 100%);
+            box-shadow: none;
             border-bottom: none;
         }
 
@@ -129,10 +127,8 @@
 
         .header-scrolled {
             position: fixed;
-            background: #000000;
-            background-image: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.2), transparent 55%),
-                              radial-gradient(circle at 85% 10%, rgba(6, 182, 212, 0.18), transparent 60%);
-            box-shadow: 0 24px 55px rgba(0, 0, 0, 0.75);
+            background: linear-gradient(90deg, #000000 0%, #000000 240px, #020617 58%, #030712 100%);
+            box-shadow: none;
             animation: slideInFromTop 0.3s ease-out;
         }
 
@@ -146,21 +142,11 @@
         }
 
         .header-logo {
-            height: 64px;
+            height: 80px;
             width: auto;
-            border-radius: 12px;
-            animation: headerLogoGlow 10s ease-in-out infinite;
+            border-radius: 0;
             display: block;
             object-fit: contain;
-        }
-
-        @keyframes headerLogoGlow {
-            0%, 100% {
-                transform: scale(0.98);
-            }
-            50% {
-                transform: scale(1.02);
-            }
         }
 
         .nav-link {
@@ -1286,10 +1272,7 @@
     <div class="text-center p-8">
         <!-- Logo animat (simulat cu CSS și JS) -->
         <div id="logo-container" class="transition duration-1000 ease-in-out transform scale-75 opacity-0">
-            <video class="logo-media h-28 md:h-32 mx-auto mb-6" width="120" height="120" autoplay loop muted playsinline poster="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif">
-                <source src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoanim.mp4" type="video/mp4">
-                <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="120" height="120" loading="eager" />
-            </video>
+            <img class="logo-media h-28 md:h-32 mx-auto mb-6" src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="120" height="120" loading="eager">
 
             <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400">
                 Miorița Studio
@@ -1315,10 +1298,7 @@
         <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Navigație principală">
             <div class="flex items-center justify-between w-full gap-6">
                 <a href="#acasa" class="flex items-center gap-3 cinematic-fade-in" style="transition-delay: 0.5s;">
-                    <video class="header-logo" width="72" height="72" autoplay loop muted playsinline poster="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif">
-                        <source src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoanim.mp4" type="video/mp4">
-                        <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="72" height="72" />
-                    </video>
+                    <img class="header-logo" src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="96" height="96" loading="eager">
                     <span class="flex flex-col leading-tight">
                         <span class="text-sm font-semibold tracking-wide text-white sm:text-lg">Miorița Studio</span>
                         <span class="hidden sm:block text-xs text-gray-400 uppercase tracking-[0.3em]">Web &amp; Design</span>

@@ -191,6 +191,20 @@
             transform: scaleX(1);
         }
 
+        .piano-letter {
+            display: inline-block;
+            padding: 0 0.02em;
+            transition: transform 0.18s ease, color 0.18s ease, text-shadow 0.18s ease;
+            will-change: transform, color;
+            transform-origin: bottom center;
+        }
+
+        .piano-letter.active {
+            transform: translateY(-9px);
+            color: #f8fafc;
+            text-shadow: 0 10px 26px rgba(139, 92, 246, 0.45);
+        }
+
         /* Header transformare în dock */
         @media (max-width: 1023px) {
             #header-normal {
@@ -1386,7 +1400,7 @@
     <section id="acasa" class="relative pt-48 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">
         <div class="max-w-4xl mx-auto cinematic-fade-in space-y-10" id="hero-portal">
             <div class="space-y-6">
-                <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
+                <h1 id="hero-title" class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
                     Site-uri care spun<br class="sm:hidden"> povestea ta
                 </h1>
                 <div class="portal-description text-xl md:text-2xl text-gray-300 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.35s;">
@@ -2098,6 +2112,49 @@
         const heroPortal = document.getElementById('hero-portal');
         if (heroPortal) {
             heroPortal.classList.add('animated-visible');
+        }
+
+        const heroTitle = document.getElementById('hero-title');
+        if (heroTitle) {
+            const nodes = Array.from(heroTitle.childNodes);
+            const fragment = document.createDocumentFragment();
+
+            const addLetterListeners = (span) => {
+                const activate = () => span.classList.add('active');
+                const deactivate = () => span.classList.remove('active');
+
+                span.addEventListener('pointerenter', activate);
+                span.addEventListener('pointerleave', deactivate);
+                span.addEventListener('pointerdown', activate);
+                span.addEventListener('pointerup', deactivate);
+                span.addEventListener('pointercancel', deactivate);
+            };
+
+            nodes.forEach((node) => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent || '';
+                    for (const char of text) {
+                        if (char === '\n') {
+                            continue;
+                        }
+                        if (char === ' ') {
+                            fragment.appendChild(document.createTextNode(' '));
+                            continue;
+                        }
+                        const span = document.createElement('span');
+                        span.className = 'piano-letter';
+                        span.textContent = char;
+                        addLetterListeners(span);
+                        fragment.appendChild(span);
+                    }
+                    return;
+                }
+
+                fragment.appendChild(node);
+            });
+
+            heroTitle.textContent = '';
+            heroTitle.appendChild(fragment);
         }
 
         // --- PORTAL CONFIGURATOR ---

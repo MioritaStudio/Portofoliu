@@ -623,38 +623,6 @@
             }
         }
 
-        /* ----------------------------------- */
-        /* 8. PORTAL HERO INTERACTIV            */
-        /* ----------------------------------- */
-        .portal-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            border-radius: 9999px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            box-shadow: 0 10px 40px rgba(8, 145, 178, 0.15);
-        }
-
-        .portal-option {
-            position: relative;
-            border-radius: 9999px;
-            padding: 0.6rem 1.5rem;
-            background: transparent;
-            color: #e2e8f0;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .portal-option.active {
-            background: linear-gradient(90deg, rgba(139, 92, 246, 0.85), rgba(6, 182, 212, 0.85));
-            color: white;
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.45);
-        }
-
         .portal-description {
             max-width: 38rem;
             margin: 0 auto;
@@ -678,6 +646,70 @@
             padding: 0.4rem 1rem;
             font-size: 0.85rem;
             letter-spacing: 0.02em;
+        }
+
+        .structure-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .structure-chip {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 200px;
+            padding: 1rem 1.1rem;
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: #e2e8f0;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .structure-chip:hover {
+            border-color: rgba(139, 92, 246, 0.55);
+            transform: translateY(-1px);
+        }
+
+        .structure-chip.active {
+            border-color: rgba(6, 182, 212, 0.75);
+            background: rgba(13, 148, 136, 0.18);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+        }
+
+        .structure-chip span {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #67e8f9;
+        }
+
+        .structure-chip p {
+            font-size: 0.95rem;
+            color: #cbd5f5;
+        }
+
+        .faq-item {
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(139, 92, 246, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-item summary i:last-child {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item[open] summary i:last-child {
+            transform: rotate(180deg);
         }
 
         /* ----------------------------------- */
@@ -1330,30 +1362,23 @@
     <section id="acasa" class="relative pt-48 pb-20 lg:pt-56 lg:pb-32 min-h-screen flex items-center justify-center text-center px-4 overflow-hidden">
         <div class="max-w-4xl mx-auto cinematic-fade-in space-y-10" id="hero-portal">
             <div class="space-y-6">
-                <div class="portal-toggle mx-auto">
-                    <button class="portal-option active" data-portal-mode="creative">
-                        <i class="fas fa-wand-magic-sparkles"></i> Experiență Creativă
-                    </button>
-                    <button class="portal-option" data-portal-mode="business">
-                        <i class="fas fa-briefcase"></i> Perspectivă Business
-                    </button>
-                </div>
-                <h1 id="portal-title" class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 animated-visible" style="transition-delay: 0.2s;">
                     Site-uri care spun<br class="sm:hidden"> povestea ta
                 </h1>
-                <div id="portal-description" class="portal-description text-xl md:text-2xl text-gray-300 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.35s;">
-                    Construim pagini clare și ușor de folosit, care transformă ideile tale în experiențe online relaxate și plăcute.
+                <div class="portal-description text-xl md:text-2xl text-gray-300 font-light animated-visible cinematic-fade-in" style="transition-delay: 0.35s;">
+                    Construim pagini clare, cu explicații pe limba tuturor și fluxuri ușor de urmărit pentru echipe ocupate.
+                    Îți arătăm ce primești pas cu pas, fără jargon și fără presiune.
                 </div>
-                <div id="portal-badges" class="portal-badges text-sm text-gray-300 animated-visible" style="transition-delay: 0.45s;">
+                <div class="portal-badges text-sm text-gray-300 animated-visible" style="transition-delay: 0.45s;">
                     <span class="portal-badge"><i class="fas fa-wand-magic-sparkles text-purple-300"></i> Navigare intuitivă</span>
-                    <span class="portal-badge"><i class="fas fa-seedling text-green-300"></i> Mesaje pe limba ta</span>
+                    <span class="portal-badge"><i class="fas fa-seedling text-green-300"></i> Texte prietenoase</span>
                     <span class="portal-badge"><i class="fas fa-heart text-rose-300"></i> Sprijin pas cu pas</span>
                 </div>
             </div>
-            <a href="#configurator" class="inline-block cinematic-scale-in animated-visible" style="transition-delay: 0.6s;">
+            <a href="#" onclick="openModal('packages-modal'); return false;" class="inline-block cinematic-scale-in animated-visible" style="transition-delay: 0.6s;">
                 <button class="font-bold py-4 px-12 rounded-lg text-lg text-white transition duration-300 transform hover:scale-[1.03] shadow-lg shadow-purple-500/50"
                         style="background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
-                    Deschide configuratorul <i class="fas fa-arrow-right ml-2"></i>
+                    Află ce include fiecare plan <i class="fas fa-circle-info ml-2"></i>
                 </button>
             </a>
         </div>
@@ -1383,20 +1408,25 @@
                         <div class="configurator-step" data-step="1">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-xl font-semibold text-white">1. Ce obiectiv urmărești?</h3>
-                                <span class="mission-status locked" id="status-step-1"><i class="fas fa-lock"></i> selectează</span>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" class="text-sm text-cyan-300 hover:text-cyan-100 transition" onclick="openModal('packages-modal'); return false;">
+                                        <i class="fas fa-circle-info mr-1"></i> vezi ce include fiecare plan
+                                    </button>
+                                    <span class="mission-status locked" id="status-step-1"><i class="fas fa-lock"></i> selectează</span>
+                                </div>
                             </div>
                             <div class="choice-grid" id="goal-choices">
-                                <button class="choice-tile" data-goal="starter">
+                                <button type="button" class="choice-tile" data-goal="starter">
                                     <span class="text-purple-300 text-sm">Starter</span>
                                     <p class="text-lg font-semibold text-white">Lansare rapidă</p>
                                     <p class="text-sm text-gray-400">Website de prezentare cu o pagină</p>
                                 </button>
-                                <button class="choice-tile" data-goal="pro">
+                                <button type="button" class="choice-tile" data-goal="pro">
                                     <span class="text-cyan-300 text-sm">Pro</span>
                                     <p class="text-lg font-semibold text-white">Extindere conținut</p>
                                     <p class="text-sm text-gray-400">Mai multe pagini și integrare avansată</p>
                                 </button>
-                                <button class="choice-tile" data-goal="studio">
+                                <button type="button" class="choice-tile" data-goal="studio">
                                     <span class="text-amber-300 text-sm">Studio</span>
                                     <p class="text-lg font-semibold text-white">Proiect personalizat</p>
                                     <p class="text-sm text-gray-400">Funcționalități custom și integrări</p>
@@ -1406,15 +1436,31 @@
 
                         <div class="configurator-step" data-step="2">
                             <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-semibold text-white">2. Ce nivel de complexitate vizezi?</h3>
-                                <span class="mission-status locked" id="status-step-2"><i class="fas fa-lock"></i> setează</span>
+                                <h3 class="text-xl font-semibold text-white">2. Ce părți are site-ul tău?</h3>
+                                <span class="mission-status locked" id="status-step-2"><i class="fas fa-lock"></i> configurează</span>
                             </div>
-                            <p class="text-sm text-gray-400 mb-3">Alege ritmul proiectului ca punct de pornire pentru estimare.</p>
-                            <input type="range" id="budget-range" min="0" max="2" step="1" value="1" class="w-full">
-                            <div class="flex justify-between text-xs text-gray-500 mt-2">
-                                <span>Starter</span>
-                                <span>Pro</span>
-                                <span>Studio</span>
+                            <p class="text-sm text-gray-400 mb-3">Bifează zonele pe care le dorești gata din prima zi.</p>
+                            <div class="structure-selector" id="structure-choices">
+                                <button type="button" class="structure-chip" data-structure="essentials">
+                                    <span>Pagini principale</span>
+                                    <p>Acasă, despre, servicii/soluții și contact pregătite cap-coadă.</p>
+                                </button>
+                                <button type="button" class="structure-chip" data-structure="portfolio">
+                                    <span>Studii de caz</span>
+                                    <p>Galerie cu proiecte, testimoniale și rezultate povestite simplu.</p>
+                                </button>
+                                <button type="button" class="structure-chip" data-structure="blog">
+                                    <span>Resurse & articole</span>
+                                    <p>Secțiune de noutăți cu categorii, autor și formulare de abonare.</p>
+                                </button>
+                                <button type="button" class="structure-chip" data-structure="booking">
+                                    <span>Programări & formulare</span>
+                                    <p>Calendar, integrare cu email și notificări clare pentru echipă.</p>
+                                </button>
+                                <button type="button" class="structure-chip" data-structure="shop">
+                                    <span>Produse digitale</span>
+                                    <p>Listare cursuri sau e-book-uri cu plată rapidă și livrare automată.</p>
+                                </button>
                             </div>
                         </div>
 
@@ -1438,19 +1484,19 @@
                             </div>
                             <p class="text-sm text-gray-400 mb-3">Adaugă elemente care îți fac munca mai ușoară.</p>
                             <div class="choice-grid" id="extra-choices">
-                                <button class="choice-tile" data-extra="brand-kit">
+                                <button type="button" class="choice-tile" data-extra="brand-kit">
                                     <p class="text-lg font-semibold text-white">Brand Kit</p>
                                     <p class="text-sm text-gray-400">Logo set, paletă, ghid de utilizare</p>
                                 </button>
-                                <button class="choice-tile" data-extra="content-sprint">
+                                <button type="button" class="choice-tile" data-extra="content-sprint">
                                     <p class="text-lg font-semibold text-white">Atelier de conținut</p>
                                     <p class="text-sm text-gray-400">Texte și structură de pagină</p>
                                 </button>
-                                <button class="choice-tile" data-extra="automation">
+                                <button type="button" class="choice-tile" data-extra="automation">
                                     <p class="text-lg font-semibold text-white">Integrare automatizări</p>
                                     <p class="text-sm text-gray-400">Conectori și fluxuri personalizate</p>
                                 </button>
-                                <button class="choice-tile" data-extra="audio-id">
+                                <button type="button" class="choice-tile" data-extra="audio-id">
                                     <p class="text-lg font-semibold text-white">Identitate audio</p>
                                     <p class="text-sm text-gray-400">Sound logo și elemente sonore</p>
                                 </button>
@@ -1475,7 +1521,7 @@
                                 <span class="font-semibold text-emerald-300" id="summary-budget">--</span>
                             </div>
                             <div class="flex items-center justify-between mt-2">
-                                <span class="text-sm text-gray-400">Complexitate estimată</span>
+                                <span class="text-sm text-gray-400">Structură estimată</span>
                                 <span class="font-semibold text-amber-200" id="summary-difficulty">--</span>
                             </div>
                         </div>
@@ -1502,6 +1548,58 @@
                         </a>
                     </aside>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. GHID CONFIGURATOR -->
+    <section id="ghid-planuri" class="py-20 px-4 bg-slate-900/40">
+        <div class="container mx-auto">
+            <div class="max-w-4xl mx-auto text-center mb-12 space-y-4">
+                <p class="uppercase tracking-[0.35em] text-xs text-purple-300">Ai nevoie de orientare?</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white">Combinații recomandate în configurator</h2>
+                <p class="text-gray-300">Mai jos găsești trei scenarii reale care arată cum folosesc clienții configuratorul. Poți porni de la ele și apoi ajustezi după nevoile tale.</p>
+            </div>
+            <div class="grid gap-8 md:grid-cols-3">
+                <article class="bg-slate-900/70 border border-slate-700 rounded-2xl p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-cyan-500/20 text-cyan-200">Starter</span>
+                        <span class="text-sm text-gray-400">Lansare brand personal</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white">Consultant independent</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-layer-group text-purple-300 mr-2"></i>Pagini principale + studii de caz scurte</li>
+                        <li><i class="fas fa-envelope-open-text text-purple-300 mr-2"></i>Formular simplu cu răspuns automat</li>
+                        <li><i class="fas fa-pen-nib text-purple-300 mr-2"></i>Extra recomandat: Atelier de conținut pentru tonul potrivit</li>
+                    </ul>
+                    <p class="text-xs text-gray-400">Investiție orientativă: de la 899 €</p>
+                </article>
+                <article class="bg-slate-900/70 border border-slate-700 rounded-2xl p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-purple-500/20 text-purple-200">Pro</span>
+                        <span class="text-sm text-gray-400">Scalare echipă</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white">Agenție de servicii</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-layer-group text-purple-300 mr-2"></i>Pagini principale + portofoliu extins + resurse</li>
+                        <li><i class="fas fa-calendar-check text-purple-300 mr-2"></i>Programări & formulare pentru lead-uri calde</li>
+                        <li><i class="fas fa-bolt text-purple-300 mr-2"></i>Extra recomandat: Automatizări pentru trimitere briefing</li>
+                    </ul>
+                    <p class="text-xs text-gray-400">Investiție orientativă: de la 1899 €</p>
+                </article>
+                <article class="bg-slate-900/70 border border-slate-700 rounded-2xl p-6 flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full bg-amber-500/20 text-amber-200">Studio</span>
+                        <span class="text-sm text-gray-400">Produs digital</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white">Platformă educațională</h3>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-layer-group text-purple-300 mr-2"></i>Pagini principale + resurse + magazin digital</li>
+                        <li><i class="fas fa-users text-purple-300 mr-2"></i>Flux de onboarding și zone private</li>
+                        <li><i class="fas fa-swatchbook text-purple-300 mr-2"></i>Extra recomandat: Brand Kit complet</li>
+                    </ul>
+                    <p class="text-xs text-gray-400">Investiție orientativă: de la 2849 €</p>
+                </article>
             </div>
         </div>
     </section>
@@ -1604,6 +1702,47 @@
                         </div>
                     </div>
                 </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6.1 ÎNTREBĂRI FRECVENTE -->
+    <section id="intrebari" class="py-20 px-4">
+        <div class="container mx-auto max-w-5xl">
+            <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+                <p class="uppercase tracking-[0.35em] text-xs text-cyan-300">Întrebări frecvente</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white">Răspunsuri pe înțelesul tuturor</h2>
+                <p class="text-gray-300">Dacă nu ești obișnuit cu proiectele digitale, secțiunea de mai jos te ajută să clarifici ce se întâmplă înainte, în timpul și după configurator.</p>
+            </div>
+            <div class="grid gap-6 md:grid-cols-2">
+                <details class="faq-item bg-slate-900/60 border border-slate-700 rounded-2xl p-6 group open:bg-slate-900/80">
+                    <summary class="text-lg font-semibold text-white flex items-center justify-between cursor-pointer">
+                        <span><i class="fas fa-circle-question text-purple-300 mr-2"></i>Ce se întâmplă după ce trimit configuratorul?</span>
+                        <i class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-sm text-gray-300 mt-3">Primești un e-mail cu rezumatul complet și propunerea orientativă. În maximum 24 de ore lucrătoare revenim cu un mesaj personalizat și stabilim o discuție de 30 de minute în care lămurim toate detaliile.</p>
+                </details>
+                <details class="faq-item bg-slate-900/60 border border-slate-700 rounded-2xl p-6 group open:bg-slate-900/80">
+                    <summary class="text-lg font-semibold text-white flex items-center justify-between cursor-pointer">
+                        <span><i class="fas fa-circle-question text-purple-300 mr-2"></i>Pot modifica alegerile după ce trimit formularul?</span>
+                        <i class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-sm text-gray-300 mt-3">Da, configuratorul este un punct de pornire. La call-ul de clarificare revizuim împreună opțiunile și actualizăm estimarea, astfel încât să rămâi în control total asupra bugetului.</p>
+                </details>
+                <details class="faq-item bg-slate-900/60 border border-slate-700 rounded-2xl p-6 group open:bg-slate-900/80">
+                    <summary class="text-lg font-semibold text-white flex items-center justify-between cursor-pointer">
+                        <span><i class="fas fa-circle-question text-purple-300 mr-2"></i>Nu am conținut pregătit. Este o problemă?</span>
+                        <i class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-sm text-gray-300 mt-3">Nu. Alegi opțiunea „Atelier de conținut” la extra și lucrăm împreună la mesaje, structuri și call-to-action-uri. Îți oferim și un ghid de tone of voice pentru post-lansare.</p>
+                </details>
+                <details class="faq-item bg-slate-900/60 border border-slate-700 rounded-2xl p-6 group open:bg-slate-900/80">
+                    <summary class="text-lg font-semibold text-white flex items-center justify-between cursor-pointer">
+                        <span><i class="fas fa-circle-question text-purple-300 mr-2"></i>Ce garanții am că proiectul rămâne pe linia de plutire?</span>
+                        <i class="fas fa-chevron-down text-gray-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-sm text-gray-300 mt-3">Folosim planificare în sprinturi scurte, cu materiale livrate la finalul fiecărei etape pentru feedback rapid. În plus, oferim suport tehnic gratuit 30 de zile după lansare, astfel încât să testezi totul fără griji.</p>
+                </details>
             </div>
         </div>
     </section>
@@ -1797,6 +1936,70 @@
     </div>
 </div>
 
+<!-- Modal Detalii Pachete -->
+<div id="packages-modal" class="modal-container hidden" aria-modal="true" role="dialog">
+    <div class="modal-content relative w-full max-w-4xl bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-12 transform scale-90 opacity-0 transition-all duration-300">
+        <button class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-300" onclick="closeModal('packages-modal')">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        <div class="space-y-6">
+            <div>
+                <h3 class="text-3xl font-extrabold text-white mb-2">Ce conține fiecare plan?</h3>
+                <p class="text-gray-300">Am tradus pachetele în limbaj simplu, ca să vezi repede ce primești indiferent dacă alegi varianta de start sau un proiect complet personalizat.</p>
+            </div>
+            <div class="grid gap-6 md:grid-cols-3">
+                <div class="bg-slate-900/60 border border-slate-700 rounded-2xl p-6 flex flex-col gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-[0.35em] text-cyan-300">Starter</span>
+                        <h4 class="text-xl font-semibold text-white mt-2">Pornire rapidă</h4>
+                        <p class="text-sm text-gray-300 mt-2">Ideal când vrei un site de prezentare curat, cu toate informațiile esențiale puse în ordine.</p>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Pagini principale structurate (acasă, despre, servicii, contact)</li>
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Design responsive și mesaje clare</li>
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Formular de contact și hartă integrate</li>
+                    </ul>
+                    <p class="text-xs text-gray-400">Se pot adăuga oricând secțiuni în plus din configurator.</p>
+                </div>
+                <div class="bg-slate-900/80 border border-purple-600/40 rounded-2xl p-6 flex flex-col gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-[0.35em] text-purple-300">Pro</span>
+                        <h4 class="text-xl font-semibold text-white mt-2">Creștere susținută</h4>
+                        <p class="text-sm text-gray-300 mt-2">Recomandat când ai mai multe servicii, echipă extinsă sau vrei să explici procese diferite.</p>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Pagini dedicate pe verticale de business</li>
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Studii de caz sau articole pentru educarea clienților</li>
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Integrare ușoară cu tool-urile curente</li>
+                    </ul>
+                    <p class="text-xs text-gray-400">Include suport în structurarea conținutului și sugestii de CTA.</p>
+                </div>
+                <div class="bg-slate-900/60 border border-amber-500/40 rounded-2xl p-6 flex flex-col gap-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-[0.35em] text-amber-300">Studio</span>
+                        <h4 class="text-xl font-semibold text-white mt-2">Platformă personalizată</h4>
+                        <p class="text-sm text-gray-300 mt-2">Pentru produse digitale, programe complexe sau când ai nevoie de fluxuri speciale.</p>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-300">
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Experiențe custom (ex. membership, cursuri, onboarding)</li>
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Automatizări și conectori tehnici personalizați</li>
+                        <li><i class="fas fa-check text-emerald-300 mr-2"></i>Workshops de UX și prototipare rapidă</li>
+                    </ul>
+                    <p class="text-xs text-gray-400">Include consultanță tehnică și sesiuni de testare cu echipa ta.</p>
+                </div>
+            </div>
+            <div class="bg-slate-900/40 border border-slate-700/60 rounded-2xl p-6">
+                <h4 class="text-lg font-semibold text-white mb-3">Cum alegi rapid?</h4>
+                <ul class="grid gap-3 text-sm text-gray-300 md:grid-cols-3">
+                    <li><i class="fas fa-rocket text-cyan-300 mr-2"></i> Ai nevoie de prezență online rapidă? Începe cu Starter și adaugă secțiuni doar când apar.</li>
+                    <li><i class="fas fa-people-group text-cyan-300 mr-2"></i> Echipa ta lucrează deja la materiale? Pro îți dă loc să le organizezi și să le crești.</li>
+                    <li><i class="fas fa-fire text-cyan-300 mr-2"></i> Ai produs digital sau procese complexe? Studio lasă loc pentru integrarea lor cap-coadă.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Legal & GDPR -->
 <div id="legal-modal" class="modal-container hidden" aria-modal="true" role="dialog">
     <div id="modal-content-container-legal" class="modal-content relative w-full max-w-4xl bg-slate-800 rounded-2xl shadow-2xl p-6 md:p-10 transform scale-90 opacity-0 transition-all duration-300">
@@ -1867,78 +2070,23 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- PORTAL HERO INTERACTIV ---
-
-        const portalModes = {
-            creative: {
-                title: 'Site-uri care spun<br class="sm:hidden"> povestea ta',
-                description: 'Accente vizuale calde, animații discrete și mesaje care emoționează fără jargon.',
-                badges: [
-                    { icon: 'fas fa-wand-magic-sparkles', color: 'text-purple-300', label: 'Atmosferă prietenoasă' },
-                    { icon: 'fas fa-image', color: 'text-amber-300', label: 'Elemente ilustrate cu grijă' },
-                    { icon: 'fas fa-mug-hot', color: 'text-cyan-300', label: 'Colaborare relaxată' }
-                ],
-                subtitle: 'Mod creativ: ne bucurăm de proces și dăm viață poveștii tale.'
-            },
-            business: {
-                title: 'Experiențe online clare<br class="sm:hidden"> pentru echipa ta',
-                description: 'Structurăm conținutul ca să fie simplu de parcurs și ușor de actualizat.',
-                badges: [
-                    { icon: 'fas fa-route', color: 'text-emerald-300', label: 'Pași explicați pe înțeles' },
-                    { icon: 'fas fa-handshake-angle', color: 'text-sky-300', label: 'Sprijin în fiecare etapă' },
-                    { icon: 'fas fa-chart-simple', color: 'text-rose-300', label: 'Rezultate ușor de urmărit' }
-                ],
-                subtitle: 'Mod business: claritate, ritm constant și zero surprize neplăcute.'
-            }
-        };
-
+        // --- PORTAL HERO ---
         const heroPortal = document.getElementById('hero-portal');
-        const portalTitle = document.getElementById('portal-title');
-        const portalDescription = document.getElementById('portal-description');
-        const portalBadges = document.getElementById('portal-badges');
-        const portalButtons = document.querySelectorAll('.portal-option');
-
-        function renderPortal(mode) {
-            const data = portalModes[mode];
-            if (!data || !portalTitle) return;
-            portalButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.portalMode === mode);
-            });
-            portalTitle.innerHTML = data.title;
-            portalDescription.textContent = '';
-            portalDescription.innerHTML = `<span class="text-white/90 font-semibold">${data.subtitle}</span> ${data.description}`;
-            portalBadges.innerHTML = data.badges.map(badge => `
-                <span class="portal-badge">
-                    <i class="${badge.icon} ${badge.color}"></i>
-                    ${badge.label}
-                </span>
-            `).join('');
-            if (heroPortal) {
-                heroPortal.setAttribute('data-mode', mode);
-            }
+        if (heroPortal) {
+            heroPortal.classList.add('animated-visible');
         }
 
-        portalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const mode = button.dataset.portalMode;
-                renderPortal(mode);
-            });
-        });
-
-        renderPortal('creative');
-
         // --- PORTAL CONFIGURATOR ---
-        const budgetRange = document.getElementById('budget-range');
 
         const configuratorState = {
             goal: null,
-            budget: budgetRange ? Number(budgetRange.value) : 1,
-            budgetTouched: false,
+            structure: new Set(),
             vibe: null,
             extras: new Set()
         };
 
         const goalButtons = document.querySelectorAll('#goal-choices .choice-tile');
+        const structureButtons = document.querySelectorAll('#structure-choices .structure-chip');
         const vibeButtons = document.querySelectorAll('#vibe-choices .mood-chip');
         const extraButtons = document.querySelectorAll('#extra-choices .choice-tile');
 
@@ -1995,13 +2143,38 @@
             studio: 'Studio'
         };
 
-        const sliderPackages = ['starter', 'pro', 'studio'];
-        const complexityLabels = ['Implementare esențială', 'Implementare avansată', 'Implementare complet personalizată'];
-
         const basePrices = {
             starter: 599,
             pro: 1499,
             studio: 2499
+        };
+
+        const structureOptions = {
+            essentials: {
+                label: 'Pagini principale',
+                description: 'Acasă, despre, servicii, contact pregătite complet.',
+                price: { starter: 0, pro: 0, studio: 0 }
+            },
+            portfolio: {
+                label: 'Studii de caz',
+                description: 'Prezentări de proiecte cu rezultate și testimoniale.',
+                price: { starter: 180, pro: 240, studio: 320 }
+            },
+            blog: {
+                label: 'Resurse & articole',
+                description: 'Blog cu categorii și colectare de abonați.',
+                price: { starter: 160, pro: 210, studio: 260 }
+            },
+            booking: {
+                label: 'Programări & formulare',
+                description: 'Calendar, formulare și notificări integrate.',
+                price: { starter: 190, pro: 260, studio: 320 }
+            },
+            shop: {
+                label: 'Produse digitale',
+                description: 'Listare cursuri sau materiale digitale cu plată online.',
+                price: { starter: 240, pro: 320, studio: 420 }
+            }
         };
 
         const extraPricing = {
@@ -2024,17 +2197,26 @@
             'audio-id': { icon: 'fas fa-music', label: 'Identitate audio' }
         };
 
+        const structureBadges = {
+            essentials: { icon: 'fas fa-house', label: 'Pagini principale' },
+            portfolio: { icon: 'fas fa-photo-film', label: 'Studii de caz' },
+            blog: { icon: 'fas fa-newspaper', label: 'Resurse & articole' },
+            booking: { icon: 'fas fa-calendar-check', label: 'Programări integrate' },
+            shop: { icon: 'fas fa-bag-shopping', label: 'Produse digitale' }
+        };
+
         function formatPrice(value) {
             return `${value.toLocaleString('ro-RO')} €`;
         }
 
         function buildConfiguratorSnapshot() {
-            const packageKey = sliderPackages[configuratorState.budget];
-            if (!configuratorState.goal || !packageKey) {
+            const packageKey = configuratorState.goal;
+            const structureKeys = Array.from(configuratorState.structure);
+            if (!packageKey || structureKeys.length === 0) {
                 return { ready: false };
             }
 
-            const goalLabel = goalLabels[configuratorState.goal];
+            const goalLabel = goalLabels[packageKey];
             const packageLabel = packageLabels[packageKey];
             const vibeKey = configuratorState.vibe;
             const vibeLabel = vibeKey ? vibeBadges[vibeKey].label : null;
@@ -2042,33 +2224,56 @@
             const extrasLabels = extrasKeys
                 .map(extra => (extraBadges[extra] ? extraBadges[extra].label : ''))
                 .filter(label => label.length > 0);
+            const structureLabels = structureKeys
+                .map(key => (structureOptions[key] ? structureOptions[key].label : ''))
+                .filter(label => label.length > 0);
 
             let totalPrice = basePrices[packageKey] || 0;
+            structureKeys.forEach(key => {
+                const option = structureOptions[key];
+                if (!option) return;
+                const optionPrice = option.price?.[packageKey];
+                if (typeof optionPrice === 'number') {
+                    totalPrice += optionPrice;
+                }
+            });
             extrasKeys.forEach(extra => {
                 totalPrice += extraPricing[extra] || 0;
             });
 
-            const description = `Propunem o ${goalLabel.toLowerCase()} cu ${vibeLabel ? `ton ${vibeLabel.toLowerCase()}` : 'un ton adaptabil'} și ${extrasLabels.length ? 'servicii suplimentare selectate' : 'fără extra opționale'}.`;
+            const structureList = structureLabels.join(', ');
+            const structureSentence = structureList.charAt(0).toLowerCase() + structureList.slice(1);
+            const description = `Planul ${packageLabel} include ${structureSentence}${structureLabels.length > 1 ? '' : ''}, cu ${vibeLabel ? `un ton ${vibeLabel.toLowerCase()}` : 'mesaje adaptate'} și ${extrasLabels.length ? 'extra opționale deja alese' : 'posibilitatea de a adăuga extra ulterior'}.`;
+
+            let structureSummary = 'Structură esențială, ușor de parcurs';
+            if (structureLabels.length >= 4) {
+                structureSummary = 'Structură completă, pregătită pentru scalare';
+            } else if (structureLabels.length >= 2) {
+                structureSummary = 'Structură extinsă, cu spațiu pentru dezvoltare';
+            }
 
             const summaryLines = [
                 `Obiectiv selectat: ${goalLabel}.`,
                 `Pachet de bază: ${packageLabel} (${formatPrice(basePrices[packageKey])}).`,
+                `Structură inclusă: ${structureLabels.length ? structureLabels.join(', ') : 'în definire'}.`,
                 vibeLabel ? `Ton preferat: ${vibeLabel}.` : 'Ton preferat: în definire.',
                 extrasLabels.length ? `Servicii suplimentare: ${extrasLabels.join(', ')}.` : 'Servicii suplimentare: neselectate momentan.'
             ];
 
             return {
                 ready: true,
-                goalKey: configuratorState.goal,
+                goalKey: packageKey,
                 goalLabel,
                 packageKey,
                 packageLabel,
-                budgetIndex: configuratorState.budget,
                 totalPrice,
                 vibeKey,
                 vibeLabel,
                 extrasKeys,
                 extrasLabels,
+                structureKeys,
+                structureLabels,
+                structureSummary,
                 description,
                 summaryLines
             };
@@ -2083,6 +2288,7 @@
             const lines = [
                 `Pachet recomandat: ${snapshot.packageLabel}`,
                 `Obiectiv selectat: ${snapshot.goalLabel}`,
+                `Structură inclusă: ${snapshot.structureLabels.join(', ')}`,
                 `Investiție estimată: de la ${formatPrice(snapshot.totalPrice)}`,
                 `Ton preferat: ${vibeText}`,
                 `Servicii suplimentare: ${extrasText}`
@@ -2119,7 +2325,7 @@
             portalSummaryPackage.textContent = snapshot.packageLabel;
             portalSummaryInvestment.textContent = `de la ${formatPrice(snapshot.totalPrice)}`;
             portalSummaryExtras.textContent = snapshot.extrasLabels.length ? snapshot.extrasLabels.join(', ') : 'Fără servicii suplimentare';
-            portalSummaryText.textContent = snapshot.description;
+            portalSummaryText.textContent = `${snapshot.structureSummary} · ${snapshot.description}`;
 
             if (portalPackageInput) portalPackageInput.value = snapshot.packageLabel;
             if (portalInvestmentInput) portalInvestmentInput.value = `de la ${formatPrice(snapshot.totalPrice)}`;
@@ -2172,11 +2378,12 @@
             summaryDescription.textContent = snapshot.description;
             summaryPackage.textContent = snapshot.packageLabel;
             summaryBudget.textContent = `de la ${formatPrice(snapshot.totalPrice)}`;
-            summaryDifficulty.textContent = complexityLabels[snapshot.budgetIndex];
+            summaryDifficulty.textContent = snapshot.structureSummary;
 
             const badges = [
                 { icon: 'fas fa-layer-group', label: `Pachet ${snapshot.packageLabel}` },
                 { icon: 'fas fa-bullseye', label: snapshot.goalLabel },
+                ...snapshot.structureKeys.map(key => structureBadges[key]).filter(Boolean),
                 snapshot.vibeKey ? vibeBadges[snapshot.vibeKey] : null,
                 ...snapshot.extrasKeys.map(extra => extraBadges[extra]).filter(Boolean)
             ].filter(Boolean);
@@ -2201,34 +2408,49 @@
         function updateProgress() {
             let completed = 0;
             if (configuratorState.goal) completed++;
-            if (configuratorState.budgetTouched) completed++;
+            if (configuratorState.structure.size > 0) completed++;
             if (configuratorState.vibe) completed++;
-            if (configuratorState.extras.size > 0) completed++;
 
-            const percent = Math.round((completed / 4) * 100);
+            let percent = Math.round((completed / 3) * 100);
+            if (configuratorState.extras.size > 0 && percent < 100) {
+                percent = Math.min(100, percent + 10);
+            }
             progressBar.style.width = `${percent}%`;
             progressLabel.textContent = percent;
         }
 
-        function selectGoal(goal) {
-            configuratorState.goal = goal;
-            goalButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.goal === goal));
-            updateStepStatus(1, true, `Selectat · ${goalLabels[goal]}`);
-            const targetIndex = sliderPackages.indexOf(goal);
-            if (budgetRange && targetIndex >= 0) {
-                budgetRange.value = targetIndex;
-                handleBudgetChange(targetIndex);
+        function refreshStructureStatus() {
+            structureButtons.forEach(btn => btn.classList.toggle('active', configuratorState.structure.has(btn.dataset.structure)));
+            const hasStructure = configuratorState.structure.size > 0;
+            if (!hasStructure) {
+                updateStepStatus(2, false, 'Configurează');
             } else {
-                renderSummary();
-                updateProgress();
+                const labels = Array.from(configuratorState.structure)
+                    .map(item => structureOptions[item]?.label || '')
+                    .filter(Boolean);
+                updateStepStatus(2, true, `Definit · ${labels.length} ${labels.length === 1 ? 'secțiune' : 'secțiuni'}`);
             }
         }
 
-        function handleBudgetChange(value) {
-            configuratorState.budget = Number(value);
-            configuratorState.budgetTouched = true;
-            const sliderPackageKey = sliderPackages[configuratorState.budget];
-            updateStepStatus(2, true, `Calibrat · ${packageLabels[sliderPackageKey]}`);
+        function selectGoal(goal) {
+            configuratorState.goal = goal;
+            if (!configuratorState.structure.size) {
+                configuratorState.structure.add('essentials');
+            }
+            goalButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.goal === goal));
+            updateStepStatus(1, true, `Selectat · ${goalLabels[goal]}`);
+            refreshStructureStatus();
+            renderSummary();
+            updateProgress();
+        }
+
+        function toggleStructure(key) {
+            if (configuratorState.structure.has(key)) {
+                configuratorState.structure.delete(key);
+            } else {
+                configuratorState.structure.add(key);
+            }
+            refreshStructureStatus();
             renderSummary();
             updateProgress();
         }
@@ -2249,7 +2471,7 @@
             }
             extraButtons.forEach(btn => btn.classList.toggle('active', configuratorState.extras.has(btn.dataset.extra)));
             const hasExtras = configuratorState.extras.size > 0;
-            updateStepStatus(4, hasExtras, hasExtras ? `Servicii alese: ${configuratorState.extras.size}` : 'Opțional · fără servicii');
+            updateStepStatus(4, true, hasExtras ? `Servicii alese: ${configuratorState.extras.size}` : 'Opțional · poți reveni oricând');
             renderSummary();
             updateProgress();
         }
@@ -2258,10 +2480,9 @@
             btn.addEventListener('click', () => selectGoal(btn.dataset.goal));
         });
 
-        if (budgetRange) {
-            budgetRange.addEventListener('input', (event) => handleBudgetChange(event.target.value));
-            handleBudgetChange(budgetRange.value);
-        }
+        structureButtons.forEach(btn => {
+            btn.addEventListener('click', () => toggleStructure(btn.dataset.structure));
+        });
 
         vibeButtons.forEach(btn => {
             btn.addEventListener('click', () => selectVibe(btn.dataset.vibe));
@@ -2271,6 +2492,8 @@
             btn.addEventListener('click', () => toggleExtra(btn.dataset.extra));
         });
 
+        refreshStructureStatus();
+        updateStepStatus(4, true, 'Opțional · poți reveni oricând');
         renderSummary();
         updateProgress();
 

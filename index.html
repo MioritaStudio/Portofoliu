@@ -7,17 +7,17 @@
     <title>Miorița Studio | Viitorul Digital, Creat Astăzi</title>
     
     <!-- Preconnect pentru resurse externe -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com" defer></script>
+
+    <!-- Tailwind CSS CDN (stylesheet variant to avoid MIME issues) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.4/dist/tailwind.min.css" referrerpolicy="no-referrer" />
     <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" crossorigin="anonymous">
     <link rel="icon" type="image/gif" href="./logonew.gif">
     <link rel="shortcut icon" href="./logonew.gif">
     <link rel="apple-touch-icon" href="./logonew.gif">
@@ -2840,7 +2840,7 @@
         <!-- Logo animat (simulat cu CSS și JS) -->
         <div id="logo-container" class="transition duration-1000 ease-in-out transform scale-75 opacity-0">
             <!-- LOGO ACTUALIZAT AICI (Imagine) -->
-            <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" 
+            <img src="./logonew.gif"
                  alt="Miorița Studio Logo" 
                  class="h-28 md:h-32 mx-auto mb-6 drop-shadow-lg"
                  width="120"
@@ -2874,7 +2874,7 @@
         <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Navigație principală">
             <div class="flex items-center justify-between w-full gap-6">
                 <a href="#acasa" class="flex items-center gap-3 cinematic-fade-in" style="transition-delay: 0.5s;">
-                    <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" class="header-logo" width="56" height="56" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/56x56/8B5CF6/ffffff?text=MS';" />
+                    <img src="./logonew.gif" alt="Miorița Studio Logo" class="header-logo" width="56" height="56" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/56x56/8B5CF6/ffffff?text=MS';" />
                     <span class="hidden sm:flex flex-col leading-tight">
                         <span class="text-lg font-semibold tracking-wide text-white">Miorița Studio</span>
                         <span class="text-xs text-gray-400 uppercase tracking-[0.3em]">Web & Design</span>
@@ -3741,7 +3741,7 @@
         <!-- Logo animat (simulat cu CSS și JS) -->
         <div id="logo-container" class="transition duration-1000 ease-in-out transform scale-75 opacity-0">
             <!-- LOGO ACTUALIZAT AICI (Imagine) -->
-            <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" 
+            <img src="./logonew.gif"
                  alt="Miorița Studio Logo" 
                  class="h-28 md:h-32 mx-auto mb-6 drop-shadow-lg"
                  width="120"
@@ -3775,7 +3775,7 @@
         <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Navigație principală">
             <div class="flex items-center justify-between w-full gap-6">
                 <a href="#acasa" class="flex items-center gap-3 cinematic-fade-in" style="transition-delay: 0.5s;">
-                    <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" class="header-logo" width="56" height="56" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/56x56/8B5CF6/ffffff?text=MS';" />
+                    <img src="./logonew.gif" alt="Miorița Studio Logo" class="header-logo" width="56" height="56" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='https://placehold.co/56x56/8B5CF6/ffffff?text=MS';" />
                     <span class="hidden sm:flex flex-col leading-tight">
                         <span class="text-lg font-semibold tracking-wide text-white">Miorița Studio</span>
                         <span class="text-xs text-gray-400 uppercase tracking-[0.3em]">Web & Design</span>
@@ -4824,7 +4824,6 @@
                             <a href="https://dr-lazuran.ro" target="_blank" class="carousel-item absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 block" data-project="dr-lazuran">
                                 <div class="h-full w-full bg-cover bg-center flex items-end p-8 card-glow-effect"
                                      style="background-image: url('LogoDr.png');">
-                                     style="background-image: url('https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/LogoDr.png');">
                                     <div class="bg-black/70 p-4 rounded-lg cinematic-fade-in animated-visible">
                                         <h3 class="text-3xl font-bold text-white">Dr. Lazuran</h3>
                                         <p class="text-gray-300">Dezvoltare web personalizată pentru un cabinet stomatologic. Design curat și funcțional.</p>
@@ -5044,7 +5043,7 @@
                          alt="Miorița Studio Logo"
                     <img src="logonew.gif"
                          alt="Miorița Studio Logo"
-                    <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" 
+                    <img src="./logonew.gif"
                          alt="Miorița Studio Logo" 
                          class="footer-logo-img"
                          width="24"

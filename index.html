@@ -32,6 +32,7 @@
         
         body {
             font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #000000 0%, var(--color-dark-bg) 220px, var(--color-dark-bg) 100%);
             background-color: var(--color-dark-bg);
             color: #E5E7EB; /* Gray-200 */
             scroll-behavior: smooth;
@@ -103,12 +104,35 @@
             will-change: transform;
         }
 
+        #main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #000000;
+            background-image: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.18), transparent 55%),
+                              radial-gradient(circle at 85% 10%, rgba(6, 182, 212, 0.16), transparent 60%);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+            border-bottom: none;
+        }
+
+        #main-header::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 12px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(3, 7, 18, 0) 100%);
+            pointer-events: none;
+        }
+
         .header-scrolled {
             position: fixed;
-            background-color: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.5);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            background: #000000;
+            background-image: radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.2), transparent 55%),
+                              radial-gradient(circle at 85% 10%, rgba(6, 182, 212, 0.18), transparent 60%);
+            box-shadow: 0 24px 55px rgba(0, 0, 0, 0.75);
             animation: slideInFromTop 0.3s ease-out;
         }
 
@@ -122,7 +146,7 @@
         }
 
         .header-logo {
-            height: 48px;
+            height: 64px;
             width: auto;
             border-radius: 12px;
             animation: headerLogoGlow 10s ease-in-out infinite;
@@ -1249,7 +1273,7 @@
         <!-- Logo animat (simulat cu CSS și JS) -->
         <div id="logo-container" class="transition duration-1000 ease-in-out transform scale-75 opacity-0">
             <video class="logo-media h-28 md:h-32 mx-auto mb-6" width="120" height="120" autoplay loop muted playsinline poster="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif">
-                <source src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" type="image/gif">
+                <source src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoanim.mp4" type="video/mp4">
                 <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="120" height="120" loading="eager" />
             </video>
 
@@ -1273,17 +1297,17 @@
 <main id="main-content" class="content-hidden">
     
     <!-- 2. HEADER STICKY -->
-    <header id="main-header" class="header-sticky fixed w-full top-0 z-40 bg-black/80 backdrop-blur-xl border-b border-slate-900/70">
+    <header id="main-header" class="header-sticky fixed w-full top-0 z-40 backdrop-blur-xl">
         <nav id="header-normal" class="container mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Navigație principală">
             <div class="flex items-center justify-between w-full gap-6">
                 <a href="#acasa" class="flex items-center gap-3 cinematic-fade-in" style="transition-delay: 0.5s;">
-                    <video class="header-logo" width="56" height="56" autoplay loop muted playsinline poster="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif">
-                        <source src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" type="image/gif">
-                        <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="56" height="56" />
+                    <video class="header-logo" width="72" height="72" autoplay loop muted playsinline poster="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif">
+                        <source src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logoanim.mp4" type="video/mp4">
+                        <img src="https://raw.githubusercontent.com/MioritaStudio/Portofoliu/main/logonew.gif" alt="Miorița Studio Logo" width="72" height="72" />
                     </video>
-                    <span class="hidden sm:flex flex-col leading-tight">
-                        <span class="text-lg font-semibold tracking-wide text-white">Miorița Studio</span>
-                        <span class="text-xs text-gray-400 uppercase tracking-[0.3em]">Web & Design</span>
+                    <span class="flex flex-col leading-tight">
+                        <span class="text-sm font-semibold tracking-wide text-white sm:text-lg">Miorița Studio</span>
+                        <span class="hidden sm:block text-xs text-gray-400 uppercase tracking-[0.3em]">Web &amp; Design</span>
                     </span>
                 </a>
 
@@ -2631,24 +2655,21 @@
          */
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
-            const contentContainerId = modalId === 'legal-modal' ? 'modal-content-container-legal' :
-                                       'modal-content-container-contact';
-            const contentContainer = document.getElementById(contentContainerId);
-            
-            // FIX: BLOCARE: Setăm scroll-ul la 'hidden' pentru a bloca fundalul modalului
-            document.body.style.overflow = 'hidden'; 
-            
+            if (!modal) return;
+
+            const contentContainer = modal.querySelector('.modal-content');
+            if (!contentContainer) return;
+
+            document.body.style.overflow = 'hidden';
+
             modal.classList.remove('hidden');
             modal.classList.add('flex', 'modal-enter-active');
-            
-            // Forțează reflow-ul și aplică tranziția de conținut
-            setTimeout(() => {
+
+            requestAnimationFrame(() => {
                 contentContainer.classList.remove('scale-90', 'opacity-0');
                 contentContainer.classList.add('modal-content-enter-active');
-                
-                // Centrare vizuală cu scrollIntoView - ajută ca modalul să apară în viewport imediat
-                contentContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 10);
+                contentContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
         }
 
         /**
@@ -2657,13 +2678,14 @@
          */
         window.closeModal = function(modalId) {
             const modal = document.getElementById(modalId);
-            const contentContainerId = modalId === 'legal-modal' ? 'modal-content-container-legal' :
-                                       'modal-content-container-contact';
-            const contentContainer = document.getElementById(contentContainerId);
+            if (!modal) return;
+
+            const contentContainer = modal.querySelector('.modal-content');
+            if (!contentContainer) return;
 
             contentContainer.classList.add('scale-90', 'opacity-0');
             contentContainer.classList.remove('modal-content-enter-active');
-            
+
             modal.classList.remove('modal-enter-active');
             modal.style.opacity = '0';
 
@@ -2671,10 +2693,10 @@
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 modal.style.opacity = '1';
-                
-                // FIX: RESTABILIRE: Setăm scroll-ul body-ului la 'scroll' (valoarea inițială)
-                document.body.style.overflow = 'scroll';
-                
+                const anyOpenModal = Array.from(document.querySelectorAll('.modal-container'))
+                    .some(m => m.classList.contains('flex'));
+                document.body.style.overflow = anyOpenModal ? 'hidden' : 'auto';
+
             }, 300);
         }
         

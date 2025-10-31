@@ -274,6 +274,24 @@
             opacity: 0;
             border-radius: 50%;
         }
+
+        .feedback-success {
+            background: rgba(16, 185, 129, 0.15);
+            color: #bbf7d0;
+            border-color: rgba(16, 185, 129, 0.45);
+        }
+
+        .feedback-error {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fecaca;
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .feedback-pending {
+            background: rgba(148, 163, 184, 0.18);
+            color: #e2e8f0;
+            border-color: rgba(148, 163, 184, 0.35);
+        }
         
         /* ----------------------------------- */
         /* 5. MODAL STYLING */
@@ -1334,7 +1352,6 @@
                 <div class="hidden lg:flex items-center justify-center flex-1">
                     <ul class="flex items-center justify-center gap-8 text-gray-200 text-sm font-medium">
                         <li><a href="#acasa" class="nav-link">Acasă</a></li>
-                        <li><a href="#servicii" class="nav-link">Cum lucrăm</a></li>
                         <li><a href="#configurator" class="nav-link">Configurator</a></li>
                         <li><a href="#proiecte" class="nav-link">Proiecte</a></li>
                         <li><a href="#despre" class="nav-link">Despre</a></li>
@@ -1371,10 +1388,6 @@
                 <a href="#acasa" class="menu-item">
                     <i class="fas fa-home"></i>
                     <span>Acasă</span>
-                </a>
-                <a href="#servicii" class="menu-item">
-                    <i class="fas fa-route"></i>
-                    <span>Cum lucrăm</span>
                 </a>
                 <a href="#configurator" class="menu-item">
                     <i class="fas fa-sliders"></i>
@@ -1969,13 +1982,7 @@
                             Trimite Solicitarea <i class="fas fa-envelope-open-text ml-2"></i>
                         </button>
                     </div>
-                    <div id="form-confirm-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
-                        <div style="background:#1e293b;padding:2rem 2.5rem;border-radius:1rem;box-shadow:0 4px 32px #000;text-align:center;max-width:90vw;">
-                            <h3 style="color:#8B5CF6;font-size:1.5rem;margin-bottom:1rem;">Mesaj trimis cu succes!</h3>
-                            <p style="color:#fff;margin-bottom:2rem;">Îți mulțumim pentru solicitare.<br>Te vom contacta în curând.</p>
-                            <button id="confirm-ok-btn" style="background:linear-gradient(90deg,#8B5CF6,#06B6D4);color:#fff;padding:0.75rem 2rem;border:none;border-radius:0.5rem;font-weight:bold;cursor:pointer;">OK</button>
-                        </div>
-                    </div>
+                    <div id="contact-form-feedback" class="hidden mt-6 rounded-xl px-5 py-4 text-sm font-medium border" role="alert"></div>
         </form>
     </div>
 </div>
@@ -2122,8 +2129,9 @@
 
         const heroTitle = document.getElementById('hero-title');
         if (heroTitle) {
-            const nodes = Array.from(heroTitle.childNodes);
-            const fragment = document.createDocumentFragment();
+            const originalHeroHtml = heroTitle.innerHTML;
+            const mobileQuery = window.matchMedia('(max-width: 767px)');
+            let heroPianoActive = false;
 
             const addLetterListeners = (span) => {
                 const activate = () => span.classList.add('active');
@@ -2137,31 +2145,64 @@
                 span.addEventListener('pointercancel', deactivate);
             };
 
-            nodes.forEach((node) => {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    const text = node.textContent || '';
-                    for (const char of text) {
-                        if (char === '\n') {
-                            continue;
+            const buildPianoFragment = () => {
+                const fragment = document.createDocumentFragment();
+                const template = document.createElement('template');
+                template.innerHTML = originalHeroHtml;
+                const templateNodes = Array.from(template.content.childNodes);
+
+                templateNodes.forEach((node) => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const text = node.textContent || '';
+                        for (const char of text) {
+                            if (char === '\n') {
+                                continue;
+                            }
+                            if (char === ' ') {
+                                fragment.appendChild(document.createTextNode(' '));
+                                continue;
+                            }
+                            const span = document.createElement('span');
+                            span.className = 'piano-letter';
+                            span.textContent = char;
+                            addLetterListeners(span);
+                            fragment.appendChild(span);
                         }
-                        if (char === ' ') {
-                            fragment.appendChild(document.createTextNode(' '));
-                            continue;
-                        }
-                        const span = document.createElement('span');
-                        span.className = 'piano-letter';
-                        span.textContent = char;
-                        addLetterListeners(span);
-                        fragment.appendChild(span);
+                        return;
                     }
+
+                    fragment.appendChild(node.cloneNode(true));
+                });
+
+                return fragment;
+            };
+
+            const applyPianoEffect = () => {
+                if (heroPianoActive) return;
+                heroTitle.innerHTML = '';
+                heroTitle.appendChild(buildPianoFragment());
+                heroPianoActive = true;
+            };
+
+            const removePianoEffect = () => {
+                if (!heroPianoActive) {
+                    heroTitle.innerHTML = originalHeroHtml;
                     return;
                 }
+                heroTitle.innerHTML = originalHeroHtml;
+                heroPianoActive = false;
+            };
 
-                fragment.appendChild(node);
-            });
+            const syncHeroEffect = () => {
+                if (mobileQuery.matches) {
+                    removePianoEffect();
+                } else {
+                    applyPianoEffect();
+                }
+            };
 
-            heroTitle.textContent = '';
-            heroTitle.appendChild(fragment);
+            syncHeroEffect();
+            mobileQuery.addEventListener('change', syncHeroEffect);
         }
 
         const initGifLoops = () => {
@@ -2766,6 +2807,8 @@
             });
         }
 
+        window.openModal = openModal;
+
         /**
          * Închide un modal și RESTABILEȘTE scroll-ul paginii de fundal.
          * @param {string} modalId - ID-ul modalului de închis.
@@ -2790,6 +2833,9 @@
                 const anyOpenModal = Array.from(document.querySelectorAll('.modal-container'))
                     .some(m => m.classList.contains('flex'));
                 document.body.style.overflow = anyOpenModal ? 'hidden' : 'auto';
+                if (modalId === 'contact-form-modal' && typeof clearContactFeedback === 'function') {
+                    clearContactFeedback();
+                }
 
             }, 300);
         }
@@ -3152,13 +3198,51 @@
         }
 
         const contactForm = document.getElementById('project-contact-form');
-        const confirmModal = document.getElementById('form-confirm-modal');
-        const confirmButton = document.getElementById('confirm-ok-btn');
+        const contactFormFeedback = document.getElementById('contact-form-feedback');
+        let contactAutoCloseTimer = null;
+
+        const showContactFeedback = (message, status = 'success') => {
+            if (!contactFormFeedback) return;
+            contactFormFeedback.textContent = message;
+            contactFormFeedback.classList.remove('hidden', 'feedback-success', 'feedback-error', 'feedback-pending');
+
+            if (status === 'error') {
+                contactFormFeedback.classList.add('feedback-error');
+            } else if (status === 'pending') {
+                contactFormFeedback.classList.add('feedback-pending');
+            } else {
+                contactFormFeedback.classList.add('feedback-success');
+            }
+        };
+
+        const clearContactFeedback = () => {
+            if (!contactFormFeedback) return;
+            if (contactAutoCloseTimer) {
+                clearTimeout(contactAutoCloseTimer);
+                contactAutoCloseTimer = null;
+            }
+            contactFormFeedback.classList.add('hidden');
+            contactFormFeedback.classList.remove('feedback-success', 'feedback-error', 'feedback-pending');
+            contactFormFeedback.textContent = '';
+        };
 
         if (contactForm) {
             contactForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
+
+                if (contactAutoCloseTimer) {
+                    clearTimeout(contactAutoCloseTimer);
+                    contactAutoCloseTimer = null;
+                }
+
                 const formData = new FormData(contactForm);
+                const userEmail = formData.get('email');
+                if (userEmail) {
+                    formData.append('_cc', userEmail);
+                    formData.append('_replyto', userEmail);
+                }
+
+                showContactFeedback('Trimitem mesajul tău...', 'pending');
 
                 try {
                     const response = await fetch(contactForm.action, {
@@ -3171,8 +3255,9 @@
                         throw new Error('Form submission failed');
                     }
 
-                    if (confirmModal) {
-                        confirmModal.style.display = 'flex';
+                    showContactFeedback('Mesajul a plecat către noi și ai primit o copie cu rezumatul comenzii pe email.', 'success');
+                    if (contactFormFeedback) {
+                        contactFormFeedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
 
                     contactForm.reset();
@@ -3188,34 +3273,18 @@
                         resetChatbot();
                     }
 
-                    const closeConfirmation = () => {
-                        if (confirmModal) {
-                            confirmModal.style.display = 'none';
-                        }
+                    contactAutoCloseTimer = setTimeout(() => {
+                        clearContactFeedback();
                         closeModal('contact-form-modal');
                         window.location.hash = '#acasa';
                         window.scrollTo({ top: 0, behavior: 'smooth' });
-                        if (confirmButton) {
-                            confirmButton.onclick = null;
-                        }
-                    };
-
-                    let autoCloseTimer = null;
-                    if (confirmModal) {
-                        autoCloseTimer = setTimeout(closeConfirmation, 2500);
-                    }
-
-                    if (confirmButton) {
-                        confirmButton.onclick = () => {
-                            if (autoCloseTimer) {
-                                clearTimeout(autoCloseTimer);
-                            }
-                            closeConfirmation();
-                        };
-                    }
+                    }, 4000);
                 } catch (error) {
                     console.error('Eroare la trimiterea formularului:', error);
-                    alert('A apărut o eroare la trimiterea formularului. Te rugăm să încerci din nou.');
+                    showContactFeedback('A apărut o eroare la trimiterea formularului. Te rugăm să încerci din nou.', 'error');
+                    if (contactFormFeedback) {
+                        contactFormFeedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 }
             });
         }

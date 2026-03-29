@@ -1869,30 +1869,44 @@
                     </div>
                 </div>
                 
-                <ul class="steps steps-horizontal md:steps-vertical text-xs md:text-sm w-full mb-2 md:mb-0 overflow-x-auto shrink-0">
-                    <li class="step step-primary" id="step-ind-1">Tip</li>
-                    <li class="step" id="step-ind-2">Design</li>
-                    <li class="step" id="step-ind-3">Funcții</li>
-                    <li class="step" id="step-ind-4">Timp</li>
-                </ul>
+                <div class="overflow-x-auto w-full shrink-0 mb-2 md:mb-0">
+                    <ul class="steps steps-horizontal md:steps-vertical text-xs md:text-sm min-w-max md:min-w-0 md:w-full">
+                        <li class="step step-primary" id="step-ind-1">Tip</li>
+                        <li class="step" id="step-ind-2">Design</li>
+                        <li class="step" id="step-ind-3">Funcții</li>
+                        <li class="step" id="step-ind-4">Timp</li>
+                    </ul>
+                </div>
 
                 <!-- Selection summary (desktop only) -->
                 <div id="conf-summary" class="hidden md:flex flex-col gap-2 mt-6 flex-1 overflow-y-auto text-sm">
                     <div id="summary-type" class="hidden items-center justify-between py-2 border-b border-white/10">
                         <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Tip</span>
-                        <span id="summary-type-val" class="text-white font-medium text-right"></span>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span id="summary-type-val" class="text-white font-medium text-right truncate"></span>
+                            <button onclick="clearSummary('type')" class="shrink-0 text-gray-500 hover:text-red-400 transition-colors" title="Șterge"><i class="fas fa-times text-xs"></i></button>
+                        </div>
                     </div>
                     <div id="summary-style" class="hidden items-center justify-between py-2 border-b border-white/10">
                         <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Design</span>
-                        <span id="summary-style-val" class="text-white font-medium text-right"></span>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span id="summary-style-val" class="text-white font-medium text-right truncate"></span>
+                            <button onclick="clearSummary('style')" class="shrink-0 text-gray-500 hover:text-red-400 transition-colors" title="Șterge"><i class="fas fa-times text-xs"></i></button>
+                        </div>
                     </div>
                     <div id="summary-features" class="hidden items-center justify-between py-2 border-b border-white/10">
                         <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Funcții</span>
-                        <span id="summary-features-val" class="text-primary font-medium text-right"></span>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span id="summary-features-val" class="text-primary font-medium text-right truncate"></span>
+                            <button onclick="clearSummary('features')" class="shrink-0 text-gray-500 hover:text-red-400 transition-colors" title="Șterge"><i class="fas fa-times text-xs"></i></button>
+                        </div>
                     </div>
                     <div id="summary-timeline" class="hidden items-center justify-between py-2">
                         <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Timp</span>
-                        <span id="summary-timeline-val" class="text-white font-medium text-right"></span>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span id="summary-timeline-val" class="text-white font-medium text-right truncate"></span>
+                            <button onclick="clearSummary('timeline')" class="shrink-0 text-gray-500 hover:text-red-400 transition-colors" title="Șterge"><i class="fas fa-times text-xs"></i></button>
+                        </div>
                     </div>
                 </div>
 
@@ -2104,7 +2118,7 @@
                             </div>
                         </label>
                         <label class="cursor-pointer">
-                            <input type="radio" name="timeline" value="0" class="peer sr-only" onchange="updateConf(4)">
+                            <input type="radio" name="timeline" value="0" class="peer sr-only" onchange="updateConf(4)" checked>
                             <div class="p-4 rounded-xl border border-white/10 bg-white/5 peer-checked:border-primary peer-checked:bg-primary/10 text-center hover:bg-white/10 transition">
                                 <i class="fas fa-calendar-check text-2xl text-blue-400 mb-2"></i>
                                 <h4 class="font-bold">Standard</h4>
@@ -2188,7 +2202,10 @@
 
     <script>
         // Modal Functions
-        function openModal(id) { document.getElementById(id).showModal(); }
+        function openModal(id) {
+            document.getElementById(id).showModal();
+            if(id === 'configurator-modal') { formStartTime = Date.now(); }
+        }
         function closeModal(id) { document.getElementById(id).close(); }
 
         // Preloader Logic
@@ -2668,6 +2685,35 @@
                 if(i <= step) el.classList.add('step-primary');
                 // else el.classList.remove('step-primary');
             }
+            if(step === 4) updateConf(4);
+        }
+
+        function clearSummary(field) {
+            if(field === 'type') {
+                document.getElementsByName('type').forEach(r => r.checked = false);
+                conf.type = 0;
+                const el = document.getElementById('summary-type');
+                el.classList.add('hidden'); el.classList.remove('flex');
+                document.getElementById('btn-step-1').setAttribute('disabled', 'true');
+            } else if(field === 'style') {
+                document.getElementsByName('style').forEach(r => r.checked = false);
+                conf.style = 0;
+                const el = document.getElementById('summary-style');
+                el.classList.add('hidden'); el.classList.remove('flex');
+                document.getElementById('btn-step-2').setAttribute('disabled', 'true');
+            } else if(field === 'features') {
+                document.querySelectorAll('#step-3 input[type="checkbox"]').forEach(c => c.checked = false);
+                conf.features = 0;
+                const el = document.getElementById('summary-features');
+                el.classList.add('hidden'); el.classList.remove('flex');
+            } else if(field === 'timeline') {
+                document.getElementsByName('timeline').forEach(r => r.checked = false);
+                conf.timeline = 0;
+                const el = document.getElementById('summary-timeline');
+                el.classList.add('hidden'); el.classList.remove('flex');
+                document.getElementById('btn-submit').setAttribute('disabled', 'true');
+            }
+            updateConf(0);
         }
 
         // Canvas Backgrounds (Single optimized loop for Hero)

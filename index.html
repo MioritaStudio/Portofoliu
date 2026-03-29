@@ -1869,12 +1869,32 @@
                     </div>
                 </div>
                 
-                <ul class="steps steps-horizontal md:steps-vertical text-xs md:text-sm w-full mb-2 md:mb-0 md:flex-1 overflow-x-auto">
+                <ul class="steps steps-horizontal md:steps-vertical text-xs md:text-sm w-full mb-2 md:mb-0 overflow-x-auto shrink-0">
                     <li class="step step-primary" id="step-ind-1">Tip</li>
                     <li class="step" id="step-ind-2">Design</li>
                     <li class="step" id="step-ind-3">Funcții</li>
                     <li class="step" id="step-ind-4">Timp</li>
                 </ul>
+
+                <!-- Selection summary (desktop only) -->
+                <div id="conf-summary" class="hidden md:flex flex-col gap-2 mt-6 flex-1 overflow-y-auto text-sm">
+                    <div id="summary-type" class="hidden items-center justify-between py-2 border-b border-white/10">
+                        <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Tip</span>
+                        <span id="summary-type-val" class="text-white font-medium text-right"></span>
+                    </div>
+                    <div id="summary-style" class="hidden items-center justify-between py-2 border-b border-white/10">
+                        <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Design</span>
+                        <span id="summary-style-val" class="text-white font-medium text-right"></span>
+                    </div>
+                    <div id="summary-features" class="hidden items-center justify-between py-2 border-b border-white/10">
+                        <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Funcții</span>
+                        <span id="summary-features-val" class="text-primary font-medium text-right"></span>
+                    </div>
+                    <div id="summary-timeline" class="hidden items-center justify-between py-2">
+                        <span class="text-gray-500 text-xs uppercase tracking-wide shrink-0 mr-2">Timp</span>
+                        <span id="summary-timeline-val" class="text-white font-medium text-right"></span>
+                    </div>
+                </div>
 
                 <hr class="hidden md:block border-white/10 my-6">
 
@@ -2560,17 +2580,36 @@
 
         let conf = { type: 0, style: 0, features: 0, timeline: 0 };
 
+        function getCheckedLabel(name, selector) {
+            const radios = document.getElementsByName(name);
+            let label = '';
+            radios.forEach(r => { if(r.checked) label = r.closest('label')?.querySelector(selector)?.innerText || ''; });
+            return label;
+        }
+
         function updateConf(step) {
             // Step 1: Type
             const types = document.getElementsByName('type');
             types.forEach(r => { if(r.checked) conf.type = parseInt(r.value); });
             if(conf.type > 0) document.getElementById('btn-step-1').removeAttribute('disabled');
+            const typeName = getCheckedLabel('type', 'h3');
+            if(typeName) {
+                document.getElementById('summary-type').classList.remove('hidden');
+                document.getElementById('summary-type').classList.add('flex');
+                document.getElementById('summary-type-val').innerText = typeName;
+            }
 
             // Step 2: Style
             const styles = document.getElementsByName('style');
             let styleSelected = false;
             styles.forEach(r => { if(r.checked) { conf.style = parseInt(r.value); styleSelected = true; } });
             if(styleSelected) document.getElementById('btn-step-2').removeAttribute('disabled');
+            const styleName = getCheckedLabel('style', 'h4');
+            if(styleName) {
+                document.getElementById('summary-style').classList.remove('hidden');
+                document.getElementById('summary-style').classList.add('flex');
+                document.getElementById('summary-style-val').innerText = styleName;
+            }
 
             // Step 3: Features
             const feats = document.querySelectorAll('#step-3 input:checked');
@@ -2580,6 +2619,15 @@
                 conf.features += parseInt(f.value);
                 featNames.push(f.nextElementSibling.innerText);
             });
+            const summaryFeatures = document.getElementById('summary-features');
+            if(feats.length > 0) {
+                summaryFeatures.classList.remove('hidden');
+                summaryFeatures.classList.add('flex');
+                document.getElementById('summary-features-val').innerText = feats.length + (feats.length === 1 ? ' funcție' : ' funcții') + ' (+€' + conf.features + ')';
+            } else {
+                summaryFeatures.classList.add('hidden');
+                summaryFeatures.classList.remove('flex');
+            }
 
              // Step 4: Timeline
             const timelines = document.getElementsByName('timeline');
@@ -2591,6 +2639,12 @@
                 document.getElementById('btn-submit').removeAttribute('disabled');
             } else {
                 document.getElementById('btn-submit').setAttribute('disabled', 'true');
+            }
+            const timelineName = getCheckedLabel('timeline', 'h4');
+            if(timelineName) {
+                document.getElementById('summary-timeline').classList.remove('hidden');
+                document.getElementById('summary-timeline').classList.add('flex');
+                document.getElementById('summary-timeline-val').innerText = timelineName;
             }
 
             // Calc

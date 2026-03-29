@@ -106,6 +106,8 @@
             background-color: #030014;
             color: #ffffff;
             overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
         /* Canvas Styling */
@@ -135,7 +137,7 @@
 
         /* Custom Scrollbar - Hidden to let the beam shine */
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        html { scrollbar-width: none; -ms-overflow-style: none; }
+        html { scrollbar-width: none; -ms-overflow-style: none; overflow-x: hidden; scrollbar-gutter: auto; }
 
         /* Typewriter Cursor */
         .typewriter-text {

@@ -2913,36 +2913,46 @@
         document.addEventListener('DOMContentLoaded', () => {
             const introScreen = document.getElementById('intro-screen');
             const enterBtn = document.getElementById('enter-btn');
-            
-            if (introScreen && enterBtn) {
-                // Prevent scrolling while intro is active
-                document.body.style.overflow = 'hidden';
-                
-                const dismissIntro = () => {
-                    introScreen.style.transform = 'translateY(-100%)';
-                    document.body.style.overflow = ''; // Restore scrolling
-                    setTimeout(() => introScreen.remove(), 1000);
-                };
+            if (!introScreen || !enterBtn) return;
 
-                enterBtn.addEventListener('click', dismissIntro);
-                
-                // Swipe up detection
-                introScreen.addEventListener('touchstart', (e) => {
-                    let touchstartY = e.changedTouches[0].screenY;
-                    introScreen.addEventListener('touchend', (e) => {
-                        let touchendY = e.changedTouches[0].screenY;
-                        if (touchstartY - touchendY > 50) dismissIntro();
-                    }, { once: true });
-                });
-                
-                // Scroll down detection
-                introScreen.addEventListener('wheel', (e) => {
-                    if (e.deltaY > 0) dismissIntro();
-                });
-            }
+            const root = document.documentElement;
+            const previousHtmlOverflow = root.style.overflow;
+            const previousBodyOverflow = document.body.style.overflow;
+            root.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            introScreen.style.touchAction = 'none';
+            window.scrollTo(0, 0);
+
+            let dismissing = false;
+            const dismissIntro = () => {
+                if (dismissing) return;
+                dismissing = true;
+                introScreen.style.transform = 'translateY(-100%)';
+                setTimeout(() => {
+                    introScreen.remove();
+                    window.scrollTo(0, 0);
+                    root.style.overflow = previousHtmlOverflow;
+                    document.body.style.overflow = previousBodyOverflow;
+                }, 1000);
+            };
+
+            enterBtn.addEventListener('click', dismissIntro);
+            introScreen.addEventListener('wheel', (event) => {
+                event.preventDefault();
+                if (event.deltaY > 0) dismissIntro();
+            }, { passive: false });
+
+            let touchStartY = 0;
+            introScreen.addEventListener('touchstart', (event) => {
+                touchStartY = event.changedTouches[0].screenY;
+            }, { passive: true });
+            introScreen.addEventListener('touchmove', (event) => event.preventDefault(), { passive: false });
+            introScreen.addEventListener('touchend', (event) => {
+                event.preventDefault();
+                if (touchStartY - event.changedTouches[0].screenY > 50) dismissIntro();
+            }, { passive: false });
         });
     </script>
-
 
 </body>
 </html>

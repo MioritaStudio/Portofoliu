@@ -373,7 +373,7 @@
 
         @media (max-width: 640px) {
             #acasa h1 { font-size: clamp(2rem, 9vw, 3rem); line-height: 1.14; }
-            #acasa h1 span { display: block; max-width: 100%; white-space: normal; overflow-wrap: normal; }
+            #acasa h1 > span { display: block; max-width: 100%; white-space: normal; }
             #acasa h1 br { display: none; }
             #intro-screen h1 { max-width: calc(100vw - 2rem); font-size: clamp(1.7rem, 8vw, 2.5rem); letter-spacing: .04em; text-align: center; overflow-wrap: anywhere; }
             #intro-screen p { max-width: calc(100vw - 2rem); text-align: center; letter-spacing: .12em; }
@@ -552,12 +552,12 @@
             </div>
             
             <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-6 leading-tight reveal-text">
-                <span style="animation-delay: 0.1s;">Web Design în Baia Mare.</span><br>
-                <span class="text-[#e9dcff]" style="animation-delay: 0.3s;">Site-uri clare, ușor de folosit.</span>
+                <span style="animation-delay: 0.1s;">Web Design în Baia&nbsp;Mare.</span><br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400" style="animation-delay: 0.3s;">Site-uri și aplicații web.</span>
             </h1>
             
             <p class="mx-auto max-w-[700px] text-gray-400 text-lg md:text-xl mb-10 leading-relaxed reveal-text">
-                <span style="animation-delay: 0.5s;">Construiesc site-uri de prezentare, WordPress, magazine online și platforme custom pentru firme din Baia Mare, Maramureș și din toată România.</span>
+                <span style="animation-delay: 0.5s;">Facem site-uri de prezentare, magazine online și platforme web pentru firme din Baia Mare, Maramureș și din toată România.</span>
             </p>
             
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-aos="fade-up" data-aos-delay="200">
@@ -609,7 +609,7 @@
                 </div>
                 <h2 class="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Cine lucrează la proiect</h2>
                 <p class="text-gray-400 text-lg md:text-xl mb-12 leading-relaxed">
-                    Sunt Mihai Suraianu, din Baia Mare. Discuți direct cu mine despre structură, design și implementare. Îți spun ce pot livra și ce are nevoie de un specialist separat.
+                    Miorița Studio lucrează la proiecte web din Baia Mare și din toată România. Discutăm cerințele, construim și verificăm înainte de lansare.
                 </p>
                 
                 <div class="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-500/20 p-8 rounded-3xl text-left flex flex-col md:flex-row gap-8 items-center hover:border-blue-500/40 transition-colors">
@@ -660,7 +660,7 @@
         <!-- ATF 8: PROCESS -->
         <section class="py-24 relative z-20 container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center mb-16" data-aos="fade-up">
-                <h2 class="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Cum <span class="text-purple-500">Lucrez</span></h2>
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Cum <span class="text-purple-500">lucrăm</span></h2>
                 <p class="text-gray-400 text-lg">De la prima idee până la lansare, lucrez transparent și eficient.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -672,17 +672,17 @@
                 <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-2xl text-center relative" data-aos="fade-up" data-aos-delay="200">
                     <div class="w-12 h-12 rounded-full bg-blue-600 text-white font-black flex items-center justify-center text-xl mx-auto mb-4 shadow-[0_0_20px_rgba(37,99,235,0.4)]">2</div>
                     <h3 class="font-bold text-white mb-2">Design și prototip</h3>
-                    <p class="text-xs text-gray-400">Pregătesc structura și un prototip pentru a valida direcția.</p>
+                    <p class="text-xs text-gray-400">Pregătim structura și un prototip pentru a valida direcția.</p>
                 </div>
                 <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-2xl text-center relative" data-aos="fade-up" data-aos-delay="300">
                     <div class="w-12 h-12 rounded-full bg-pink-600 text-white font-black flex items-center justify-center text-xl mx-auto mb-4 shadow-[0_0_20px_rgba(219,39,119,0.4)]">3</div>
                     <h3 class="font-bold text-white mb-2">Implementare</h3>
-                    <p class="text-xs text-gray-400">Implementez paginile, integrările agreate și verific utilizarea pe mobil.</p>
+                    <p class="text-xs text-gray-400">Implementăm paginile, integrările agreate și verificăm utilizarea pe mobil.</p>
                 </div>
                 <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-2xl text-center relative" data-aos="fade-up" data-aos-delay="400">
                     <div class="w-12 h-12 rounded-full bg-emerald-600 text-white font-black flex items-center justify-center text-xl mx-auto mb-4 shadow-[0_0_20px_rgba(5,150,105,0.4)]">4</div>
                     <h3 class="font-bold text-white mb-2">Verificare și lansare</h3>
-                    <p class="text-xs text-gray-400">Verific proiectul înainte de lansare și stabilesc separat mentenanța necesară.</p>
+                    <p class="text-xs text-gray-400">Verificăm proiectul înainte de lansare și stabilim separat mentenanța necesară.</p>
                 </div>
             </div>
         </section>
@@ -1497,7 +1497,7 @@
             </div>
             <div class="mt-12 p-6 md:p-8 rounded-2xl bg-white/5 border border-white/10" data-aos="fade-up">
                 <p class="text-sm text-gray-500 uppercase tracking-widest mb-3">Proiecte din portofoliu</p>
-                <p class="text-gray-300 leading-relaxed">Am lucrat la Dr. Lăzuran, Muse Rituals și Grădinița P.P. Nr. 28. Ograda Bunicii este proiectul meu propriu, încă în dezvoltare.</p>
+                <p class="text-gray-300 leading-relaxed">În portofoliu: Dr. Lăzuran, Muse Rituals și Grădinița P.P. Nr. 28. Ograda Bunicii este un proiect propriu, încă în dezvoltare.</p>
             </div>
         </div>
     </section>
@@ -1684,7 +1684,7 @@
                 </div>
 
             </div>
-            <div class="text-center mt-12"><a href="/Portofoliu/portofoliu.html" class="inline-flex px-7 py-4 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-500">Vezi portofoliul explicat <span aria-hidden="true" class="ml-2">→</span></a></div>
+            <div class="text-center mt-12"><a href="/Portofoliu/portofoliu.html" class="inline-flex px-7 py-4 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-500">Vezi toate proiectele <span aria-hidden="true" class="ml-2">→</span></a></div>
         </div>
     </section>
 
@@ -1807,7 +1807,7 @@
                 <div class="md:col-span-2 space-y-6">
                     <a href="#" class="text-3xl font-bold block">Miorița<span class="text-primary">Studio</span></a>
                     <p class="text-gray-400 max-w-sm text-lg leading-relaxed">
-                        Site-uri și produse web construite în Baia Mare, cu atenție la conținut și utilizare.
+                        Site-uri și produse web din Baia Mare.
                     </p>
                     <div class="flex gap-4">
                         <a href="https://www.facebook.com/profile.php?id=61583340294894" target="_blank" class="h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all hover:-translate-y-1"><i class="fab fa-facebook-f text-xl"></i></a>
@@ -2223,7 +2223,7 @@
             </form>
             <h3 class="font-bold text-2xl text-white mb-6">Informații Legale</h3>
             <div class="space-y-4 text-sm">
-                <p><strong>1. Identitate:</strong> Miorița Studio este operat de Suraianu Mihai PFA, Baia Mare, România. Datele contractuale complete sunt comunicate înainte de semnare.</p>
+                <p><strong>1. Identitate:</strong> Miorița Studio oferă servicii web din Baia Mare. Datele contractuale sunt comunicate în ofertă, înainte de semnare.</p>
                 <p><strong>2. Termeni de Plată:</strong> Plata și etapele de livrare sunt stabilite în oferta și contractul fiecărui proiect.</p>
                 <p><strong>3. Proprietate Intelectuală:</strong> Drepturile de folosire și predarea materialelor sunt stabilite în contract.</p>
                 <p><strong>4. Confidențialitate (GDPR):</strong> Datele trimise prin contact sunt folosite pentru a răspunde cererii. Detaliile despre prelucrare trebuie descrise în politica de confidențialitate.</p>
@@ -2845,8 +2845,14 @@
             const root = document.documentElement;
             const previousHtmlOverflow = root.style.overflow;
             const previousBodyOverflow = document.body.style.overflow;
+            const previousBodyPosition = document.body.style.position;
+            const previousBodyWidth = document.body.style.width;
+            const previousBodyTop = document.body.style.top;
             root.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+            document.body.style.top = '0';
             introScreen.style.touchAction = 'none';
             window.scrollTo(0, 0);
 
@@ -2860,6 +2866,9 @@
                     window.scrollTo(0, 0);
                     root.style.overflow = previousHtmlOverflow;
                     document.body.style.overflow = previousBodyOverflow;
+                    document.body.style.position = previousBodyPosition;
+                    document.body.style.width = previousBodyWidth;
+                    document.body.style.top = previousBodyTop;
                 }, 1000);
             };
 

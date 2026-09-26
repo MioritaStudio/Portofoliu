@@ -189,6 +189,7 @@
             border-color: #8b5cf6;
             box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.3);
         }
+        #demo-search-results [hidden] { display: none !important; }
 
         /* Unique Buttons */
         .btn-liquid {
@@ -1112,9 +1113,9 @@
                     <div class="text-xs text-gray-500 uppercase mb-3 flex justify-between">
                         <span>Scurtături</span> <i class="fas fa-keyboard text-gray-300"></i>
                     </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                    <button type="button" onclick="openDemoSearch()" class="flex items-center gap-2 text-sm text-gray-400" aria-label="Deschide căutarea rapidă">
                         Caută: <kbd class="kbd kbd-sm bg-zinc-800 border-zinc-700 text-white">⌘</kbd> + <kbd class="kbd kbd-sm bg-zinc-800 border-zinc-700 text-white">K</kbd>
-                    </div>
+                    </button>
                 </div>
 
                 <!-- 27. DROPDOWN -->
@@ -1845,6 +1846,22 @@
         </div>
     </footer>
 
+    <!-- Interactive command search example -->
+    <dialog id="demo-search-modal" class="modal bg-black/70">
+        <div class="modal-box w-11/12 max-w-md bg-zinc-950 border border-white/10 text-white p-5">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-lg">Căutare rapidă</h3>
+                <button type="button" class="btn btn-sm btn-circle btn-ghost" aria-label="Închide căutarea" onclick="closeModal('demo-search-modal')">✕</button>
+            </div>
+            <input id="demo-search-input" type="search" placeholder="Caută o secțiune..." class="w-full bg-black border border-white/20 rounded-lg px-4 py-3 text-white outline-none focus:border-purple-500" oninput="filterDemoSearch(this.value)" onkeydown="if(event.key === 'Enter') { event.preventDefault(); goDemoSearch(); }">
+            <div id="demo-search-results" class="mt-3 space-y-1">
+                <button type="button" data-search="servicii" data-target="services" onclick="goDemoSearch(this)" class="demo-search-option block w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 text-sm">Servicii</button>
+                <button type="button" data-search="exemple interactive componente" data-target="integrations" onclick="goDemoSearch(this)" class="demo-search-option block w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 text-sm">Exemple interactive</button>
+                <button type="button" data-search="portofoliu proiecte" data-target="proiecte" onclick="goDemoSearch(this)" class="demo-search-option block w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 text-sm">Portofoliu</button>
+            </div>
+        </div>
+    </dialog>
+
     <!-- MODAL: PROJECT DETAILS -->
     <dialog id="project-modal" class="modal bg-black/60">
         <div class="modal-box w-11/12 max-w-3xl bg-zinc-950 border border-zinc-800 shadow-2xl p-0 relative overflow-hidden flex flex-col max-h-[90vh]">
@@ -2424,6 +2441,32 @@
             heart.classList.toggle('text-blue-500', !blue);
             heart.classList.toggle('text-red-500', blue);
         }
+        function openDemoSearch() {
+            const input = document.getElementById('demo-search-input');
+            input.value = '';
+            filterDemoSearch('');
+            openModal('demo-search-modal');
+            input.focus();
+        }
+        function filterDemoSearch(query) {
+            const term = query.trim().toLocaleLowerCase('ro');
+            document.querySelectorAll('.demo-search-option').forEach(option => {
+                option.hidden = !option.dataset.search.includes(term);
+            });
+        }
+        function goDemoSearch(option = document.querySelector('.demo-search-option:not([hidden])')) {
+            if (!option) return;
+            closeModal('demo-search-modal');
+            document.getElementById(option.dataset.target)?.scrollIntoView({ behavior: 'smooth' });
+        }
+        document.addEventListener('keydown', event => {
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+                if (document.querySelector('dialog[open]:not(#demo-search-modal)')) return;
+                event.preventDefault();
+                if (document.getElementById('demo-search-modal').open) closeModal('demo-search-modal');
+                else openDemoSearch();
+            }
+        });
         
         // Password Strength
         function checkStrength(pass) {

@@ -2856,6 +2856,12 @@
             introScreen.style.touchAction = 'none';
             window.scrollTo(0, 0);
 
+            // Keep the entire page still while the intro slides away, including
+            // touch momentum that may continue after the original gesture ends.
+            const blockIntroScroll = (event) => event.preventDefault();
+            window.addEventListener('wheel', blockIntroScroll, { passive: false, capture: true });
+            window.addEventListener('touchmove', blockIntroScroll, { passive: false, capture: true });
+
             let dismissing = false;
             const dismissIntro = () => {
                 if (dismissing) return;
@@ -2863,13 +2869,16 @@
                 introScreen.style.transform = 'translateY(-100%)';
                 setTimeout(() => {
                     introScreen.remove();
-                    window.scrollTo(0, 0);
                     root.style.overflow = previousHtmlOverflow;
                     document.body.style.overflow = previousBodyOverflow;
                     document.body.style.position = previousBodyPosition;
                     document.body.style.width = previousBodyWidth;
                     document.body.style.top = previousBodyTop;
-                }, 1000);
+                    window.scrollTo(0, 0);
+                    requestAnimationFrame(() => window.scrollTo(0, 0));
+                    window.removeEventListener('wheel', blockIntroScroll, true);
+                    window.removeEventListener('touchmove', blockIntroScroll, true);
+                }, 1350);
             };
 
             enterBtn.addEventListener('click', dismissIntro);

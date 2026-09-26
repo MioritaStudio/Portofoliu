@@ -190,6 +190,9 @@
             box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.3);
         }
         #demo-search-results [hidden] { display: none !important; }
+        .countdown-digits { display: inline-flex; font-variant-numeric: tabular-nums; line-height: 1; }
+        .countdown-digit { position: relative; display: inline-block; width: 1ch; height: 1em; overflow: hidden; }
+        .countdown-digit > span { display: block; position: absolute; inset: 0; }
 
         /* Unique Buttons */
         .btn-liquid {
@@ -927,14 +930,14 @@
                     <div class="text-xs text-gray-500 uppercase mb-3">Ofertă Limitată</div>
                     <div class="grid grid-flow-col gap-2 text-center auto-cols-max">
                         <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                            <span class="countdown font-mono text-xl">
-                                <span id="countdown-min" style="--value:15;"></span>
+                            <span id="countdown-min" class="countdown-digits font-mono text-xl" role="timer" aria-live="off">
+                                <span id="countdown-min-tens" class="countdown-digit"><span>1</span></span><span id="countdown-min-ones" class="countdown-digit"><span>5</span></span>
                             </span>
                             min
                         </div> 
                         <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-                            <span class="countdown font-mono text-xl">
-                                <span id="countdown-sec" style="--value:10;"></span>
+                            <span id="countdown-sec" class="countdown-digits font-mono text-xl" role="timer" aria-live="off">
+                                <span id="countdown-sec-tens" class="countdown-digit"><span>0</span></span><span id="countdown-sec-ones" class="countdown-digit"><span>0</span></span>
                             </span>
                             sec
                         </div>
@@ -2356,6 +2359,30 @@
 
         // Countdown Timer
         const countdownEnd = Date.now() + 15 * 60 * 1000;
+        const reduceCountdownMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function updateCountdownDigit(id, value) {
+            const slot = document.getElementById(id);
+            if (!slot || slot.dataset.value === value) return;
+            const current = slot.firstElementChild;
+            slot.dataset.value = value;
+            if (!current.dataset.ready || reduceCountdownMotion || !slot.getClientRects().length) {
+                current.textContent = value;
+                current.dataset.ready = 'true';
+                return;
+            }
+            const next = document.createElement('span');
+            next.textContent = value;
+            next.style.transform = 'translateY(100%)';
+            slot.appendChild(next);
+            current.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }], { duration: 180, easing: 'ease-out', fill: 'forwards' });
+            const animation = next.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], { duration: 180, easing: 'ease-out', fill: 'forwards' });
+            animation.onfinish = () => {
+                next.style.transform = '';
+                next.dataset.ready = 'true';
+                slot.replaceChildren(next);
+                animation.cancel();
+            };
+        }
         function updateCountdown() {
             const remaining = Math.max(0, Math.ceil((countdownEnd - Date.now()) / 1000));
             const countdownMins = Math.floor(remaining / 60);
@@ -2363,8 +2390,14 @@
             const minEl = document.getElementById('countdown-min');
             const secEl = document.getElementById('countdown-sec');
             if (minEl && secEl) {
-                minEl.style.setProperty('--value', countdownMins.toString());
-                secEl.style.setProperty('--value', countdownSecs.toString());
+                const minutes = String(countdownMins).padStart(2, '0');
+                const seconds = String(countdownSecs).padStart(2, '0');
+                updateCountdownDigit('countdown-min-tens', minutes[0]);
+                updateCountdownDigit('countdown-min-ones', minutes[1]);
+                updateCountdownDigit('countdown-sec-tens', seconds[0]);
+                updateCountdownDigit('countdown-sec-ones', seconds[1]);
+                minEl.setAttribute('aria-label', `${countdownMins} minute`);
+                secEl.setAttribute('aria-label', `${countdownSecs} secunde`);
             }
         }
         updateCountdown();
